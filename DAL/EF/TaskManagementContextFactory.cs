@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace DAL.EF
 {
-    public class TaskManagementContextFactory : IDesignTimeDbContextFactory<TaskManagementContext>
+    public class TaskManagementContextFactory : IDesignTimeDbContextFactory<ApplicationContext>
     {
-        public TaskManagementContext CreateDbContext(string[] args)
+        public ApplicationContext CreateDbContext(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<TaskManagementContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
             optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb; Database=TMSDatabase; Trusted_Connection=True;");
 
-            return new TaskManagementContext(optionsBuilder.Options);
+            return new ApplicationContext(optionsBuilder.Options);
         }
     }
 }

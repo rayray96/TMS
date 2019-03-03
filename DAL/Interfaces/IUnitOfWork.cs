@@ -1,8 +1,10 @@
-﻿using DAL.Entities;
+﻿using System;
+using System.Threading.Tasks;
+using DAL.Entities;
 
 namespace DAL.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork: IDisposable
     {
         IRepository<Person> People { get; }
         IRepository<Priority> Priorities { get; }
@@ -10,6 +12,6 @@ namespace DAL.Interfaces
         IRepository<TaskInfo> Tasks { get; }
         IRepository<Team> Teams { get; }
 
-        void Save();
+        Task SaveAsync();
     }
 }

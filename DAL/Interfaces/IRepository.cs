@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
@@ -7,11 +10,18 @@ namespace DAL.Interfaces
     {
         void Create(T item);
         void Update(T item);
-        void Delete(int id);
+        void Delete(T item);
 
-        T Get(int id);
+        T GetById(int id);
+        T GetSingle(Expression<Func<T, bool>> whereCondition);
 
-        IEnumerable<T> Find(Func<T, Boolean> predicate);
+        IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
+        IQueryable<T> GetQueryable();
         IEnumerable<T> GetAll();
+
+        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> whereCondition);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetSingleAsync(Expression<Func<T, bool>> whereCondition);
+        Task<T> GetByIdAsync(int id);
     }
 }
