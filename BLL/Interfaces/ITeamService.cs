@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BLL.DTO;
+using DAL.Entities;
 
 namespace BLL.Interfaces
 {
@@ -18,9 +19,16 @@ namespace BLL.Interfaces
         /// <summary>
         /// Change name of team.
         /// </summary>
-        /// <param name="id"> Id of team</param>
-        /// <param name="NewName">new name for team</param>
+        /// <param name="id">Id of team</param>
+        /// <param name="NewName">New name for team</param>
         /// ///<exception cref="ArgumentException">team wasn't found</exception>
         void ChangeTeamName(int id, string NewName);
+
+        /// <summary>
+        /// Creating team and adding a manager to it.     
+        /// </summary>
+        /// <param name="manager">Manager of a team</param>
+        /// <param name="teamName">The name of a team</param>
+        void CreateTeam(Person manager, string teamName);
     }
 }

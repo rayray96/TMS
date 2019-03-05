@@ -8,13 +8,15 @@ using DAL.EF;
 
 namespace DAL.UnitOfWork
 {
-    public class IdentityUnitOfWork: IIdentityUnitOfWork
+    public class IdentityUnitOfWork : IIdentityUnitOfWork
     {
         private UserRepository userRepository;
+        private RoleRepository roleRepository;
         private PersonRepository personRepository;
 
         private ApplicationDbContext Context { get; }
         private UserManager<ApplicationUser> UserManager { get; }
+        private RoleManager<ApplicationRole> RoleManager { get; }
 
         public IdentityUnitOfWork(UserManager<ApplicationUser> userManager)
         {
@@ -33,6 +35,17 @@ namespace DAL.UnitOfWork
             }
         }
 
+        public IRoleRepository Roles
+        {
+            get
+            {
+                if (roleRepository == null)
+                    roleRepository = new RoleRepository(RoleManager);
+
+                return roleRepository;
+            }
+        }
+
         public IRepository<Person> People
         {
             get
@@ -43,7 +56,6 @@ namespace DAL.UnitOfWork
                 return personRepository;
             }
         }
-
 
         public void Save()
         {

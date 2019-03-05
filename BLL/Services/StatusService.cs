@@ -20,7 +20,6 @@ namespace BLL.Services
             db = uow;
 
             var config = new MapperConfiguration(cfg => {
-               // cfg.CreateMap<ApplicationUser, UserDTO>();
                 cfg.CreateMap<Person, PersonDTO>();
                 cfg.CreateMap<Status, StatusDTO>();
                 cfg.CreateMap<TaskInfo, TaskDTO>();

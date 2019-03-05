@@ -8,7 +8,7 @@ using DAL.Entities;
 
 namespace BLL.Services
 {
-    public class TeamService: ITeamService
+    public class TeamService : ITeamService
     {
         private readonly IUnitOfWork db;
 
@@ -24,7 +24,6 @@ namespace BLL.Services
 
             var config = new MapperConfiguration(cfg =>
             {
-                //cfg.CreateMap<ApplicationUser, UserDTO>();
                 cfg.CreateMap<Person, PersonDTO>();
                 cfg.CreateMap<Status, StatusDTO>();
                 cfg.CreateMap<Priority, PriorityDTO>();
@@ -34,6 +33,7 @@ namespace BLL.Services
 
             mapper = config.CreateMapper();
         }
+
         public void ChangeTeamName(int teamId, string NewName)
         {
             var team = db.Teams.GetById(teamId);
@@ -54,6 +54,22 @@ namespace BLL.Services
             var result = db.Teams.GetAll();
 
             return mapper.Map<IEnumerable<Team>, IEnumerable<TeamDTO>>(result);
+        }
+
+        public void CreateTeam(Person manager, string teamName)
+        {
+            var team = new Team { TeamName = teamName };
+            IEnumerable<Team> checkTeamExists = db.Teams.Find(t => (t.TeamName == teamName));
+
+            if (checkTeamExists != null)
+                throw new ArgumentException("This team already exists", teamName);
+
+            if (manager.Role != "Manager")
+                throw new ArgumentException("This user is not a manager", manager.Name);
+
+            db.Teams.Create(team);
+            manager.TeamId = team.Id;
+            db.Save();
         }
     }
 }

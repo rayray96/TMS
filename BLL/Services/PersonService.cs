@@ -27,7 +27,6 @@ namespace BLL.Services
 
             var config = new MapperConfiguration(cfg =>
             {
-                //cfg.CreateMap<ApplicationUser, UserDTO>();
                 cfg.CreateMap<Person, PersonDTO>();
                 cfg.CreateMap<Status, StatusDTO>();
                 cfg.CreateMap<Priority, PriorityDTO>();
