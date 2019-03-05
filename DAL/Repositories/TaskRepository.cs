@@ -5,7 +5,7 @@ namespace DAL.Repositories
 {
     public class TaskRepository : Repository<TaskInfo>
     {
-        public TaskRepository(ApplicationContext context)
+        public TaskRepository(ApplicationDbContext context)
             : base(context)
         {
 

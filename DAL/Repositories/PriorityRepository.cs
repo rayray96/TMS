@@ -5,7 +5,7 @@ namespace DAL.Repositories
 {
     public class PriorityRepository : Repository<Priority>
     {
-        public PriorityRepository(ApplicationContext context)
+        public PriorityRepository(ApplicationDbContext context)
             : base(context)
         {
 

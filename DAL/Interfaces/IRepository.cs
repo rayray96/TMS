@@ -10,7 +10,7 @@ namespace DAL.Interfaces
     {
         void Create(T item);
         void Update(T item);
-        void Delete(T item);
+        void Delete(int id);
 
         T GetById(int id);
         T GetSingle(Expression<Func<T, bool>> whereCondition);

@@ -10,10 +10,10 @@ namespace DAL
     {
         static void Main(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             var options = optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb; Database=TMSDatabase; Trusted_Connection=True;").Options;
 
-            using (ApplicationContext con = new ApplicationContext(options))
+            using (ApplicationDbContext con = new ApplicationDbContext(options))
             {
                 var statuses = con.Statuses.ToList();
 

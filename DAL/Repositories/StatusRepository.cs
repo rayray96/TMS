@@ -5,7 +5,7 @@ namespace DAL.Repositories
 {
     public class StatusRepository : Repository<Status>
     {
-        public StatusRepository(ApplicationContext context)
+        public StatusRepository(ApplicationDbContext context)
             : base(context)
         {
 

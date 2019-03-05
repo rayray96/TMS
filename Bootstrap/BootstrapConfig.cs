@@ -10,8 +10,8 @@ namespace Bootstrap
     {
         public static void RegisterApplicationServices(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
-            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
         }
     }
 }

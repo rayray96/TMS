@@ -7,7 +7,7 @@ namespace DAL.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int? PriorityId { get; set; }
+        public int? PriorityId { get; set; } // TODO: Delete Nullable!
         public int AuthorId { get; set; }
         public int AssigneeId { get; set; }
         public int StatusId { get; set; }

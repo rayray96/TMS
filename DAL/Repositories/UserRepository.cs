@@ -35,9 +35,9 @@ namespace DAL.Repositories
             return await UserManager.FindByNameAsync(userName);
         }
 
-        public async Task<IdentityResult> CreateAsync(ApplicationUser user, string password)
+        public async Task<IdentityResult> CreateAsync(ApplicationUser user)
         {
-            return await UserManager.CreateAsync(user, password);
+            return await UserManager.CreateAsync(user);
         }
 
         public async Task<IdentityResult> UpdateAsync(ApplicationUser user)

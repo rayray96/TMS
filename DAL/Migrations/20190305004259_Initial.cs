@@ -66,7 +66,7 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: false)
+                    Name = table.Column<string>(maxLength: 60, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,7 +79,7 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    TeamName = table.Column<string>(nullable: false)
+                    TeamName = table.Column<string>(maxLength: 60, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -265,6 +265,16 @@ namespace DAL.Migrations
                         principalTable: "Statuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "27547609-6d11-4895-921f-eed008292079", "2dc17fe2-5fe7-44ff-961b-6afd1fe41856", "Admin", "ADMIN" },
+                    { "6128b66e-e9c1-45b3-9770-b721c308db3f", "10640e6e-db0c-4e92-a142-e814b6976d66", "Manager", "MANAGER" },
+                    { "607643b0-c4b3-4e0e-bdef-b0035ba3ea60", "b8080b80-6ba2-44cf-909d-a1e91e868000", "Worker", "WORKER" }
                 });
 
             migrationBuilder.InsertData(

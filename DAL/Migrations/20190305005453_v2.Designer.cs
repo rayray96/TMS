@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAL.Migrations
 {
-    [DbContext(typeof(ApplicationContext))]
-    [Migration("20190301141347_Initial")]
-    partial class Initial
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20190305005453_v2")]
+    partial class v2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -138,7 +138,8 @@ namespace DAL.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(60);
 
                     b.HasKey("Id");
 
@@ -230,7 +231,8 @@ namespace DAL.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("TeamName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(60);
 
                     b.HasKey("Id");
 
@@ -259,6 +261,29 @@ namespace DAL.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "9beb6a5b-147d-4a26-a9c8-20154e78a13c",
+                            ConcurrencyStamp = "0df59d58-09cc-4620-952e-2c526945c7cd",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "9d54dacc-21ac-43dd-aadc-ac72348cd935",
+                            ConcurrencyStamp = "99d59588-9fd8-4d6c-ab56-b64e4fd7e745",
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
+                        },
+                        new
+                        {
+                            Id = "3c3cc97c-f2de-46d5-9ac8-042e9cbcf127",
+                            ConcurrencyStamp = "915e5c93-7e33-4b13-9ef1-07b7ef7f9c10",
+                            Name = "Worker",
+                            NormalizedName = "WORKER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

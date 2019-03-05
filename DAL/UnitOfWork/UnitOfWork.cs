@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using DAL.Interfaces;
 using DAL.Entities;
 using DAL.Repositories;
@@ -10,28 +10,44 @@ namespace DAL.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
+        //private UserRepository userRepository;
         private PersonRepository personRepository;
         private StatusRepository statusRepository;
         private TaskRepository taskRepository;
         private PriorityRepository priorityRepository;
         private TeamRepository teamRepository;
 
-        private ApplicationContext context;
+        private ApplicationDbContext Context { get; }
+        private UserManager<ApplicationUser> UserManager { get; }
 
-        public UnitOfWork(string connectionString)
+        public UnitOfWork()
         {
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
-            var options = optionsBuilder.UseSqlServer(connectionString).Options;
-
-            context = new ApplicationContext(options);
+            Context = new ApplicationDbContext();
         }
+
+        //public UnitOfWork(UserManager<ApplicationUser> userManager)
+        //{
+        //    Context = new ApplicationDbContext();
+        //    this.UserManager = userManager;
+        //}
+
+        //public IUserRepository Users
+        //{
+        //    get
+        //    {
+        //        if (userRepository == null)
+        //            userRepository = new UserRepository(UserManager);
+
+        //        return userRepository;
+        //    }
+        //}
 
         public IRepository<Person> People
         {
             get
             {
                 if (personRepository == null)
-                    personRepository = new PersonRepository(context);
+                    personRepository = new PersonRepository(Context);
 
                 return personRepository;
             }
@@ -42,7 +58,7 @@ namespace DAL.UnitOfWork
             get
             {
                 if (statusRepository == null)
-                    statusRepository = new StatusRepository(context);
+                    statusRepository = new StatusRepository(Context);
 
                 return statusRepository;
             }
@@ -53,7 +69,7 @@ namespace DAL.UnitOfWork
             get
             {
                 if (taskRepository == null)
-                    taskRepository = new TaskRepository(context);
+                    taskRepository = new TaskRepository(Context);
 
                 return taskRepository;
             }
@@ -64,7 +80,7 @@ namespace DAL.UnitOfWork
             get
             {
                 if (priorityRepository == null)
-                    priorityRepository = new PriorityRepository(context);
+                    priorityRepository = new PriorityRepository(Context);
 
                 return priorityRepository;
             }
@@ -75,15 +91,20 @@ namespace DAL.UnitOfWork
             get
             {
                 if (teamRepository == null)
-                    teamRepository = new TeamRepository(context);
+                    teamRepository = new TeamRepository(Context);
 
                 return teamRepository;
             }
         }
 
+        public void Save()
+        {
+            Context.SaveChanges();
+        }
+
         public async Task SaveAsync()
         {
-            await context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
         }
 
         private bool disposed = false;
@@ -94,13 +115,8 @@ namespace DAL.UnitOfWork
             {
                 if (disposing)
                 {
-                    context.Dispose();
-
-                    personRepository.Dispose();
-                    teamRepository.Dispose();
-                    statusRepository.Dispose();
-                    priorityRepository.Dispose();
-                    taskRepository.Dispose();
+                    Context.Dispose();
+                   // userRepository.Dispose();
                 }
                 this.disposed = true;
             }

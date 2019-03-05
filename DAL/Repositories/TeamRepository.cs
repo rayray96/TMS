@@ -5,7 +5,7 @@ namespace DAL.Repositories
 {
     public class TeamRepository : Repository<Team>
     {
-        public TeamRepository(ApplicationContext context)
+        public TeamRepository(ApplicationDbContext context)
             : base(context)
         {
 

@@ -5,12 +5,17 @@ using DAL.Configurations;
 
 namespace DAL.EF
 {
-    public class ApplicationContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationContext(DbContextOptions<ApplicationContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
+            Database.Migrate();
+        }
+
+        public ApplicationDbContext()
+        {
+            Database.Migrate();
         }
 
         public DbSet<Person> People { get; set; }
@@ -26,6 +31,7 @@ namespace DAL.EF
             modelBuilder.ApplyConfiguration(new TaskSetup());
             modelBuilder.ApplyConfiguration(new PrioritySetup());
             modelBuilder.ApplyConfiguration(new TeamSetup());
+            modelBuilder.ApplyConfiguration(new IdentityRoleSetup());
 
             base.OnModelCreating(modelBuilder);
         }

@@ -12,9 +12,9 @@ namespace DAL.Repositories
     public abstract class Repository<T> : IRepository<T>, IDisposable where T : class
     {
         protected DbSet<T> Set => Context.Set<T>();
-        protected ApplicationContext Context { get; }
+        protected ApplicationDbContext Context { get; }
 
-        protected Repository(ApplicationContext context)
+        protected Repository(ApplicationDbContext context)
         {
             if (context == null)
                 throw new ArgumentNullException("An instance of ApplicationContext is required to use this repository.", nameof(context));
@@ -74,12 +74,16 @@ namespace DAL.Repositories
 
         public void Update(T item)
         {
-            Set.Update(item);
+            Context.Entry(item).State = EntityState.Modified;
+            //Set.Update(item);
         }
 
-        public void Delete(T item)
+        public void Delete(int id)
         {
-            Set.Remove(item);
+            T item = Set.Find(id);
+
+            if (item != null)
+                Set.Remove(item);
         }
 
         private bool disposed = false;

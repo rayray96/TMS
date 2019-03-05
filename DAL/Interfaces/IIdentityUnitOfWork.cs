@@ -1,12 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using DAL.Entities;
 
 namespace DAL.Interfaces
 {
     public interface IIdentityUnitOfWork
     {
-        IRoleRepository RoleRepository { get; }
-        IUserRepository UserRepository { get; }
-
-        //Task SaveAsync();
+        IUserRepository Users { get; }
+        IRepository<Person> People { get; }
+        
+        void Save();
+        Task SaveAsync();
     }
 }
