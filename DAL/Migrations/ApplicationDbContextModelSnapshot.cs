@@ -263,22 +263,22 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "9beb6a5b-147d-4a26-a9c8-20154e78a13c",
-                            ConcurrencyStamp = "0df59d58-09cc-4620-952e-2c526945c7cd",
+                            Id = "25d6cdfc-83b2-40d9-b172-21993759ab61",
+                            ConcurrencyStamp = "812a6f03-76c4-45ad-a54a-472c1e5539ac",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "9d54dacc-21ac-43dd-aadc-ac72348cd935",
-                            ConcurrencyStamp = "99d59588-9fd8-4d6c-ab56-b64e4fd7e745",
+                            Id = "440d099e-a6ee-46e6-96d2-3c6f6fe05c6c",
+                            ConcurrencyStamp = "db69877d-0632-41a1-a55f-caf85ce78107",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "3c3cc97c-f2de-46d5-9ac8-042e9cbcf127",
-                            ConcurrencyStamp = "915e5c93-7e33-4b13-9ef1-07b7ef7f9c10",
+                            Id = "84d28b86-2e45-4b9e-b6ee-6f3be5c97c19",
+                            ConcurrencyStamp = "f6833ac1-e1c5-4e67-b9ba-dd9c526533ce",
                             Name = "Worker",
                             NormalizedName = "WORKER"
                         });

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BLL.DTO;
 
 namespace BLL.Interfaces
@@ -9,6 +8,12 @@ namespace BLL.Interfaces
     /// </summary>
     public interface IStatusService
     {
+        /// <summary>
+        /// Get all possible statuses for task.
+        /// </summary>
+        /// <returns>Enumeration of statuses</returns>
+        IEnumerable<StatusDTO> GetAllStatuses();
+
         /// <summary>
         /// Get all active statuses.
         /// </summary>
@@ -20,11 +25,5 @@ namespace BLL.Interfaces
         /// </summary>
         /// <returns>Enumeration of statuses</returns>
         IEnumerable<StatusDTO> GetNotActiveStatuses();
-
-        /// <summary>
-        /// Get all possible statuses for task.
-        /// </summary>
-        /// <returns>Enumeration of statuses</returns>
-        IEnumerable<StatusDTO> GetAllStatuses();
     }
 }

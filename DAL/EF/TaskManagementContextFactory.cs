@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore.Design;
-
+using System.IO;
+// This class for testing system only!
+// TODO: Don't forget to delete before publishing!
 namespace DAL.EF
 {
     public class TaskManagementContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
@@ -8,8 +11,15 @@ namespace DAL.EF
         public ApplicationDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb; Database=TMSDatabase; Trusted_Connection=True;");
-            
+
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                   .SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json")
+                   .Build();
+
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            optionsBuilder.UseSqlServer(connectionString);
+
             return new ApplicationDbContext(optionsBuilder.Options);
         }
     }

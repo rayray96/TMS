@@ -1,27 +1,20 @@
 ﻿using System;
 using System.Linq;
 using DAL.EF;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
+// This Program.cs for testing system only!
+// TODO: Don't forget to delete before publishing!
 namespace DAL
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            var options = optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb; Database=TMSDatabase; Trusted_Connection=True;").Options;
+            Assembly assembly = Assembly.Load("DAL");
+            Console.WriteLine(assembly.FullName);
 
-            using (ApplicationDbContext con = new ApplicationDbContext(options))
-            {
-                var statuses = con.Statuses.ToList();
-
-                foreach (var status in statuses)
-                {
-                    Console.WriteLine($"Status: {status.Name}");
-                } 
-            }
             Console.ReadKey();
         }
     }

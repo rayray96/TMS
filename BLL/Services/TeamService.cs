@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AutoMapper;
 using BLL.DTO;
+using BLL.Configurations;
 using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Entities;
@@ -11,42 +12,16 @@ namespace BLL.Services
     public class TeamService : ITeamService
     {
         private readonly IUnitOfWork db;
-
         private IMapper mapper { get; set; }
 
         /// <summary>
         /// Dependency Injection to database repositories.
         /// </summary>
-        /// <param name="uow"> Point to context of DataBase </param>
+        /// <param name="uow"> Point to context of dataBase </param>
         public TeamService(IUnitOfWork uow)
         {
             db = uow;
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Person, PersonDTO>();
-                cfg.CreateMap<Status, StatusDTO>();
-                cfg.CreateMap<Priority, PriorityDTO>();
-                cfg.CreateMap<Team, TeamDTO>();
-                cfg.CreateMap<TaskInfo, TaskDTO>();
-            });
-
-            mapper = config.CreateMapper();
-        }
-
-        public void ChangeTeamName(int teamId, string NewName)
-        {
-            var team = db.Teams.GetById(teamId);
-
-            if (team == null)
-                throw new ArgumentException("Invalid Team for changes");
-
-            if (team.TeamName != NewName)
-            {
-                db.Teams.Delete(teamId);
-                team.TeamName = NewName;
-                db.Teams.Create(team);
-            }
+            mapper = MapperConfig.MapperResult();
         }
 
         public IEnumerable<TeamDTO> GetAllTeams()
@@ -54,6 +29,21 @@ namespace BLL.Services
             var result = db.Teams.GetAll();
 
             return mapper.Map<IEnumerable<Team>, IEnumerable<TeamDTO>>(result);
+        }
+
+        public void ChangeTeamName(int teamId, string newName)
+        {
+            var team = db.Teams.GetById(teamId);
+
+            if (team == null)
+                throw new ArgumentException("Invalid Team for changes");
+
+            if (team.TeamName != newName)
+            {
+                db.Teams.Delete(teamId);
+                team.TeamName = newName;
+                db.Teams.Create(team);
+            }
         }
 
         public void CreateTeam(Person manager, string teamName)

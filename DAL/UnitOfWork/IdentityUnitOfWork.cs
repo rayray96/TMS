@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using DAL.Interfaces;
 using DAL.Entities;
 using DAL.Repositories;
@@ -11,16 +12,17 @@ namespace DAL.UnitOfWork
     public class IdentityUnitOfWork : IIdentityUnitOfWork
     {
         private UserRepository userRepository;
-        private RoleRepository roleRepository;
         private PersonRepository personRepository;
 
         private ApplicationDbContext Context { get; }
         private UserManager<ApplicationUser> UserManager { get; }
-        private RoleManager<ApplicationRole> RoleManager { get; }
 
-        public IdentityUnitOfWork(UserManager<ApplicationUser> userManager)
+        public IdentityUnitOfWork(string connectionString, UserManager<ApplicationUser> userManager)
         {
-            Context = new ApplicationDbContext();
+            var optionBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionBuilder.UseSqlServer(connectionString);
+
+            Context = new ApplicationDbContext(optionBuilder.Options);
             this.UserManager = userManager;
         }
 
@@ -32,17 +34,6 @@ namespace DAL.UnitOfWork
                     userRepository = new UserRepository(UserManager);
 
                 return userRepository;
-            }
-        }
-
-        public IRoleRepository Roles
-        {
-            get
-            {
-                if (roleRepository == null)
-                    roleRepository = new RoleRepository(RoleManager);
-
-                return roleRepository;
             }
         }
 

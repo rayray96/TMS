@@ -5,12 +5,12 @@ using DAL.Interfaces;
 using DAL.Entities;
 using DAL.Repositories;
 using DAL.EF;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        //private UserRepository userRepository;
         private PersonRepository personRepository;
         private StatusRepository statusRepository;
         private TaskRepository taskRepository;
@@ -20,27 +20,13 @@ namespace DAL.UnitOfWork
         private ApplicationDbContext Context { get; }
         private UserManager<ApplicationUser> UserManager { get; }
 
-        public UnitOfWork()
+        public UnitOfWork(string connectionString)
         {
-            Context = new ApplicationDbContext();
+            var optionBuilder= new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionBuilder.UseSqlServer(connectionString);
+
+            Context = new ApplicationDbContext(optionBuilder.Options);
         }
-
-        //public UnitOfWork(UserManager<ApplicationUser> userManager)
-        //{
-        //    Context = new ApplicationDbContext();
-        //    this.UserManager = userManager;
-        //}
-
-        //public IUserRepository Users
-        //{
-        //    get
-        //    {
-        //        if (userRepository == null)
-        //            userRepository = new UserRepository(UserManager);
-
-        //        return userRepository;
-        //    }
-        //}
 
         public IRepository<Person> People
         {
@@ -116,7 +102,6 @@ namespace DAL.UnitOfWork
                 if (disposing)
                 {
                     Context.Dispose();
-                   // userRepository.Dispose();
                 }
                 this.disposed = true;
             }

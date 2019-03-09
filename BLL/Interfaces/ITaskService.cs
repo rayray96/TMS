@@ -10,13 +10,7 @@ namespace BLL.Interfaces
     public interface ITaskService
     {
         /// <summary>
-        /// Get all possible templates of priorities sets.
-        /// </summary>
-        /// <returns>Enumerations of templates</returns>
-        IEnumerable<PriorityDTO> GetAllPriorities();
-
-        /// <summary>
-        /// Delete task.
+        /// Delete task from database.
         /// </summary>
         /// <param name="taskId">Id of task for deleting</param>
         /// <param name="currentUserName">Name of person who try to delete this task</param>
@@ -30,26 +24,29 @@ namespace BLL.Interfaces
         /// <param name="task">Task to adding</param>
         /// <param name="authorName">Name of tasks author</param>
         /// <param name="assigneeName">Name of tasks assignee if null -  assignee will be an author</param>
+        /// <param name="priority">Priority for current task</param>
+        /// <param name="deadline">The end date of current task</param>
         /// ///<exception cref="ArgumentNullException">Name of author is null or empty</exception>
         /// ///<exception cref="Exception">Problem with status new in database. </exception>  
-        void CreateTask(TaskDTO task, string authorName, string assigneeName);
-        
+        void CreateTask(TaskDTO task, string authorName, string assigneeName, string priority, string deadline);
+
         /// <summary>
-        /// Save task which was edit by user.
+        /// Update task by author.
         /// </summary>
         /// <param name="task">Task with edits</param>
-        /// <param name="assigneeName">Name of assignee of task</param>
-        /// ///<exception cref="ArgumentNullException">Name of assignee is null or empty</exception>  
-        void SaveChangeTask(TaskDTO task, string assigneeName);
+        /// <param name="authorName">Name of author of the current task</param>
+        /// ///<exception cref="ArgumentNullException">Name of author is null or empty</exception>  
+        void UpdateTask(TaskDTO task, string authorName);
 
         /// <summary>
         /// Set new status to task.
         /// </summary>
         /// <param name="taskid">Id of task that need to set new status</param>
         /// <param name="statusName">Name of new status for task</param>
+        /// <param name="changerId">Id of the asignee or the author for current task</param>
         /// ///<exception cref="ArgumentNullException">Name of status is null or empty</exception>
         /// ///<exception cref="ArgumentException">task for edit wasn't found</exception>   
-        void SetNewStatus(int taskid, string statusName);
+        void UpdateStatus(int taskId, string statusName, int changerId);
 
         /// <summary>
         /// Get task with Id.
@@ -59,7 +56,7 @@ namespace BLL.Interfaces
         TaskDTO GetTask(int id);
 
         /// <summary>
-        /// Get tasks of team of Manager with shown Id.
+        /// Get tasks of team by Manager Id.
         /// </summary>
         /// <param name="managerId">Id of manager of team</param>
         /// ///<exception cref="ArgumentException">Manager with this Id wasn't found</exception>   
@@ -67,31 +64,51 @@ namespace BLL.Interfaces
         IEnumerable<TaskDTO> GetTasksOfTeam(string managerId);
 
         /// <summary>
-        /// Get tasks of team where Due date is in past
+        /// Get tasks of team which are inactive.
         /// </summary>
         /// <param name="teamId">Id of team</param>
         /// <returns>Enumeration of tasks</returns>
-        IEnumerable<TaskDTO> GetOverDueTasks(int teamId);
+        IEnumerable<TaskDTO> GetInactiveTasks(int teamId);
 
         /// <summary>
-        /// Get tasks of team where status is Closed
+        /// Get tasks of team where status is completed.
         /// </summary>
-        /// <param name="teamId"></param>
-        /// <returns></returns>
-        IEnumerable<TaskDTO> GetCompleteTasks(int teamId);
-
-        /// <summary>
-        /// Get all tasks without subtasks of shown assignee  
-        /// </summary>
-        /// <param name="id">string Id of assignee</param>
+        /// <param name="teamId">Id of team</param>
         /// <returns>Enumerations of tasks</returns>
-        IEnumerable<TaskDTO> GetTaskOfAssignee(string id);
+        IEnumerable<TaskDTO> GetCompletedTasks(int teamId);
 
         /// <summary>
-        /// Get all tasks without subtasks of shown assignee  
+        /// Get all tasks of shown assignee.
         /// </summary>
-        /// <param name="id">string Id of assignee</param>
+        /// <param name="id">String Id of assignee</param>
         /// <returns>Enumerations of tasks</returns>
-        IEnumerable<TaskDTO> GetTaskWithPriority(string priorityName);
+        IEnumerable<TaskDTO> GetTasksOfAssignee(string id);
+
+        /// <summary>
+        /// Get all tasks of shown author.
+        /// </summary>
+        /// <param name="id">String Id of assignee</param>
+        /// <returns>Enumerations of tasks</returns>
+        IEnumerable<TaskDTO> GetTasksOfAuthor(string id);
+
+        /// <summary>
+        /// Get all tasks.
+        /// </summary>
+        /// <returns>Enumerations of tasks</returns>
+        IEnumerable<TaskDTO> GetAllTasks();
+
+        /// <summary>
+        /// Get common progress of tasks of current team.
+        /// </summary>
+        /// <param name="managerId"></param>
+        /// <returns>Progress of team</returns>
+        int GetProgressOfTeam(string managerId);
+
+        /// <summary>
+        /// Get common progress of all tasks.
+        /// </summary>
+        /// <returns>Progress of all team</returns>
+        int GetProgressOfAllTasks();
     }
 }
+

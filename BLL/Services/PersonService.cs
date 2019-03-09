@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using BLL.DTO;
+using BLL.Configurations;
 using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Entities;
 
 namespace BLL.Services
 {
-    public class PersonService : IPersonService // Finish with services!
+    public class PersonService : IPersonService
     {
         private readonly IUnitOfWork db;
         private readonly IEmailService emailService;
@@ -19,25 +20,15 @@ namespace BLL.Services
         /// <summary>
         /// Dependency Injection to database repositories.
         /// </summary>
-        /// <param name="uow"> Point to context of DataBase </param>
+        /// <param name="uow"> Point to context of dataBase </param>
         public PersonService(IUnitOfWork uow, IEmailService emailService)
         {
             db = uow;
             this.emailService = emailService;
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Person, PersonDTO>();
-                cfg.CreateMap<Status, StatusDTO>();
-                cfg.CreateMap<Priority, PriorityDTO>();
-                cfg.CreateMap<Team, TeamDTO>();
-                cfg.CreateMap<TaskInfo, TaskDTO>();
-            });
-
-            mapper = config.CreateMapper();
+            mapper = MapperConfig.MapperResult();
         }
 
-        #region Team
+        #region Methods which include work with team.
 
         public void DeletePersonFromTeam(int id)
         {
@@ -116,7 +107,7 @@ namespace BLL.Services
 
         #endregion
 
-        #region GetPerson
+        #region Methods which include work with person.
 
         public PersonDTO GetPerson(int id)
         {
@@ -131,10 +122,6 @@ namespace BLL.Services
 
             return mapper.Map<Person, PersonDTO>(person);
         }
-
-        #endregion
-
-        #region GetAssignee
 
         public IEnumerable<PersonDTO> GetAssignees(string managerId)
         {

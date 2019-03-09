@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190305005453_v2")]
-    partial class v2
+    [Migration("20190307223008_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -265,22 +265,22 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "9beb6a5b-147d-4a26-a9c8-20154e78a13c",
-                            ConcurrencyStamp = "0df59d58-09cc-4620-952e-2c526945c7cd",
+                            Id = "b5579f0d-8cbb-40b5-b00a-bdf4c08e880d",
+                            ConcurrencyStamp = "32333c9a-ef96-4bc5-957b-fb352f04f1d9",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "9d54dacc-21ac-43dd-aadc-ac72348cd935",
-                            ConcurrencyStamp = "99d59588-9fd8-4d6c-ab56-b64e4fd7e745",
+                            Id = "b589b466-d1de-4210-90bf-2c884a365200",
+                            ConcurrencyStamp = "f8553781-72ef-414c-8f92-20ade22a9024",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "3c3cc97c-f2de-46d5-9ac8-042e9cbcf127",
-                            ConcurrencyStamp = "915e5c93-7e33-4b13-9ef1-07b7ef7f9c10",
+                            Id = "3a44e138-0561-4273-8fea-f129ec62610c",
+                            ConcurrencyStamp = "e11d7984-0d13-487f-938d-5804cbf5a252",
                             Name = "Worker",
                             NormalizedName = "WORKER"
                         });

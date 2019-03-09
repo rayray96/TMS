@@ -6,7 +6,7 @@ using DAL.Entities;
 namespace BLL.Interfaces
 {
     /// <summary>
-    /// Service for working with Persons.
+    /// Service for working with teams.
     /// </summary>
     public interface ITeamService
     {
@@ -21,8 +21,8 @@ namespace BLL.Interfaces
         /// </summary>
         /// <param name="id">Id of team</param>
         /// <param name="NewName">New name for team</param>
-        /// ///<exception cref="ArgumentException">team wasn't found</exception>
-        void ChangeTeamName(int id, string NewName);
+        /// ///<exception cref="ArgumentException">Team wasn't found</exception>
+        void ChangeTeamName(int id, string newName);
 
         /// <summary>
         /// Creating team and adding a manager to it.     
