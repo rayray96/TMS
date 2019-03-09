@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
-using BLL.DTO;
 using BLL.Configurations;
+using BLL.DTO;
+using BLL.Exceptions;
 using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Entities;
@@ -36,7 +37,7 @@ namespace BLL.Services
             var team = db.Teams.GetById(teamId);
 
             if (team == null)
-                throw new ArgumentException("Invalid Team for changes");
+                throw new TeamNotFoundException("Invalid Team for changes");
 
             if (team.TeamName != newName)
             {
@@ -44,22 +45,6 @@ namespace BLL.Services
                 team.TeamName = newName;
                 db.Teams.Create(team);
             }
-        }
-
-        public void CreateTeam(Person manager, string teamName)
-        {
-            var team = new Team { TeamName = teamName };
-            IEnumerable<Team> checkTeamExists = db.Teams.Find(t => (t.TeamName == teamName));
-
-            if (checkTeamExists != null)
-                throw new ArgumentException("This team already exists", teamName);
-
-            if (manager.Role != "Manager")
-                throw new ArgumentException("This user is not a manager", manager.Name);
-
-            db.Teams.Create(team);
-            manager.TeamId = team.Id;
-            db.Save();
         }
     }
 }

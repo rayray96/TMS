@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using DAL.Entities;
+using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace DAL.Interfaces
 {
@@ -12,10 +14,13 @@ namespace DAL.Interfaces
         Task<ApplicationUser> FindByIdAsync(string userId);
         Task<ApplicationUser> FindByNameAsync(string userName);
 
-        Task<IdentityResult> CreateAsync(ApplicationUser user);
+        Task<IdentityResult> AddClaimAsync(ApplicationUser user, Claim claim);
+        Task<IdentityResult> CreateAsync(ApplicationUser user, string password);
         Task<IdentityResult> UpdateAsync(ApplicationUser user);
         Task<IdentityResult> DeleteAsync(ApplicationUser user);
         Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string role);
         Task<IdentityResult> RemoveFromRoleAsync(ApplicationUser user, string role);
+
+        Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName);
     }
 }

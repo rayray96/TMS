@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using BLL.DTO;
 using BLL.Configurations;
+using BLL.DTO;
+using BLL.Exceptions;
 using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Entities;
@@ -35,7 +36,7 @@ namespace BLL.Services
             Person person = db.People.GetById(id);
 
             if (person == null)
-                throw new ArgumentException("Person is not exist");
+                throw new PersonNotFoundException("This person was not found");
 
             person.TeamId = null;
             db.People.Update(person);
@@ -45,20 +46,20 @@ namespace BLL.Services
         public void AddPersonsToTeam(int[] persons, string managerId)
         {
             if ((persons == null) || (persons.Length == 0))
-                throw new ArgumentException("No persons to adding", "persons");
+                throw new PersonNotFoundException("No persons to adding");
 
             if (string.IsNullOrWhiteSpace(managerId))
-                throw new ArgumentException("Unknown manager", "managerId");
+                throw new ManagerNotFoundException("This manager is unknown");
 
             Person manager = db.People.Find(m => (m.UserId == managerId)).SingleOrDefault();
 
             if (manager == null)
-                throw new ArgumentException("Unknown manager", "managerId");
+                throw new ManagerNotFoundException("This manager is unknown");
 
             IEnumerable<Person> newTeamMembers = db.People.Find(p => persons.Contains(p.Id));
 
             if (newTeamMembers.Count() != persons.Length)
-                throw new ArgumentException("Not all members was founded");
+                throw new PersonNotFoundException("Not all members was founded");
 
             foreach (var member in newTeamMembers)
             {
@@ -95,7 +96,7 @@ namespace BLL.Services
         {
             IEnumerable<PersonDTO> people = new List<PersonDTO>();
             if (manager == null)
-                throw new ArgumentException("Manager is not found", "managerId");
+                throw new ManagerNotFoundException("This manager is unknown");
 
             if (manager.Team == null)
                 return people;

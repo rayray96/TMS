@@ -16,10 +16,7 @@ namespace DAL.Repositories
 
         protected Repository(ApplicationDbContext context)
         {
-            if (context == null)
-                throw new ArgumentNullException("An instance of ApplicationContext is required to use this repository.", nameof(context));
-
-            Context = context;
+            Context = context ?? throw new ArgumentNullException("An instance of ApplicationContext is required to use this repository.", nameof(context));
         }
 
         public T GetById(int id)

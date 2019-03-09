@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using DAL.Interfaces;
 using DAL.Entities;
+using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace DAL.Repositories
 {
@@ -13,6 +15,17 @@ namespace DAL.Repositories
         public UserRepository(UserManager<ApplicationUser> userManager)
         {
             UserManager = userManager;
+        }
+
+        public async Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName)
+        {
+            return await UserManager.GetUsersInRoleAsync(roleName);
+        }
+
+        public async Task<IdentityResult> AddClaimAsync(ApplicationUser user, Claim claim)
+        {
+            
+            return await UserManager.AddClaimAsync(user, claim);
         }
 
         public async Task<ApplicationUser> FindByEmailAsync(string email)
@@ -35,9 +48,9 @@ namespace DAL.Repositories
             return await UserManager.FindByNameAsync(userName);
         }
 
-        public async Task<IdentityResult> CreateAsync(ApplicationUser user)
+        public async Task<IdentityResult> CreateAsync(ApplicationUser user, string password)
         {
-            return await UserManager.CreateAsync(user);
+            return await UserManager.CreateAsync(user, password);
         }
 
         public async Task<IdentityResult> UpdateAsync(ApplicationUser user)

@@ -37,7 +37,7 @@ namespace DAL.UnitOfWork
             }
         }
 
-        public IRepository<Person> People
+        public PersonRepository People
         {
             get
             {

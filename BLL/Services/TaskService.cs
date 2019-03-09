@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using BLL.DTO;
 using BLL.Configurations;
+using BLL.DTO;
+using BLL.Exceptions;
 using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Entities;
@@ -28,7 +29,7 @@ namespace BLL.Services
             TaskDTO task = mapper.Map<TaskInfo, TaskDTO>(db.Tasks.GetById(taskId));
 
             if (task == null)
-                throw new ArgumentException("Task with this id not found", "taskId");
+                throw new TaskNotFoundException("Task with this id not found");
 
             if (task.Author.Name == currentUserName)
             {
@@ -37,14 +38,14 @@ namespace BLL.Services
             }
             else
             {
-                throw new InvalidOperationException("Access error. You cannot delete this task");
+                throw new TaskAccessException("Access error. You cannot delete this task");
             }
         }
 
         public void CreateTask(TaskDTO task, string authorName, string assigneeName, string priority, string deadline)
         {
             if (string.IsNullOrWhiteSpace(authorName))
-                throw new ArgumentNullException("Author is not shown", "authorName");
+                throw new PersonNotFoundException("Author is not shown");
 
             PersonDTO authorDTO = mapper.Map<Person, PersonDTO>(db.People.Find(p => p.Name == authorName).Single());
 
@@ -56,7 +57,7 @@ namespace BLL.Services
 
             StatusDTO status = mapper.Map<Status, StatusDTO>(db.Statuses.Find(s => (s.Name == "Not Started")).SingleOrDefault());
             if (status == null)
-                throw new Exception("Status \"New\" wasn't found in database");
+                throw new StatusNotFoundException("Status \"New\" was not found in database");
 
 
             PriorityDTO prior;
@@ -97,7 +98,7 @@ namespace BLL.Services
             if (taskForEdit != null)
             {
                 if ((authorName == null))
-                    throw new ArgumentNullException("assigneeName", "Cannot be null");
+                    throw new ManagerNotFoundException("The author name cannot be null");
 
                 if (taskForEdit.Author.Name == authorName)
                 {
@@ -134,7 +135,7 @@ namespace BLL.Services
         {
             var manager = db.People.Find(p => p.UserId == managerId).SingleOrDefault();
             if (manager == null)
-                throw new ArgumentException("Manager is not found", "managerId");
+                throw new ManagerNotFoundException("Manager is not found");
 
             IEnumerable<TaskInfo> tasks = db.Tasks.Find(t => ((t.Author.Id == manager.Id) &&
                                             (t.Assignee.Id != manager.Id))).OrderBy(tsk => tsk.Assignee.Name).ToList();
@@ -183,13 +184,13 @@ namespace BLL.Services
         public void UpdateStatus(int taskId, string statusName, int changerId)
         {
             if (string.IsNullOrWhiteSpace(statusName))
-                throw new ArgumentNullException("Name of status is null or empty", "statusName");
+                throw new StatusNotFoundException("Name of status is null or empty");
 
             Status status = db.Statuses.Find(s => (s.Name == statusName)).SingleOrDefault();
 
             TaskInfo task = db.Tasks.GetById(taskId);
             if (task == null)
-                throw new ArgumentException("Task wasn't found", "id");
+                throw new TaskNotFoundException("Task wasn't found");
 
             if (task.AuthorId == changerId)
             {
@@ -201,7 +202,7 @@ namespace BLL.Services
                 else if (statusName == "Canceled")
                     task.Progress = 0;
                 else
-                    throw new ArgumentException("This is status cannot belong to Author", "statusName");
+                    throw new StatuskAccessException("This is status cannot belong to Author");
             }
             else if (task.AssigneeId == changerId)
             {
@@ -235,12 +236,12 @@ namespace BLL.Services
                             break;
                         }
                     default:
-                        throw new ArgumentException("This is status cannot belong to Author", "statusName");
+                        throw new StatuskAccessException("This status cannot belongs to Author");
                 }
             }
             else
-                throw new ArgumentException("Current person cannot change a status", "changerId");
-            task.Status = status ?? throw new ArgumentException("Status with this name wasn't found", "statusName");
+                throw new StatuskAccessException("Current person cannot change a status");
+            task.Status = status ?? throw new StatusNotFoundException("Status with this name was not found");
 
             db.Tasks.Update(task);
             db.Save();

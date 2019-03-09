@@ -2,8 +2,9 @@
 using System;
 using System.Linq;
 using AutoMapper;
-using BLL.DTO;
 using BLL.Configurations;
+using BLL.DTO;
+using BLL.Exceptions;
 using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Entities;
@@ -31,7 +32,7 @@ namespace BLL.Services
         public IEnumerable<TaskDTO> GetTaskWithPriority(string priorityName)
         {
             if (priorityName == null)
-                throw new ArgumentNullException("Current priority name is null", "priorityName");
+                throw new PriorityIsNullException("Current priority name is null");
 
             var tasks = db.Tasks.Find(t => (t.Priority.Name == priorityName));
             var resultTasks = mapper.Map<IEnumerable<TaskInfo>, IEnumerable<TaskDTO>>(tasks);
