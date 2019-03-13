@@ -1,29 +1,26 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using DAL.Interfaces;
 using DAL.Entities;
 using DAL.Repositories;
 using DAL.EF;
+using DAL.Identity;
 
 namespace DAL.UnitOfWork
 {
     public class IdentityUnitOfWork : IIdentityUnitOfWork
     {
-        private UserRepository userRepository;
-        private PersonRepository personRepository;
+        private IUserRepository userRepository;
+        private IRepository<RefreshToken> refreshTokenRepository;
+        private IRepository<Person> personRepository;
 
         private ApplicationDbContext Context { get; }
-        private UserManager<ApplicationUser> UserManager { get; }
+        private ApplicationUserManager ApplicationUser { get; }
 
-        public IdentityUnitOfWork(string connectionString, UserManager<ApplicationUser> userManager)
+        public IdentityUnitOfWork(ApplicationDbContext context, ApplicationUserManager applicationUser)
         {
-            var optionBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionBuilder.UseSqlServer(connectionString);
-
-            Context = new ApplicationDbContext(optionBuilder.Options);
-            this.UserManager = userManager;
+            Context = context;
+            ApplicationUser = applicationUser;
         }
 
         public IUserRepository Users
@@ -31,13 +28,24 @@ namespace DAL.UnitOfWork
             get
             {
                 if (userRepository == null)
-                    userRepository = new UserRepository(UserManager);
+                    userRepository = new UserRepository(ApplicationUser);
 
                 return userRepository;
             }
         }
 
-        public PersonRepository People
+        public IRepository<RefreshToken> RefreshTokens
+        {
+            get
+            {
+                if (refreshTokenRepository == null)
+                    refreshTokenRepository = new RefreshTokenRepository(Context);
+
+                return refreshTokenRepository;
+            }
+        }
+
+        public IRepository<Person> People
         {
             get
             {
@@ -67,7 +75,6 @@ namespace DAL.UnitOfWork
                 if (disposing)
                 {
                     Context.Dispose();
-                    userRepository.Dispose();
                 }
                 this.disposed = true;
             }

@@ -24,6 +24,8 @@ namespace DAL.EF
         public DbSet<Priority> Priorities { get; set; }
         public DbSet<Team> Teams { get; set; }
 
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new PersonSetup());
@@ -32,6 +34,7 @@ namespace DAL.EF
             modelBuilder.ApplyConfiguration(new PrioritySetup());
             modelBuilder.ApplyConfiguration(new TeamSetup());
             modelBuilder.ApplyConfiguration(new IdentityRoleSetup());
+            modelBuilder.ApplyConfiguration(new RefreshTokenSetup());
 
             base.OnModelCreating(modelBuilder);
         }

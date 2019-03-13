@@ -19,7 +19,7 @@ namespace BLL.Services
         public TaskService(IUnitOfWork uow)
         {
             db = uow;
-            mapper = MapperConfig.MapperResult();
+            mapper = MapperConfig.GetMapperResult();
         }
 
         #region Main CRUD-operations for Tasks.

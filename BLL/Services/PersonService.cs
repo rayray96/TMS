@@ -26,7 +26,7 @@ namespace BLL.Services
         {
             db = uow;
             this.emailService = emailService;
-            mapper = MapperConfig.MapperResult();
+            mapper = MapperConfig.GetMapperResult();
         }
 
         #region Methods which include work with team.
@@ -92,7 +92,7 @@ namespace BLL.Services
             return people;
         }
 
-        private IEnumerable<PersonDTO> GetPeopleInTeam(Person manager)
+        public IEnumerable<PersonDTO> GetPeopleInTeam(Person manager)
         {
             IEnumerable<PersonDTO> people = new List<PersonDTO>();
             if (manager == null)

@@ -11,12 +11,15 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AutoMapper;
+using BLL.DTO;
+using DAL.Identity;
 
 namespace Bootstrap
 {
     public static class BootstrapConfig
     {
-        private const string ServiceNamespace = "BLL.Services";
+        private static IMapper mapper = MapUsers(); // TODO: if doesn't work Identity, use this!
 
         public static void RegisterApplicationServices(this IServiceCollection services, string nameConnection)
         {
@@ -34,22 +37,38 @@ namespace Bootstrap
             services.AddTransient<IIdentityUnitOfWork, IdentityUnitOfWork>();
 
             // Adding services.
-            var serviceAssembly = Assembly.Load("BLL");
-
-            var serviceRegistrations = serviceAssembly
-                .GetExportedTypes()
-                .Where(type => type.Namespace == ServiceNamespace && type.GetInterfaces().Any())
-                .Select(type => new
-                {
-                    Interface = type.GetInterfaces().Single(),
-                    Implementation = type
-                });
-
-            foreach (var reg in serviceRegistrations)
-                services.AddTransient(reg.Interface, reg.Implementation);
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IPersonService, PersonService>();
+            services.AddTransient<IPriorityService, PriorityService>();
+            services.AddTransient<IStatusService, StatusService>();
+            services.AddTransient<ITaskService, TaskService>();
+            services.AddTransient<ITeamService, TeamService>();
+            services.AddTransient<IUserService, UserService>();
 
             // Adding Identity for working with users and with their roles.
-            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>(opts =>
+            {
+                opts.User.RequireUniqueEmail = true;
+
+                opts.Password.RequiredLength = 6;
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequireLowercase = false;
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequireUppercase = false;
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddUserManager<ApplicationUserManager>()
+                .AddDefaultTokenProviders();
+        }
+
+        private static IMapper MapUsers()
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ApplicationUser, UserDTO>();
+            });
+
+            return config.CreateMapper();
         }
     }
 }

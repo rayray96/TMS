@@ -5,72 +5,83 @@ using DAL.Interfaces;
 using DAL.Entities;
 using System.Security.Claims;
 using System.Collections.Generic;
+using DAL.Identity;
 
 namespace DAL.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        public UserManager<ApplicationUser> UserManager { get; private set; }
+        public ApplicationUserManager ApplicationUserManager { get; private set; }
 
-        public UserRepository(UserManager<ApplicationUser> userManager)
+        public UserRepository(ApplicationUserManager applicationUserManager)
         {
-            UserManager = userManager;
+            ApplicationUserManager = applicationUserManager;
+        }
+
+        public async Task<IList<string>> GetRolesAsync(ApplicationUser user)
+        {
+            return await ApplicationUserManager.GetRolesAsync(user);
         }
 
         public async Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName)
         {
-            return await UserManager.GetUsersInRoleAsync(roleName);
+            return await ApplicationUserManager.GetUsersInRoleAsync(roleName);
         }
 
         public async Task<IdentityResult> AddClaimAsync(ApplicationUser user, Claim claim)
         {
-            
-            return await UserManager.AddClaimAsync(user, claim);
+
+            return await ApplicationUserManager.AddClaimAsync(user, claim);
         }
 
         public async Task<ApplicationUser> FindByEmailAsync(string email)
         {
-            return await UserManager.FindByEmailAsync(email);
+            return await ApplicationUserManager.FindByEmailAsync(email);
+        }
+
+        public async Task<bool> CheckPasswordAsync(ApplicationUser user, string password)
+        {
+            return await ApplicationUserManager.CheckPasswordAsync(user, password);
         }
 
         public async Task<ApplicationUser> FindByLoginAsync(string userName, string password)
         {
-            return await UserManager.FindByLoginAsync(userName, password);
+            return await ApplicationUserManager.FindByLoginAsync(userName, password); // Remake!!!
         }
 
         public async Task<ApplicationUser> FindByIdAsync(string userId)
         {
-            return await UserManager.FindByIdAsync(userId);
+            return await ApplicationUserManager.FindByIdAsync(userId);
         }
 
         public async Task<ApplicationUser> FindByNameAsync(string userName)
         {
-            return await UserManager.FindByNameAsync(userName);
+            return await ApplicationUserManager.FindByNameAsync(userName);
         }
 
         public async Task<IdentityResult> CreateAsync(ApplicationUser user, string password)
         {
-            return await UserManager.CreateAsync(user, password);
+            return await ApplicationUserManager.CreateAsync(user, password);
         }
 
         public async Task<IdentityResult> UpdateAsync(ApplicationUser user)
         {
-            return await UserManager.UpdateAsync(user);
+            return await ApplicationUserManager.UpdateAsync(user);
         }
 
         public async Task<IdentityResult> DeleteAsync(ApplicationUser user)
         {
-            return await UserManager.DeleteAsync(user);
+            return await ApplicationUserManager.DeleteAsync(user);
         }
 
         public async Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string role)
         {
-            return await UserManager.AddToRoleAsync(user, role);
+            return await ApplicationUserManager.AddToRoleAsync(user, role);
         }
 
         public async Task<IdentityResult> RemoveFromRoleAsync(ApplicationUser user, string role)
         {
-            return await UserManager.RemoveFromRoleAsync(user, role);
+            return await ApplicationUserManager.RemoveFromRoleAsync(user, role);
         }
 
         private bool disposed = false;
@@ -81,7 +92,7 @@ namespace DAL.Repositories
             {
                 if (disposing)
                 {
-                    UserManager.Dispose();
+                    ApplicationUserManager.Dispose();
                 }
                 this.disposed = true;
             }

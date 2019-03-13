@@ -5,27 +5,23 @@ using DAL.Interfaces;
 using DAL.Entities;
 using DAL.Repositories;
 using DAL.EF;
-using Microsoft.EntityFrameworkCore;
 
 namespace DAL.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private PersonRepository personRepository;
-        private StatusRepository statusRepository;
-        private TaskRepository taskRepository;
-        private PriorityRepository priorityRepository;
-        private TeamRepository teamRepository;
+        private IRepository<Person> personRepository;
+        private IRepository<Status> statusRepository;
+        private IRepository<TaskInfo> taskRepository;
+        private IRepository<Priority> priorityRepository;
+        private IRepository<Team> teamRepository;
 
         private ApplicationDbContext Context { get; }
         private UserManager<ApplicationUser> UserManager { get; }
 
-        public UnitOfWork(string connectionString)
+        public UnitOfWork(ApplicationDbContext context)
         {
-            var optionBuilder= new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionBuilder.UseSqlServer(connectionString);
-
-            Context = new ApplicationDbContext(optionBuilder.Options);
+            Context = context;
         }
 
         public IRepository<Person> People

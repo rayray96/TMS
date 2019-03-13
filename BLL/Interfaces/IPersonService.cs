@@ -51,6 +51,8 @@ namespace BLL.Interfaces
         /// <returns>Enumerations of persons who doesn't have a team</returns>
         IEnumerable<PersonDTO> GetPeopleWithoutTeam();
 
+        //IEnumerable<PersonDTO> GetPeopleInTeam(Person manager); // TODO: Rewrite!!!
+
         /// <summary>
         /// Get person with current Id.
         /// </summary>

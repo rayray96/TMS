@@ -11,7 +11,7 @@ using DAL.Entities;
 
 namespace BLL.Services
 {
-    class PriorityService : IPriorityService
+    public class PriorityService : IPriorityService
     {
         private IUnitOfWork db { get; set; }
         private IMapper mapper { get; set; }
@@ -19,7 +19,7 @@ namespace BLL.Services
         public PriorityService(IUnitOfWork uow)
         {
             db = uow;
-            mapper = MapperConfig.MapperResult();
+            mapper = MapperConfig.GetMapperResult();
         }
 
         public IEnumerable<PriorityDTO> GetAllPriorities()

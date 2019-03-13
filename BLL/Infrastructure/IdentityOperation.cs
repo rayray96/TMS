@@ -5,13 +5,13 @@
     /// </summary>
     public class IdentityOperation
     {
-        public bool Succedeed { get; private set; }
+        public bool Succeedeed { get; private set; }
         public string Message { get; private set; }
         public string Property { get; private set; }
 
-        public IdentityOperation(bool succedeed, string message, string prop)
+        public IdentityOperation(bool succeedeed, string message, string prop)
         {
-            Succedeed = succedeed;
+            Succeedeed = succeedeed;
             Message = message;
             Property = prop;
         }

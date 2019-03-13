@@ -17,7 +17,7 @@ namespace BLL.Services
         public StatusService(IUnitOfWork uow)
         {
             db = uow;
-            mapper = MapperConfig.MapperResult();
+            mapper = MapperConfig.GetMapperResult();
         }
 
         public IEnumerable<StatusDTO> GetAllStatuses()

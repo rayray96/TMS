@@ -22,7 +22,7 @@ namespace BLL.Services
         public TeamService(IUnitOfWork uow)
         {
             db = uow;
-            mapper = MapperConfig.MapperResult();
+            mapper = MapperConfig.GetMapperResult();
         }
 
         public IEnumerable<TeamDTO> GetAllTeams()
@@ -45,6 +45,24 @@ namespace BLL.Services
                 team.TeamName = newName;
                 db.Teams.Create(team);
             }
+        }
+
+        public void CreateTeam(Person manager, string teamName)
+        {
+            var team = new Team { TeamName = teamName };
+            IEnumerable<Team> checkTeamExists = db.Teams.Find(t => (t.TeamName == teamName));
+
+            if (checkTeamExists != null)
+                throw new ArgumentException("This team already exists", teamName);
+
+            if (manager.Role != "Manager")
+                throw new ArgumentException("This user is not a manager", manager.Name);
+
+            db.Teams.Create(team);
+            manager.TeamId = team.Id;
+            db.People.Create(manager);
+
+            db.Save();
         }
     }
 }

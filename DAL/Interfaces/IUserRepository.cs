@@ -21,6 +21,9 @@ namespace DAL.Interfaces
         Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string role);
         Task<IdentityResult> RemoveFromRoleAsync(ApplicationUser user, string role);
 
+        Task<bool> CheckPasswordAsync(ApplicationUser user, string password);
+
+        Task<IList<string>> GetRolesAsync(ApplicationUser user);
         Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName);
     }
 }
