@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BLL.DTO;
 using BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -31,6 +32,7 @@ namespace WebApi.Controllers
             this.tokenService = tokenService;
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult> Register([FromBody]RegisterViewModel model)
         {
@@ -61,6 +63,7 @@ namespace WebApi.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("token")]
         public async Task<ActionResult> AccessToken([FromBody]LoginViewModel login)
         {
@@ -75,11 +78,14 @@ namespace WebApi.Controllers
 
             var refreshToken = await tokenService.GenerateRefreshTokenAsync(login.Name);
 
-            return Ok(new
+            var response = new
             {
-                token,
-                refreshToken = refreshToken.Token
-            });
+                AccessToken = token,
+                RefreshToken = refreshToken.Token,
+                Logsn = login.Name
+            };
+
+            return Ok(response);
         }
 
         [HttpPost("{refreshToken}/refresh")]
@@ -102,11 +108,14 @@ namespace WebApi.Controllers
             var token = tokenService.GenerateToken(identity.Claims, 3);
             tokenService.UpdateRefreshToken(_refreshToken);
 
-            return Ok(new
+            var response = new
             {
-                token,
-                refreshToken = _refreshToken.Token
-            });
+                AccessToken = token,
+                RefreshToken = _refreshToken.Token,
+                Login = identity.Claims.First()
+            };
+
+            return Ok(response);
         }
     }
 }

@@ -19,8 +19,6 @@ namespace Bootstrap
 {
     public static class BootstrapConfig
     {
-        private static IMapper mapper = MapUsers(); // TODO: if doesn't work Identity, use this!
-
         public static void RegisterApplicationServices(this IServiceCollection services, string nameConnection)
         {
             // Creating connection with our database.
@@ -59,16 +57,6 @@ namespace Bootstrap
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddUserManager<ApplicationUserManager>()
                 .AddDefaultTokenProviders();
-        }
-
-        private static IMapper MapUsers()
-        {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ApplicationUser, UserDTO>();
-            });
-
-            return config.CreateMapper();
         }
     }
 }

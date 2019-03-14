@@ -13,7 +13,7 @@ namespace WebApi.Controllers
     public class ValuesController : ControllerBase
     {
         // GET api/values
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        //[Authorize(AuthenticationSchemes = "Bearer")]
         [Route("getlogin")]
         //[HttpGet]
         public IActionResult GetLogin()
