@@ -8,9 +8,6 @@ namespace DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Team> builder)
         {
-            //builder
-            //    .HasKey(e => e.Id);
-
             builder
                 .Property(e => e.TeamName)
                 .IsRequired()

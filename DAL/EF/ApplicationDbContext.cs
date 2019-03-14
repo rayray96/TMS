@@ -34,6 +34,7 @@ namespace DAL.EF
             modelBuilder.ApplyConfiguration(new PrioritySetup());
             modelBuilder.ApplyConfiguration(new TeamSetup());
             modelBuilder.ApplyConfiguration(new IdentityRoleSetup());
+            modelBuilder.ApplyConfiguration(new ApplicationUserSetup());
             modelBuilder.ApplyConfiguration(new RefreshTokenSetup());
 
             base.OnModelCreating(modelBuilder);

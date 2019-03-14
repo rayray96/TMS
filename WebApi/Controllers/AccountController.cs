@@ -23,10 +23,12 @@ namespace WebApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IUserService userService;
+        private readonly ITokenService tokenService;
 
-        public AccountController(IUserService userService)
+        public AccountController(IUserService userService, ITokenService tokenService)
         {
             this.userService = userService;
+            this.tokenService = tokenService;
         }
 
         [HttpPost("register")]
@@ -37,10 +39,12 @@ namespace WebApi.Controllers
                 var user = new UserDTO
                 {
                     Email = model.Email,
-                    UserName = model.Name,
-                    Password = model.Password
+                    UserName = model.UserName,
+                    Password = model.Password,
+                    FName = model.FName,
+                    LName = model.LName
                 };
-                var result = await userService.CreateAsync(user);
+                var result = await userService.CreateUserAsync(user);
                 if (result.Succeedeed)
                 {
                     return Ok(model);
@@ -58,75 +62,51 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("token")]
-        public async Task<ActionResult> Login([FromBody]LoginViewModel login)
+        public async Task<ActionResult> AccessToken([FromBody]LoginViewModel login)
         {
-
-            var identity = await userService.GetClaimsIdentityAsync(login.Name, login.Password);
+            var identity = await tokenService.GetClaimsIdentityAsync(login.Name, login.Password);
             if (identity == null)
             {
                 ModelState.AddModelError("login", "Invalid username or password");
                 return BadRequest(ModelState);
-                //Response.StatusCode = 400;
-                //await Response.WriteAsync("Invalid username or password");
-                //return;
             }
-            var token = userService.GenerateToken(identity.Claims, 1);
-            var refreshToken = Guid.NewGuid().ToString();
-            //return Ok(new { token });
-            var _refreshToken = await userService.SetRefreshToken(login.Name, refreshToken);
-            //var _refreshTokenObj = new RefreshToken
-            //{
-            //    Username = login.Name,
-            //    Refreshtoken = Guid.NewGuid().ToString()
-            //};
-            //_db.RefreshTokens.Add(_refreshTokenObj);
-            //_db.SaveChanges(); // move this part if program to SetRefreshToken.
+
+            var token = tokenService.GenerateToken(identity.Claims, 2);
+
+            var refreshToken = await tokenService.GenerateRefreshTokenAsync(login.Name);
 
             return Ok(new
             {
                 token,
-                refreshToken// = _refreshTokenObj.Refreshtoken
+                refreshToken = refreshToken.Token
             });
-
-            //return BadRequest("Could not verify username and password");
-
-            //var response = new
-            //{
-            //    access_token = encodedJwt,
-            //    username = identity.Name
-            //};
-
-            //// Serialization response.
-            //Response.ContentType = "application/json";
-            //await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
+
         [HttpPost("{refreshToken}/refresh")]
         public async Task<ActionResult> RefreshToken([FromRoute]string refreshToken)
         {
-            var _refreshToken = userService.GetRefreshToken(refreshToken);//_db.RefreshTokens.SingleOrDefault(m => m.Refreshtoken == refreshToken);
-
+            var _refreshToken = tokenService.GetRefreshToken(refreshToken);
             if (_refreshToken == null)
+                return BadRequest();
+
+            if (_refreshToken.Expires < DateTime.Now)
+                return Unauthorized();
+
+            var identity = await tokenService.GetClaimsIdentityAsync(_refreshToken.UserId);
+            if (identity == null)
             {
-                return NotFound("Refresh token not found");
+                ModelState.AddModelError("userId", "Invalid userId");
+                return BadRequest(ModelState);
             }
-            //var userclaim = new[] { new Claim(ClaimTypes.Name, _refreshToken.Username) };
-            //var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretKey"]));
-            //var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            //var token = new JwtSecurityToken(
-            //    issuer: "https://localhost:5001",
-            //    audience: "https://localhost:5001",
-            //    claims: userclaim,
-            //    expires: DateTime.Now.AddMinutes(2),
-            //    signingCredentials: creds);
+            var token = tokenService.GenerateToken(identity.Claims, 3);
+            tokenService.UpdateRefreshToken(_refreshToken);
 
-            var identity = await userService.GetClaimsIdentityAsync(_refreshToken.UserId);
-            var token = userService.GenerateToken(identity.Claims, 10);
-            _refreshToken.Refreshtoken = Guid.NewGuid().ToString();
-            //_db.RefreshTokens.Update(_refreshToken);
-            //_db.SaveChanges();
-
-            return Ok(new { token, refToken = _refreshToken.Refreshtoken });
+            return Ok(new
+            {
+                token,
+                refreshToken = _refreshToken.Token
+            });
         }
     }
 }

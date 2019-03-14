@@ -11,7 +11,7 @@ namespace DAL.Configurations
                  .HasKey(e => e.Id);
 
             builder
-                 .Property(e => e.Refreshtoken)
+                 .Property(e => e.Token)
                  .IsRequired();
 
             builder

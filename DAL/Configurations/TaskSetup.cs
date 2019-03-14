@@ -8,9 +8,6 @@ namespace DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<TaskInfo> builder)
         {
-            //builder
-            //    .HasKey(e => e.Id);
-
             builder
                 .Property(e => e.Name)
                 .IsRequired()

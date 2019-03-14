@@ -56,7 +56,7 @@ namespace BLL.Services
                 throw new ArgumentException("This team already exists", teamName);
 
             if (manager.Role != "Manager")
-                throw new ArgumentException("This user is not a manager", manager.Name);
+                throw new ArgumentException("This user is not a manager", manager.UserName);
 
             db.Teams.Create(team);
             manager.TeamId = team.Id;

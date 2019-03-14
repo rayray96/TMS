@@ -4,8 +4,8 @@ namespace WebApi.AccountModels
 {
     public class LoginViewModel
     {
-        [Required(ErrorMessage = "Not specified Email")]
-        [Display(Name = "Name")]
+        [Required(ErrorMessage = "Not specified username")]
+        [Display(Name = "Username")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Not specified password")]

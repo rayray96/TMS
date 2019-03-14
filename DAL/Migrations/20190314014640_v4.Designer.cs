@@ -4,14 +4,16 @@ using DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190314014640_v4")]
+    partial class v4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,13 +36,9 @@ namespace DAL.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FName")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                    b.Property<string>("FName");
 
-                    b.Property<string>("LName")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                    b.Property<string>("LName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -281,22 +279,22 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2de5e722-43ac-4c5c-9c6b-8f13bd26ada7",
-                            ConcurrencyStamp = "b4090688-e453-401b-9d62-97b611c238ce",
+                            Id = "3ebb95e4-b38a-4e5a-93e9-43c61b159184",
+                            ConcurrencyStamp = "569b6af2-bec0-409f-a74f-27aa6042498a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8e295fc9-6f4e-4a74-a0fb-c5345bf82494",
-                            ConcurrencyStamp = "4280c9cb-f9c8-4f9e-889d-7cf6a71450a7",
+                            Id = "e681eb0d-c007-49ae-b634-921f2a055a88",
+                            ConcurrencyStamp = "426c8117-4a91-4d3a-9ffd-c40a99a3bf23",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "52ad0df6-58b5-4c58-bdfd-4fbc28e25c0a",
-                            ConcurrencyStamp = "5ade07fd-42db-4e8c-a9cb-10b1e30660e2",
+                            Id = "73cb8b3f-ba77-4c50-8ddc-e72675f5964e",
+                            ConcurrencyStamp = "792de438-b4b8-49aa-86db-cfa62f013e2d",
                             Name = "Worker",
                             NormalizedName = "WORKER"
                         });

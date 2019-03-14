@@ -22,7 +22,17 @@ namespace WebApi.AccountModels
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
-        [Display(Name = "Name")]
-        public string Name { get; set; }
+        [Display(Name = "Username")]
+        public string UserName { get; set; }
+
+        [Required]
+        [StringLength(50, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
+        [Display(Name = "First Name")]
+        public string FName { get; set; }
+
+        [Required]
+        [StringLength(50, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
+        [Display(Name = "Last Name")]
+        public string LName { get; set; }
     }
 }

@@ -72,7 +72,7 @@ namespace BLL.Services
             foreach (var member in newTeamMembers)
             {
                 string emailBody = string.Format(EmailService.BODY_NEW_TEAM_MEMBER,
-                                                 member.Name, manager.Team.TeamName, manager.Name);
+                                                 member.FName + " " + member.LName, manager.Team.TeamName, manager.FName + " " + manager.LName);
                 emailService.Send(manager.Email, member.Email, EmailService.SUBJECT_NEW_TEAM_MEMBER, emailBody);
             }
         }

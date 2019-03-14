@@ -31,7 +31,7 @@ namespace BLL.Services
             if (task == null)
                 throw new TaskNotFoundException("Task with this id not found");
 
-            if (task.Author.Name == currentUserName)
+            if (task.Author.UserName == currentUserName)
             {
                 db.Tasks.Delete(task.Id);
                 db.Save();
@@ -47,13 +47,13 @@ namespace BLL.Services
             if (string.IsNullOrWhiteSpace(authorName))
                 throw new PersonNotFoundException("Author is not shown");
 
-            PersonDTO authorDTO = mapper.Map<Person, PersonDTO>(db.People.Find(p => p.Name == authorName).Single());
+            PersonDTO authorDTO = mapper.Map<Person, PersonDTO>(db.People.Find(p => p.UserName == authorName).Single());
 
             PersonDTO assigneeDTO;
             if (string.IsNullOrEmpty(assigneeName))
                 assigneeDTO = authorDTO;
             else
-                assigneeDTO = mapper.Map<Person, PersonDTO>(db.People.Find(p => p.Name == assigneeName).Single());
+                assigneeDTO = mapper.Map<Person, PersonDTO>(db.People.Find(p => p.UserName == assigneeName).Single());
 
             StatusDTO status = mapper.Map<Status, StatusDTO>(db.Statuses.Find(s => (s.Name == "Not Started")).SingleOrDefault());
             if (status == null)
@@ -100,9 +100,9 @@ namespace BLL.Services
                 if ((authorName == null))
                     throw new ManagerNotFoundException("The author name cannot be null");
 
-                if (taskForEdit.Author.Name == authorName)
+                if (taskForEdit.Author.UserName == authorName)
                 {
-                    Person author = db.People.Find(p => (p.Name == authorName)).Single();
+                    Person author = db.People.Find(p => (p.UserName == authorName)).Single();
 
                     taskForEdit.Priority.Id = task.PriorityId.Id;
                     taskForEdit.Status.Name = task.Status.Name;
@@ -138,7 +138,7 @@ namespace BLL.Services
                 throw new ManagerNotFoundException("Manager is not found");
 
             IEnumerable<TaskInfo> tasks = db.Tasks.Find(t => ((t.Author.Id == manager.Id) &&
-                                            (t.Assignee.Id != manager.Id))).OrderBy(tsk => tsk.Assignee.Name).ToList();
+                                            (t.Assignee.Id != manager.Id))).OrderBy(tsk => tsk.Assignee.UserName).ToList();
 
             IEnumerable<TaskDTO> resulttasks = mapper.Map<IEnumerable<TaskInfo>, IEnumerable<TaskDTO>>(tasks);
             return resulttasks;

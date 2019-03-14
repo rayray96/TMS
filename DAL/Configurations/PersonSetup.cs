@@ -16,6 +16,21 @@ namespace DAL.Configurations
                 .IsRequired();
 
             builder
+                .Property(e => e.UserName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            builder
+                .Property(e => e.FName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            builder
+                .Property(e => e.LName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            builder
                 .HasOne(e => e.ApplicationUser)
                 .WithMany(e=>e.People)
                 .HasForeignKey(e=>e.UserId)

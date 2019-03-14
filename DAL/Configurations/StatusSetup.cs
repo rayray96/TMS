@@ -8,9 +8,6 @@ namespace DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Status> builder)
         {
-            //builder
-            //    .HasKey(e => e.Id);
-
             builder
                 .Property(e => e.Name)
                 .IsRequired()
