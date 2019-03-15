@@ -29,12 +29,12 @@ namespace BLL.Services
             return mapper.Map<IEnumerable<Priority>, IEnumerable<PriorityDTO>>(priorities);
         }
 
-        public IEnumerable<TaskDTO> GetTaskWithPriority(string priorityName)
+        public IEnumerable<TaskDTO> GetTaskWithPriority(int id)
         {
-            if (priorityName == null)
-                throw new PriorityIsNullException("Current priority name is null");
+            //if (priorityName == null)
+            //    throw new PriorityIsNullException("Current priority name is null");
 
-            var tasks = db.Tasks.Find(t => (t.Priority.Name == priorityName));
+            var tasks = db.Tasks.Find(t => (t.Priority.Id == id));
             var resultTasks = mapper.Map<IEnumerable<TaskInfo>, IEnumerable<TaskDTO>>(tasks);
 
             return resultTasks;

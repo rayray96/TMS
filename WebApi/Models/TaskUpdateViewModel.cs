@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace WebApi.Models
 {
-    public class TaskViewModel
+    public class TaskUpdateViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -10,10 +13,6 @@ namespace WebApi.Models
         public string Priority { get; set; }
         public string Author { get; set; }
         public string Assignee { get; set; }
-        public string Status { get; set; }
-        public int? Progress { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? FinishDate { get; set; }
         public DateTime? Deadline { get; set; }
     }
 }

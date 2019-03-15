@@ -19,6 +19,6 @@ namespace BLL.Interfaces
         /// </summary>
         /// <param name="priorityName">Name of current priority</param>
         /// <returns>Enumerations of tasks</returns>
-        IEnumerable<TaskDTO> GetTaskWithPriority(string priorityName);
+        IEnumerable<TaskDTO> GetTaskWithPriority(int id);
     }
 }

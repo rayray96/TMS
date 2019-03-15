@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using BLL.DTO;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Configurations;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -15,22 +19,41 @@ namespace WebApi.Controllers
     public class StatusController : ControllerBase
     {
         private readonly IStatusService statusService;
+        private readonly ITaskService taskService;
+        private readonly IMapper mapper;
 
         public StatusController(IStatusService statusService)
         {
             this.statusService = statusService;
+            mapper = MapperConfig.GetMapperResult();
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult GetStatuses()
         {
-            var statuses = statusService.GetAllStatuses();
-            List<string> list = new List<string>();
-            foreach (var status in statuses)
+            IEnumerable<StatusViewModel> statuses;
+            if (User.IsInRole("Worker"))
             {
-                list.Add(status.Name);
+                statuses = mapper.Map<IEnumerable<StatusDTO>, IEnumerable<StatusViewModel>>(statusService.GetActiveStatuses());
             }
-            return list;
+            else
+            {
+                statuses = mapper.Map<IEnumerable<StatusDTO>, IEnumerable<StatusViewModel>>(statusService.GetNotActiveStatuses());
+            }
+            return Ok(statuses);
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult UpdateStatus(int id, [FromBody] string status)
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userIdInt = Convert.ToInt32(userIdString);
+            if (status != null)
+            {
+                taskService.UpdateStatus(id, status, userIdInt);
+            }
+
+            return Ok();
         }
     }
 }

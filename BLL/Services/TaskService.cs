@@ -42,7 +42,7 @@ namespace BLL.Services
             }
         }
 
-        public void CreateTask(TaskDTO task, string authorName, string assigneeName, string priority, string deadline)
+        public void CreateTask(TaskDTO task, string authorName, string assigneeName, string priority, DateTime? deadline)
         {
             if (string.IsNullOrWhiteSpace(authorName))
                 throw new PersonNotFoundException("Author is not shown");
@@ -66,25 +66,24 @@ namespace BLL.Services
             else
                 prior = null;
 
-
-            DateTime? endDate;
-            if (deadline != null)
-                endDate = Convert.ToDateTime(deadline);
-            else
-                endDate = null;
+            //DateTime? endDate;
+            //if (deadline != null)
+            //    endDate = Convert.ToDateTime(deadline);
+            //else
+            //    endDate = null;
 
             var newTask = new TaskDTO
             {
                 Name = task.Name,
                 Description = task.Description,
-                PriorityId = prior,
+                PriorityId = prior.Name,
                 Author = authorDTO,
-                Assignee = assigneeDTO,
+                Assignee = assigneeDTO.UserName,
                 Status = status,
                 Progress = 0,
                 StartDate = null,
                 FinishDate = null,
-                Deadline = endDate,
+                Deadline = deadline,
             };
 
             db.Tasks.Create(mapper.Map<TaskDTO, TaskInfo>(newTask));
@@ -104,10 +103,11 @@ namespace BLL.Services
                 {
                     Person author = db.People.Find(p => (p.UserName == authorName)).Single();
 
-                    taskForEdit.Priority.Id = task.PriorityId.Id;
-                    taskForEdit.Status.Name = task.Status.Name;
-                    taskForEdit.StartDate = task.StartDate;
-                    taskForEdit.FinishDate = task.FinishDate;
+                    taskForEdit.Name = task.Name;
+                    taskForEdit.Priority.Name = task.PriorityId;
+                    //taskForEdit.Status.Name = task.Status.Name;
+                    //taskForEdit.StartDate = task.StartDate;
+                    //taskForEdit.FinishDate = task.FinishDate;
                     taskForEdit.Description = task.Description;
                     taskForEdit.Deadline = task.Deadline;
                 }
