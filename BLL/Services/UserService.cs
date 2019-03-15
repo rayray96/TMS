@@ -30,14 +30,14 @@ namespace BLL.Services
         private IIdentityUnitOfWork Database { get; set; }
         private IConfiguration Configuration { get; set; }
         private IMapper mapper { get; set; }
-        
+
         public UserService(IIdentityUnitOfWork unitOfWork, IConfiguration configuration)
         {
             Database = unitOfWork;
             Configuration = configuration;
             mapper = MapperConfig.GetMapperResult();
         }
-        
+
         public async Task<IdentityOperation> CreateUserAsync(UserDTO userDTO)
         {
             ApplicationUser appUser = await Database.Users.FindByEmailAsync(userDTO.Email);
@@ -93,6 +93,66 @@ namespace BLL.Services
             {
                 return new IdentityOperation(false, "User with this email is already exist", "Email");
             }
+        }
+
+        public async Task<IdentityOperation> UpdateUserRole(string userId, string roleName)
+        {
+            var user = await Database.Users.FindByIdAsync(userId);
+            if (user != null)
+                return new IdentityOperation(false, "User with this Id is not found", "userId");
+
+            var userRole = user.People.FirstOrDefault().Role;
+
+            if ((roleName == "Manager") && (userRole == "Worker"))
+            {
+                var team = user.People.FirstOrDefault().TeamId;
+                if (team != null)
+                    return new IdentityOperation(false, "In one team cannot be two manager", "userRole");
+
+                await Database.Users.AddToRoleAsync(user, "Manager");
+                await Database.Users.RemoveFromRoleAsync(user, "Worker");
+            }
+            else if ((roleName == "Worker") && (userRole == "Manager"))
+            {
+                var team = user.People.FirstOrDefault().TeamId;
+                if (team != null)
+                    return new IdentityOperation(false, "Cannot change role, this manager has got a team", "userRole");
+
+                await Database.Users.AddToRoleAsync(user, "Worker");
+                await Database.Users.RemoveFromRoleAsync(user, "Manager");
+            }
+            else if ((roleName == "Admin") || (userRole == "Admin"))
+            {
+                return new IdentityOperation(false, "Only the one administrator have to be in database", "userRole");
+            }
+            else
+            {
+                return new IdentityOperation(false, "Current role cannot find in database", "roleName");
+            }
+
+            await Database.SaveAsync();
+            return new IdentityOperation(true, "Role has been changed", "");
+        }
+
+        public async Task<IEnumerable<UserDTO>> GetAllWorkers()
+        {
+            var users = await Database.Users.GetUsersInRoleAsync("Worker");
+
+            return mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<UserDTO>>(users);
+        }
+
+        public async Task<IEnumerable<UserDTO>> GetAllManagers()
+        {
+            var users = await Database.Users.GetUsersInRoleAsync("Manager");
+
+            return mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<UserDTO>>(users);
+        }
+
+        public async Task<UserDTO> GetUser(string id)
+        {
+            var user = await Database.Users.FindByIdAsync(id);
+
+            return mapper.Map<ApplicationUser, UserDTO>(user);
         }
 
         public void Dispose()

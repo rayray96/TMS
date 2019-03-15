@@ -53,10 +53,10 @@ namespace BLL.Services
             IEnumerable<Team> checkTeamExists = db.Teams.Find(t => (t.TeamName == teamName));
 
             if (checkTeamExists != null)
-                throw new ArgumentException("This team already exists", teamName);
+                throw new TeamExistsException("This team already exists");
 
             if (manager.Role != "Manager")
-                throw new ArgumentException("This user is not a manager", manager.UserName);
+                throw new ManagerNotFoundException("This user is not a manager");
 
             db.Teams.Create(team);
             manager.TeamId = team.Id;

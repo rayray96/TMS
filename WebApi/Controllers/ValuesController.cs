@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         }
 
         // GET api/values/5
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [Route("getrole")]
         //[HttpGet]
         public IActionResult GetRole()

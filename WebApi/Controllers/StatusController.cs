@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BLL.DTO;
 using BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +19,6 @@ namespace WebApi.Controllers
         public StatusController(IStatusService statusService)
         {
             this.statusService = statusService;
-            //this.statusService = HttpContext.RequestServices.GetService(typeof(IStatusService)) as IStatusService;
         }
 
         [HttpGet]

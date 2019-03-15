@@ -14,7 +14,6 @@ namespace DAL.Interfaces
         Task<ApplicationUser> FindByIdAsync(string userId);
         Task<ApplicationUser> FindByNameAsync(string userName);
 
-        Task<IdentityResult> AddClaimAsync(ApplicationUser user, Claim claim);
         Task<IdentityResult> CreateAsync(ApplicationUser user, string password);
         Task<IdentityResult> UpdateAsync(ApplicationUser user);
         Task<IdentityResult> DeleteAsync(ApplicationUser user);

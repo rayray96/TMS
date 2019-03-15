@@ -28,12 +28,6 @@ namespace DAL.Repositories
             return await ApplicationUserManager.GetUsersInRoleAsync(roleName);
         }
 
-        public async Task<IdentityResult> AddClaimAsync(ApplicationUser user, Claim claim)
-        {
-
-            return await ApplicationUserManager.AddClaimAsync(user, claim);
-        }
-
         public async Task<ApplicationUser> FindByEmailAsync(string email)
         {
             return await ApplicationUserManager.FindByEmailAsync(email);
