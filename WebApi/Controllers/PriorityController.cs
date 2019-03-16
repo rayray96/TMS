@@ -28,6 +28,11 @@ namespace WebApi.Controllers
         [HttpGet]
         public IActionResult GetPriorities()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             IEnumerable<PriorityViewModel> priorities = mapper.Map<IEnumerable<PriorityDTO>, IEnumerable<PriorityViewModel>>(priorityService.GetAllPriorities()).ToList();
 
             return Ok(priorities);
@@ -36,6 +41,11 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetTasksWithPriority(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var tasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(priorityService.GetTaskWithPriority(id));
 
             return Ok(tasks);

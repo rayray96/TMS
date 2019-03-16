@@ -33,6 +33,11 @@ namespace WebApi.Controllers
         [HttpGet]
         public IActionResult GetMyTeam()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             PersonDTO person = personService.GetPerson(id);
@@ -50,11 +55,16 @@ namespace WebApi.Controllers
         [HttpGet("possibleMembers")]
         public IActionResult GetPossibleMembers()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             IEnumerable<PersonViewModel> persons = mapper.Map<IEnumerable<PersonDTO>, IEnumerable<PersonViewModel>>(personService.GetPeopleWithoutTeam());
 
             return Ok(new
             {
-                Name = "PossibleMembers",
+                Name = "Possible Members",
                 Value = persons.ToList()
             });
         }
@@ -62,6 +72,11 @@ namespace WebApi.Controllers
         [HttpPost("{id}")]
         public IActionResult DeleteFromTeam(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 personService.DeletePersonFromTeam(id);
@@ -77,6 +92,11 @@ namespace WebApi.Controllers
         [HttpPost("addMembers")]
         public IActionResult AddMembersToTeam(int[] persons)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var managerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             try

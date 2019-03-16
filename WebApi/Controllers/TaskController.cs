@@ -34,8 +34,13 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetTasks()
+        public IActionResult GetTasks()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             IEnumerable<TaskViewModel> tasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(
                 taskService.GetTasksOfAssignee(User.FindFirstValue(ClaimTypes.NameIdentifier))).ToList();
 
@@ -45,6 +50,11 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteTask(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 // Try to delete this task and check task id and current user Name if he can delete it,
@@ -63,6 +73,11 @@ namespace WebApi.Controllers
         [HttpPost]
         public IActionResult CreateTask([FromBody]CreateTaskViewModel newTask)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             string author = User.Identity.Name;
 
             var task = new TaskViewModel
@@ -87,6 +102,11 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetTask(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var task = taskService.GetTask(id);
             if (task == null)
             {
@@ -115,6 +135,11 @@ namespace WebApi.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateTask(int id, [FromBody]TaskUpdateViewModel taskUpdate)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             string author = User.Identity.Name;
             var task = new TaskDTO
             {
@@ -140,9 +165,14 @@ namespace WebApi.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        [HttpGet("teamtasks")]
+        [HttpGet("teamTasks")]
         public IActionResult TaskOfMyTeam()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             PersonDTO manager = personService.GetPerson(id);
 
@@ -157,9 +187,15 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("assignees/{id}")]
-        public ActionResult GetAssignees(int managerId)
+        public IActionResult GetAssignees(int managerId)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             IEnumerable<PersonViewModel> assignees = mapper.Map<IEnumerable<PersonDTO>, IEnumerable<PersonViewModel>>(personService.GetAssignees(managerId));
+
             return Ok(assignees);
         }
     }

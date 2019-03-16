@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace WebApi
 {
@@ -74,9 +75,11 @@ namespace WebApi
                                  .RequireAuthenticatedUser()
                                  .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
+                config.Filters.Add(typeof(ExceptionFilterAttribute));
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            //services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,6 +100,7 @@ namespace WebApi
 
             app.UseAuthentication();
             app.UseMvc();
+            // app.UseCors();
         }
     }
 }

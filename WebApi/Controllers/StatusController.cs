@@ -22,15 +22,21 @@ namespace WebApi.Controllers
         private readonly ITaskService taskService;
         private readonly IMapper mapper;
 
-        public StatusController(IStatusService statusService)
+        public StatusController(IStatusService statusService, ITaskService taskService)
         {
             this.statusService = statusService;
+            this.taskService = taskService;
             mapper = MapperConfig.GetMapperResult();
         }
 
         [HttpGet]
         public ActionResult GetStatuses()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             IEnumerable<StatusViewModel> statuses;
             if (User.IsInRole("Worker"))
             {
@@ -46,6 +52,11 @@ namespace WebApi.Controllers
         [HttpPut("{id}")]
         public ActionResult UpdateStatus(int id, [FromBody] string status)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userIdInt = Convert.ToInt32(userIdString);
             if (status != null)

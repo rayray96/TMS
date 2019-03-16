@@ -67,6 +67,11 @@ namespace WebApi.Controllers
         [HttpPost("token")]
         public async Task<ActionResult> AccessToken([FromBody]LoginViewModel login)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var identity = await tokenService.GetClaimsIdentityAsync(login.Name, login.Password);
             if (identity == null)
             {
@@ -91,6 +96,11 @@ namespace WebApi.Controllers
         [HttpPost("{refreshToken}/refresh")]
         public async Task<ActionResult> RefreshToken([FromRoute]string refreshToken)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var _refreshToken = tokenService.GetRefreshToken(refreshToken);
             if (_refreshToken == null)
                 return BadRequest();
