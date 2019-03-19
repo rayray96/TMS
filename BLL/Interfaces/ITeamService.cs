@@ -24,6 +24,6 @@ namespace BLL.Interfaces
         /// ///<exception cref="ArgumentException">Team wasn't found</exception>
         void ChangeTeamName(int id, string newName);
 
-        void CreateTeam(Person manager, string teamName);
+        void CreateTeam(PersonDTO manager, string teamName);
     }
 }

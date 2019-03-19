@@ -18,6 +18,7 @@ using System.Text;
 using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 
 namespace WebApi
 {
@@ -69,6 +70,18 @@ namespace WebApi
             //    .Build();
             //});
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowLocalHost4200", builder => builder.WithOrigins("http://localhost:4200")
+                                                              .AllowAnyHeader()
+                                                              .AllowAnyMethod());
+            });
+
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowLocalHost4200"));
+            });
+
             services.AddMvc(config =>
             {
                 var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
@@ -78,8 +91,6 @@ namespace WebApi
                 config.Filters.Add(typeof(ExceptionFilterAttribute));
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            //services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -99,8 +110,10 @@ namespace WebApi
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            app.UseCors("AllowLocalHost4200");
+
             app.UseMvc();
-            // app.UseCors();
         }
     }
 }

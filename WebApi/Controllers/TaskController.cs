@@ -96,7 +96,7 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
 
-            return Ok(new { result = "Task was created!" });
+            return Ok(new { result = "Task has created!" });
         }
 
         [HttpGet("{id}")]

@@ -52,6 +52,29 @@ namespace WebApi.Controllers
             });
         }
 
+        [HttpPost("{id}")]
+        public IActionResult CreateTeam(int id, [FromBody] string teamName)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var author = personService.GetPerson(id);
+
+            try
+            {
+                teamService.CreateTeam(author, teamName);
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("Team hasn't created.", e.Message);
+                return BadRequest();
+            }
+
+            return Ok(new { result = "Team has created!" });
+        }
+
         [HttpGet("possibleMembers")]
         public IActionResult GetPossibleMembers()
         {
@@ -69,7 +92,7 @@ namespace WebApi.Controllers
             });
         }
 
-        [HttpPost("{id}")]
+        [HttpDelete("{id}")]
         public IActionResult DeleteFromTeam(int id)
         {
             if (!ModelState.IsValid)

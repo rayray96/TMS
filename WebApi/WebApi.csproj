@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Bootstrap\Bootstrap.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

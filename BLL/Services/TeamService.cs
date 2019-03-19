@@ -47,7 +47,7 @@ namespace BLL.Services
             }
         }
 
-        public void CreateTeam(Person manager, string teamName)
+        public void CreateTeam(PersonDTO manager, string teamName)
         {
             var team = new Team { TeamName = teamName };
             IEnumerable<Team> checkTeamExists = db.Teams.Find(t => (t.TeamName == teamName));
@@ -59,8 +59,8 @@ namespace BLL.Services
                 throw new ManagerNotFoundException("This user is not a manager");
 
             db.Teams.Create(team);
-            manager.TeamId = team.Id;
-            db.People.Create(manager);
+            manager.Team = mapper.Map<Team, TeamDTO>(team);
+            db.People.Create(mapper.Map<PersonDTO, Person>(manager));
 
             db.Save();
         }
