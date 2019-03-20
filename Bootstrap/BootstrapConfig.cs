@@ -42,6 +42,7 @@ namespace Bootstrap
             services.AddTransient<ITaskService, TaskService>();
             services.AddTransient<ITeamService, TeamService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ITokenService, TokenService>();
 
             // Adding Identity for working with users and with their roles.
             services.AddIdentity<ApplicationUser, IdentityRole>(opts =>

@@ -47,14 +47,13 @@ namespace WebApi.Controllers
                     LName = model.LName
                 };
                 var result = await userService.CreateUserAsync(user);
-                if (result.Succeedeed)
+                if (result.Succeeded)
                 {
-                    return Ok(model);
+                    return Ok(result);
                 }
                 else
                 {
-                    ModelState.AddModelError(result.Property, result.Message);
-                    return BadRequest(ModelState);
+                    return BadRequest(result);
                 }
             }
             else

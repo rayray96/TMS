@@ -75,7 +75,7 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
             var result = await userService.UpdateUserRole(Id, model.Role);
-            if (result.Succeedeed)
+            if (result.Succeeded)
             {
                 return Ok();
             }
