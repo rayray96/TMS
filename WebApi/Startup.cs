@@ -37,7 +37,11 @@ namespace WebApi
             // Using extension method from Bootstrap project.
             services.RegisterApplicationServices("DefaultConnection");
             // Adding and configuring JwtBearer Authentication.
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                                .AddJwtBearer(options =>
                                {
                                    options.RequireHttpsMetadata = false; // For real application use true!
@@ -63,12 +67,12 @@ namespace WebApi
                                    };
                                });
 
-            //services.AddAuthorization(options =>
-            //{
-            //    options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
-            //    .RequireAuthenticatedUser()
-            //    .Build();
-            //});
+            services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build();
+            });
 
             services.AddCors(options =>
             {
@@ -95,6 +99,10 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            // The change only affects 204, 205, and 304 status code responses,
+            // which aren't allowed to have a body anyways.
+            // This change only sets a bool to false on flush,
+            // which is checked when IIS is determining if it should set the encoding to chunked or not.
             app.Use(async (ctx, next) =>
             {
                 await next();

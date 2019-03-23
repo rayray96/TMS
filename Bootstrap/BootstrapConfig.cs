@@ -14,6 +14,7 @@ using System.Reflection;
 using AutoMapper;
 using BLL.DTO;
 using DAL.Identity;
+using DAL.Repositories;
 
 namespace Bootstrap
 {
@@ -30,19 +31,28 @@ namespace Bootstrap
             var connectionString = configuration.GetConnectionString(nameConnection);
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
-            // Adding unit of work.
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<IIdentityUnitOfWork, IdentityUnitOfWork>();
+            // Registering repositories.
+            services.AddScoped<IRepository<Person>, PersonRepository>();
+            services.AddScoped<IRepository<TaskInfo>, TaskRepository>();
+            services.AddScoped<IRepository<Team>, TeamRepository>();
+            services.AddScoped<IRepository<Status>, StatusRepository>();
+            services.AddScoped<IRepository<Priority>, PriorityRepository>();
+            services.AddScoped<IRepository<RefreshToken>, RefreshTokenRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
-            // Adding services.
-            services.AddTransient<IEmailService, EmailService>();
-            services.AddTransient<IPersonService, PersonService>();
-            services.AddTransient<IPriorityService, PriorityService>();
-            services.AddTransient<IStatusService, StatusService>();
-            services.AddTransient<ITaskService, TaskService>();
-            services.AddTransient<ITeamService, TeamService>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<ITokenService, TokenService>();
+            // Registering units of work.
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IIdentityUnitOfWork, IdentityUnitOfWork>();
+
+            // Registering services.
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IPersonService, PersonService>();
+            services.AddScoped<IPriorityService, PriorityService>();
+            services.AddScoped<IStatusService, StatusService>();
+            services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<ITeamService, TeamService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITokenService, TokenService>();
 
             // Adding Identity for working with users and with their roles.
             services.AddIdentity<ApplicationUser, IdentityRole>(opts =>
@@ -50,6 +60,8 @@ namespace Bootstrap
                 opts.User.RequireUniqueEmail = true;
 
                 opts.Password.RequiredLength = 6;
+                opts.Password.RequiredUniqueChars = 0;
+                opts.Password.RequireDigit = false;
                 opts.Password.RequireNonAlphanumeric = false;
                 opts.Password.RequireLowercase = false;
                 opts.Password.RequireNonAlphanumeric = false;

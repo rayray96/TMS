@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "004.MultipleParameters", ".
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "003.OptionalParameters", "..\..\ASP.NET\ASP.NET Core\004_Routing\004_Samples\RoutingTemplates\003.OptionalParameters\003.OptionalParameters.csproj", "{CEA6B17B-EB22-4B5B-91A6-4C96B41DE6F1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeLists", "C:\Users\vnovikov\Desktop\externalCoursesAngular_WebApi-master\AwesomeLists\AwesomeLists.csproj", "{F562AC6F-8E11-45D3-8478-A6AF866DD535}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{CEA6B17B-EB22-4B5B-91A6-4C96B41DE6F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEA6B17B-EB22-4B5B-91A6-4C96B41DE6F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEA6B17B-EB22-4B5B-91A6-4C96B41DE6F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F562AC6F-8E11-45D3-8478-A6AF866DD535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F562AC6F-8E11-45D3-8478-A6AF866DD535}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F562AC6F-8E11-45D3-8478-A6AF866DD535}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F562AC6F-8E11-45D3-8478-A6AF866DD535}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

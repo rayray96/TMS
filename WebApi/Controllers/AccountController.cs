@@ -33,8 +33,8 @@ namespace WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
-        public async Task<ActionResult> Register([FromBody]RegisterViewModel model)
+        [HttpPost("sign-up")]
+        public async Task<ActionResult> SignUpAsync([FromBody]RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -63,8 +63,8 @@ namespace WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("token")]
-        public async Task<ActionResult> AccessToken([FromBody]LoginViewModel login)
+        [HttpPost("sign-in")]
+        public async Task<ActionResult> SignInAsync([FromBody]LoginViewModel login)
         {
             if (!ModelState.IsValid)
             {
@@ -86,14 +86,14 @@ namespace WebApi.Controllers
             {
                 AccessToken = token,
                 RefreshToken = refreshToken.Token,
-                Logsn = login.Name
+                Login = login.Name
             };
 
             return Ok(response);
         }
 
         [HttpPost("{refreshToken}/refresh")]
-        public async Task<ActionResult> RefreshToken([FromRoute]string refreshToken)
+        public async Task<ActionResult> GetRefreshTokenAsync([FromRoute]string refreshToken)
         {
             if (!ModelState.IsValid)
             {
