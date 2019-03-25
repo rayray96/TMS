@@ -7,21 +7,21 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class UserService {
 
-  constructor(private fb:FormBuilder, private http: HttpClient) { }
+  constructor(private fb: FormBuilder, private http: HttpClient) { }
   readonly BaseURI = 'http://localhost:61738/api';
 
   formModel = this.fb.group({
     UserName: ['', Validators.required],
-    Email:['',[Validators.required,Validators.email]],
+    Email: ['', [Validators.required, Validators.email]],
     FirstName: ['', Validators.required],
     LastName: ['', Validators.required],
     Passwords: this.fb.group({
-      Password:['', [Validators.required, Validators.minLength(6)]],
+      Password: ['', [Validators.required, Validators.minLength(6)]],
       ConfirmPassword: ['', Validators.required]
-    }, {validator: this.comparePasswords})
+    }, { validator: this.comparePasswords })
   });
 
-  comparePasswords(fb: FormGroup){
+  comparePasswords(fb: FormGroup) {
     let confirmPswrdCtrl = fb.get('ConfirmPassword');
     //passwordMismatch
     //confirmPswrdCtrl.errors={passwordMismatch:true}
@@ -45,11 +45,11 @@ export class UserService {
     return this.http.post(this.BaseURI + '/account/sign-up', body);
   }
 
-  login(formData){
+  login(formData) {
     return this.http.post(this.BaseURI + '/account/sign-in', formData);
   }
 
-  getUserProfile(){
+  getUserProfile() {
     return this.http.get(this.BaseURI + '/userProfile')
   }
 }

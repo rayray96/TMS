@@ -4,7 +4,6 @@ import { UserComponent } from './user/user.component';
 import { RegistrationComponent } from './user/registration/registration.component';
 import { LoginComponent } from './user/login/login.component';
 import { HomeComponent } from './home/home.component';
-import { CanActivate } from '@angular/router/src/utils/preactivation';
 import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
@@ -18,7 +17,7 @@ const routes: Routes = [
       { path: 'login', component: LoginComponent }
     ]
   },
-  { path: 'home', component: HomeComponent, canActivate:[AuthGuard] }
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

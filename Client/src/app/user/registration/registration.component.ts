@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/shared/user.service';
+import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -25,18 +25,34 @@ export class RegistrationComponent implements OnInit {
           res.message.forEach(element => {
             switch (element.code) {
               case 'DuplicateUserName':
-                this.toastr.error('Username is already taken','Registration failed.');
+                this.toastr.error('Username is already taken', 'Registration failed.');
                 break;
 
               default:
-              this.toastr.error(element.description,'Registration failed.');
+                this.toastr.error(element.description, 'Registration failed.');
                 break;
             }
           });
         }
       },
       (err: any) => {
-          this.toastr.error(err.message);
+        if (err.status == 400) {
+          err.message.forEach(element => {
+            switch (element.code) {
+              case 'DuplicateUserName':
+                this.toastr.error('Username is already taken', 'Registration failed.');
+                break;
+
+              default:
+                this.toastr.error(element.description, 'Registration failed.');
+                break;
+            }
+          });
+        }
+        else {
+          console.log(err);
+          this.toastr.error('Unable to create new user', 'Registration failed');
+        }
       }
     );
   }

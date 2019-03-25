@@ -31,7 +31,7 @@ namespace WebApi.Controllers
             this.userService = userService;
             this.tokenService = tokenService;
         }
-
+        // POST api/account/sign-up
         [AllowAnonymous]
         [HttpPost("sign-up")]
         public async Task<ActionResult> SignUpAsync([FromBody]RegisterViewModel model)
@@ -61,7 +61,7 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
         }
-
+        // POST api/account/sign-in
         [AllowAnonymous]
         [HttpPost("sign-in")]
         public async Task<ActionResult> SignInAsync([FromBody]LoginViewModel login)
@@ -71,7 +71,7 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var identity = await tokenService.GetClaimsIdentityAsync(login.Name, login.Password);
+            var identity = await tokenService.GetClaimsIdentityAsync(login.UserName, login.Password);
             if (identity == null)
             {
                 ModelState.AddModelError("login", "Invalid username or password");
@@ -80,18 +80,18 @@ namespace WebApi.Controllers
 
             var token = tokenService.GenerateToken(identity.Claims, 2);
 
-            var refreshToken = await tokenService.GenerateRefreshTokenAsync(login.Name);
+            var refreshToken = await tokenService.GenerateRefreshTokenAsync(login.UserName);
 
             var response = new
             {
                 AccessToken = token,
                 RefreshToken = refreshToken.Token,
-                Login = login.Name
+                Login = login.UserName
             };
 
             return Ok(response);
         }
-
+        // POST api/account/{refreshToken}/refresh
         [HttpPost("{refreshToken}/refresh")]
         public async Task<ActionResult> GetRefreshTokenAsync([FromRoute]string refreshToken)
         {

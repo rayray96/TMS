@@ -13,11 +13,6 @@ namespace DAL.EF
             Database.Migrate();
         }
 
-        public ApplicationDbContext()
-        {
-            Database.Migrate();
-        }
-
         public DbSet<Person> People { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<TaskInfo> TaskInfos { get; set; }

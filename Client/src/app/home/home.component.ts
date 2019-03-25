@@ -7,8 +7,11 @@ import { UserService } from '../shared/user.service';
   templateUrl: './home.component.html',
   styles: []
 })
+
 export class HomeComponent implements OnInit {
+
 userDetails;
+
   constructor(private router: Router, private service: UserService) { }
 
   ngOnInit() {
@@ -18,12 +21,12 @@ userDetails;
       },
       err => {
         console.log(err)
-      }
-    )
+      },
+    );
   }
 
   onLogout() {
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
     this.router.navigate(['/user/login'])
   }
 }

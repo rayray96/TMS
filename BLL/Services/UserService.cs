@@ -35,7 +35,7 @@ namespace BLL.Services
         {
             Database = unitOfWork;
             Configuration = configuration;
-            mapper = MapperConfig.GetMapperResult();
+            mapper = MapperConfig.GetIdentityMapperResult();
         }
 
         public async Task<IdentityOperation> CreateUserAsync(UserDTO userDTO)
@@ -147,12 +147,15 @@ namespace BLL.Services
 
             return mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<UserDTO>>(users);
         }
-
-        public async Task<UserDTO> GetUser(string id)
+        // Fixed bugs with role.
+        public async Task<UserDTO> GetUser(string userName)
         {
-            var user = await Database.Users.FindByIdAsync(id);
+            var user = await Database.Users.FindByNameAsync(userName);
+            var role = await Database.Users.GetRolesAsync(user);
+            var userDTO =  mapper.Map<ApplicationUser, UserDTO>(user);
+            userDTO.Role = role.FirstOrDefault();
 
-            return mapper.Map<ApplicationUser, UserDTO>(user);
+            return userDTO;
         }
 
         public void Dispose()

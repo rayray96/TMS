@@ -15,6 +15,7 @@ namespace WebApi.Configurations
                 cfg.CreateMap<PriorityDTO, PriorityViewModel>();
                 cfg.CreateMap<TeamDTO, TeamViewModel>();
                 cfg.CreateMap<TaskDTO, TaskViewModel>();
+                cfg.CreateMap<UserDTO, UserViewModel>();
             });
 
             return config.CreateMapper();

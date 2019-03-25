@@ -57,7 +57,7 @@ namespace WebApi.Controllers
 
             try
             {
-                // Try to delete this task and check task id and current user Name if he can delete it,
+                // Try to delete this task and check task id and current user UserName if he can delete it,
                 // because deleting task is available only for author of task.
                 taskService.DeleteTask(id, User.Identity.Name);
             }

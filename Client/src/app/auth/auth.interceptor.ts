@@ -3,30 +3,34 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { JwtService } from '../services/jwt.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private jwt: JwtService) {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (localStorage.getItem('token') != null) {
+        if (this.jwt.getAccessToken != null) {
             const clonedReq = req.clone({
-                headers: req.headers.set('Authorization', 'Bearer' + localStorage.getItem('token'))
+                setHeaders: {
+                    Authorization: `Bearer ${this.jwt.getAccessToken}`
+                }
             });
             return next.handle(clonedReq).pipe(
                 tap(
-                    success => { },
+                    succ => { },
                     err => {
-                        if (err.status == 401)
-                        localStorage.removeItem('token');
-                        this.router.navigateByUrl('/user/login');
+                        if (err.status == 401) {
+                            this.jwt.clearToken();
+                            this.router.navigateByUrl('/user/login');
+                        }
                     }
                 )
             )
         }
         else
-        return next.handle(req.clone());
+            return next.handle(req.clone());
     }
 }

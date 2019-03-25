@@ -6,14 +6,11 @@ namespace WebApi.AccountModels
     {
         [Required(ErrorMessage = "Not specified username")]
         [Display(Name = "Username")]
-        public string Name { get; set; }
+        public string UserName { get; set; }
 
         [Required(ErrorMessage = "Not specified password")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
-
-        [Display(Name = "Remember me?")]
-        public bool RememberMe { get; set; }
     }
 }

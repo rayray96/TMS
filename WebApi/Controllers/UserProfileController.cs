@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
+using BLL.DTO;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Configurations;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -14,26 +19,24 @@ namespace WebApi.Controllers
     public class UserProfileController : ControllerBase
     {
         private readonly IUserService userService;
+        private readonly IMapper mapper;
 
         public UserProfileController(IUserService userService)
         {
             this.userService = userService;
+            mapper = MapperConfig.GetMapperResult();
         }
 
+        // GET api/userProfile
         [HttpGet]
-        //GET : /api/UserProfile
         public async Task<object> GetUserProfile()
         {
-            string userId = User.Claims.First(c => c.Type == "UserID").Value;
-            var user = await userService.GetUser(userId);
-            return new
-            {
-                user.FName,
-                user.LName,
-                user.Role,
-                user.Email,
-                user.UserName
-            };
+            string userName = User.FindFirstValue(ClaimsIdentity.DefaultNameClaimType);
+            var user = await userService.GetUser(userName);
+
+            var model = mapper.Map<UserDTO, UserViewModel>(user);
+
+            return Ok(model);
         }
     }
 }
