@@ -78,7 +78,8 @@ namespace WebApi
             {
                 options.AddPolicy("AllowLocalHost4200", builder => builder.WithOrigins("http://localhost:4200")
                                                               .AllowAnyHeader()
-                                                              .AllowAnyMethod());
+                                                              .AllowAnyMethod()
+                                                              .AllowCredentials());
             });
 
             services.Configure<MvcOptions>(options =>
@@ -118,17 +119,16 @@ namespace WebApi
             }
             else
             {
-                app.UseHsts(); // For HTTPS
+                app.UseHsts();
             }
-            // Property => Debug => Enable SSL
-            app.UseHttpsRedirection(); // HTTP => HTTPS
+
+            app.UseHttpsRedirection();
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
             app.UseAuthentication();
 
             app.UseCors("AllowLocalHost4200");
-
             app.UseMvc();
         }
     }

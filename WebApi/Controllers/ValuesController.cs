@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,9 +10,8 @@ namespace WebApi.Controllers
     public class ValuesController : ControllerBase
     {
         // GET api/values
-        //[Authorize(AuthenticationSchemes = "Bearer")]
         [Route("getlogin")]
-        //[HttpGet]
+        [HttpGet]
         public IActionResult GetLogin()
         {
             return Ok($"Your login: {User.Claims.First(x => x.Type == ClaimsIdentity.DefaultNameClaimType).Value}");
@@ -24,7 +20,7 @@ namespace WebApi.Controllers
         // GET api/values/5
         [Authorize(Roles = "Admin")]
         [Route("getrole")]
-        //[HttpGet]
+        [HttpGet]
         public IActionResult GetRole()
         {
             return Ok("Your role: Admin");

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BLL.DTO;
 using WebApi.Models;
+using WebApi.AccountModels;
 
 namespace WebApi.Configurations
 {

@@ -4,6 +4,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { JwtService } from 'src/app/services/jwt.service';
+import { NgxSpinnerService } from 'ngx-spinner'
 
 @Component({
   selector: 'app-login',
@@ -17,27 +18,31 @@ export class LoginComponent implements OnInit {
     Password: ''
   }
 
-  constructor(private service: UserService, 
-    private router: Router, 
-    private toastr: ToastrService, 
-    private jwt: JwtService) { }
+  constructor(private service: UserService,
+    private router: Router,
+    private toastr: ToastrService,
+    private jwt: JwtService,
+    private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
-    if (this.jwt.getAccessToken != null)
+    if (this.jwt.getAccessToken() != null)
       this.router.navigateByUrl('/home');
   }
 
   onSubmit(form: NgForm) {
+    this.spinner.show();
     this.service.login(form.value).subscribe(
       (res: any) => {
-        this.jwt.persistToken(res.accessToken, res.refreshToken)
+        this.jwt.persistAccessToken(res.accessToken);
         this.router.navigateByUrl('/home');
+        this.spinner.hide();
       },
       err => {
         if (err.status == 400)
           this.toastr.error('Incorrect username or password', 'Authentication failed');
         else
           console.log(err);
+        this.spinner.hide();
       }
     );
   }

@@ -1,5 +1,4 @@
-export interface User {
-    id: string;
+export interface UserModel {
     fName: string;
     lName: string;
     userName: string;

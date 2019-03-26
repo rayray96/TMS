@@ -15,7 +15,7 @@ export class AuthInterceptor implements HttpInterceptor {
         if (this.jwt.getAccessToken != null) {
             const clonedReq = req.clone({
                 setHeaders: {
-                    Authorization: `Bearer ${this.jwt.getAccessToken}`
+                    Authorization: `Bearer ${this.jwt.getAccessToken()}`
                 }
             });
             return next.handle(clonedReq).pipe(
@@ -23,7 +23,7 @@ export class AuthInterceptor implements HttpInterceptor {
                     succ => { },
                     err => {
                         if (err.status == 401) {
-                            this.jwt.clearToken();
+                            this.jwt.clearAccessToken();
                             this.router.navigateByUrl('/user/login');
                         }
                     }

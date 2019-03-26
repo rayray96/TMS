@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using BLL.DTO;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using WebApi.AccountModels;
 
 namespace WebApi.Controllers
@@ -78,7 +68,7 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var token = tokenService.GenerateToken(identity.Claims, 2);
+            var token = tokenService.GenerateToken(identity.Claims, 120);
 
             var refreshToken = await tokenService.GenerateRefreshTokenAsync(login.UserName);
 
@@ -114,7 +104,7 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var token = tokenService.GenerateToken(identity.Claims, 3);
+            var token = tokenService.GenerateToken(identity.Claims, 10);
             tokenService.UpdateRefreshToken(_refreshToken);
 
             var response = new

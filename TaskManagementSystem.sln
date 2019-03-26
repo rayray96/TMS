@@ -11,14 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{B172A594-D4F0-4A4C-AF28-B8B27F28BD31}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "001.Routing", "..\..\ASP.NET\ASP.NET Core\004_Routing\004_Samples\Routing\001.Routing\001.Routing.csproj", "{520A7272-1174-477B-BAD3-A8D322102121}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "002.Routing", "..\..\ASP.NET\ASP.NET Core\004_Routing\004_Samples\Routing\002.Routing\002.Routing.csproj", "{ACB0685A-F16A-4368-928F-DC5A97FA119D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "004.MultipleParameters", "..\..\ASP.NET\ASP.NET Core\004_Routing\004_Samples\RoutingTemplates\004.MultipleParameters\004.MultipleParameters.csproj", "{3E048E3F-0124-4F18-A601-AA651EAB06FF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "003.OptionalParameters", "..\..\ASP.NET\ASP.NET Core\004_Routing\004_Samples\RoutingTemplates\003.OptionalParameters\003.OptionalParameters.csproj", "{CEA6B17B-EB22-4B5B-91A6-4C96B41DE6F1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeLists", "C:\Users\vnovikov\Desktop\externalCoursesAngular_WebApi-master\AwesomeLists\AwesomeLists.csproj", "{F562AC6F-8E11-45D3-8478-A6AF866DD535}"
 EndProject
 Global
@@ -43,22 +35,6 @@ Global
 		{B172A594-D4F0-4A4C-AF28-B8B27F28BD31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B172A594-D4F0-4A4C-AF28-B8B27F28BD31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B172A594-D4F0-4A4C-AF28-B8B27F28BD31}.Release|Any CPU.Build.0 = Release|Any CPU
-		{520A7272-1174-477B-BAD3-A8D322102121}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{520A7272-1174-477B-BAD3-A8D322102121}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{520A7272-1174-477B-BAD3-A8D322102121}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{520A7272-1174-477B-BAD3-A8D322102121}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ACB0685A-F16A-4368-928F-DC5A97FA119D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ACB0685A-F16A-4368-928F-DC5A97FA119D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ACB0685A-F16A-4368-928F-DC5A97FA119D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ACB0685A-F16A-4368-928F-DC5A97FA119D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E048E3F-0124-4F18-A601-AA651EAB06FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E048E3F-0124-4F18-A601-AA651EAB06FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E048E3F-0124-4F18-A601-AA651EAB06FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E048E3F-0124-4F18-A601-AA651EAB06FF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CEA6B17B-EB22-4B5B-91A6-4C96B41DE6F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CEA6B17B-EB22-4B5B-91A6-4C96B41DE6F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CEA6B17B-EB22-4B5B-91A6-4C96B41DE6F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CEA6B17B-EB22-4B5B-91A6-4C96B41DE6F1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F562AC6F-8E11-45D3-8478-A6AF866DD535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F562AC6F-8E11-45D3-8478-A6AF866DD535}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F562AC6F-8E11-45D3-8478-A6AF866DD535}.Release|Any CPU.ActiveCfg = Release|Any CPU

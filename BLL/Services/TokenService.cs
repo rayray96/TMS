@@ -29,7 +29,7 @@ namespace BLL.Services
         private IIdentityUnitOfWork Database { get; set; }
         private IConfiguration Configuration { get; set; }
         private IMapper mapper { get; set; }
-        // Done!
+
         public TokenService(IIdentityUnitOfWork unitOfWork, IConfiguration configuration)
         {
             Database = unitOfWork;
@@ -111,7 +111,7 @@ namespace BLL.Services
 
             return claimsIdentity;
         }
-        // Done!
+        
         public string GenerateToken(IEnumerable<Claim> claims, double lifeTime)
         {
             var now = DateTime.UtcNow;
@@ -141,7 +141,7 @@ namespace BLL.Services
             }
             else
             {
-                throw new PersonNotFoundException("Refresh token with this was not found"); // TODO: exception.
+                throw new Exception("Refresh token has not found"); // TODO: exception.
             }
         }
         // Done!
@@ -177,7 +177,7 @@ namespace BLL.Services
                     UserId = appUser.Id,
                     Token = Guid.NewGuid().ToString(),
                     Issue = DateTime.Now,
-                    Expires = DateTime.Now.AddMinutes(5)
+                    Expires = DateTime.Now.AddMinutes(10)
                 };
 
                 Database.RefreshTokens.Create(newRefreshToken);
@@ -190,7 +190,7 @@ namespace BLL.Services
                 throw new Exception("User with this username is not exist"); // TODO: Exception
             }
         }
-        // Done!
+        
         public void Dispose()
         {
             Database.Dispose();
