@@ -6,9 +6,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UserService {
+  readonly BaseURI = 'https://localhost:44360/api';
+  userRole: string;
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
-  readonly BaseURI = 'https://localhost:44360/api';
 
   formModel = this.fb.group({
     UserName: ['', Validators.required],
@@ -50,6 +51,20 @@ export class UserService {
   }
 
   getUserProfile() {
-    return this.http.get(this.BaseURI + '/userProfile')
+    return this.http.get(this.BaseURI + '/userProfile');
+  }
+
+  setUserRole(role: string){
+    //this.userRole=role;
+    localStorage.setItem('role', role);
+  }
+
+  getUserRole(){
+    //return this.userRole;
+    return localStorage.getItem('role');
+  }
+
+  removeRoleFromStorage(){
+    localStorage.removeItem('role');
   }
 }

@@ -5,8 +5,14 @@
   type="ball-scale-multiple">
  <p style="font-size: 20px; color: white">Loading...</p>
 </ngx-spinner>
+
 <nav class="navbar navbar-dark bg-dark">
   <a class="navbar-brand text-white">Task Management System</a>
+  <button
+          *ngIf="service.getUserRole() == 'Admin'"
+          routerLink="/admin"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">Admin</button>
   <button class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">Logout</button>
 </nav>
 

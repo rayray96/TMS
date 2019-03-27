@@ -83,7 +83,7 @@ namespace BLL.Services
             }
         }
 
-        public async Task<IdentityOperation> UpdateUserRole(string userId, string roleName)
+        public async Task<IdentityOperation> UpdateUserRoleAsync(string userId, string roleName)
         {
             var user = await Database.Users.FindByIdAsync(userId);
             if (user != null)
@@ -122,21 +122,21 @@ namespace BLL.Services
             return new IdentityOperation(true, "Role has been changed", "");
         }
 
-        public async Task<IEnumerable<UserDTO>> GetAllWorkers()
+        public async Task<IEnumerable<UserDTO>> GetAllWorkersAsync()
         {
             var users = await Database.Users.GetUsersInRoleAsync("Worker");
 
             return mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<UserDTO>>(users);
         }
 
-        public async Task<IEnumerable<UserDTO>> GetAllManagers()
+        public async Task<IEnumerable<UserDTO>> GetAllManagersAsync()
         {
             var users = await Database.Users.GetUsersInRoleAsync("Manager");
 
             return mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<UserDTO>>(users);
         }
         // Fixed bugs with role.
-        public async Task<UserDTO> GetUser(string userName)
+        public async Task<UserDTO> GetUserAsync(string userName)
         {
             var user = await Database.Users.FindByNameAsync(userName);
             var role = await Database.Users.GetRolesAsync(user);

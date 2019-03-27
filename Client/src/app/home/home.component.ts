@@ -33,6 +33,7 @@ export class HomeComponent implements OnInit {
   onLogout() {
     this.spinner.show();
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('role');
     this.router.navigate(['/user/login'])
     this.spinner.hide();
   }

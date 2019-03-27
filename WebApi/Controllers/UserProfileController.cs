@@ -27,7 +27,7 @@ namespace WebApi.Controllers
         public async Task<object> GetUserProfile()
         {
             string userName = User.FindFirstValue(ClaimsIdentity.DefaultNameClaimType);
-            var user = await userService.GetUser(userName);
+            var user = await userService.GetUserAsync(userName);
 
             var model = mapper.Map<UserDTO, UserViewModel>(user);
 

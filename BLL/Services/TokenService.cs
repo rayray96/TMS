@@ -1,26 +1,18 @@
-﻿using BLL.DTO;
-using BLL.Infrastructure;
+﻿using AutoMapper;
+using BLL.Configurations;
 using BLL.Interfaces;
+using BLL.Exceptions;
 using DAL.Entities;
 using DAL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using BLL.Exceptions;
-using AutoMapper;
-using BLL.Configurations;
 
 namespace BLL.Services
 {
@@ -36,7 +28,7 @@ namespace BLL.Services
             Configuration = configuration;
             mapper = MapperConfig.GetMapperResult();
         }
-        // Done!
+        
         public async Task<ClaimsIdentity> GetClaimsIdentityAsync(string userName, string password)
         {
             ClaimsIdentity claimsIdentity = null;
@@ -62,22 +54,22 @@ namespace BLL.Services
                     }
                     else
                     {
-                        throw new Exception("This user does not have a role"); // TODO: exception.
+                        throw new RoleException("This user does not have a role");
                     }
                 }
                 else
                 {
-                    throw new Exception("This password is not valid");
+                    throw new InvalidPasswordException("This password is not valid");
                 }
             }
             else
             {
-                throw new Exception("This user does not exist");
+                throw new UserNotFoundException("This user does not exist");
             }
 
             return claimsIdentity;
         }
-        // Done!
+        
         public async Task<ClaimsIdentity> GetClaimsIdentityAsync(string userId)
         {
             ClaimsIdentity claimsIdentity = null;
@@ -101,12 +93,12 @@ namespace BLL.Services
                 }
                 else
                 {
-                    throw new Exception("This user does not have a role"); // TODO: exception.
+                    throw new RoleException("This user does not have a role");
                 }
             }
             else
             {
-                throw new Exception("This user does not exist");
+                throw new UserNotFoundException("This user does not exist");
             }
 
             return claimsIdentity;
@@ -131,7 +123,7 @@ namespace BLL.Services
 
             return encodedJwt;
         }
-        // Done!
+        
         public RefreshTokenDTO GetRefreshToken(string refreshToken)
         {
             if (refreshToken != null)
@@ -141,10 +133,10 @@ namespace BLL.Services
             }
             else
             {
-                throw new Exception("Refresh token has not found"); // TODO: exception.
+                throw new RefreshTokenNotFoundException("Refresh token has not found");
             }
         }
-        // Done!
+        
         public void UpdateRefreshToken(RefreshTokenDTO refreshToken)
         {
             var _refreshToken = Database.RefreshTokens.GetById(refreshToken.Id);
@@ -156,10 +148,10 @@ namespace BLL.Services
             }
             else
             {
-                throw new Exception("Refresh token has not found"); // TODO: Exception.
+                throw new RefreshTokenNotFoundException("Refresh token has not found");
             }
         }
-        // Done!
+        
         public async Task<RefreshTokenDTO> GenerateRefreshTokenAsync(string userName)
         {
             ApplicationUser appUser = await Database.Users.FindByNameAsync(userName);
@@ -187,7 +179,7 @@ namespace BLL.Services
             }
             else
             {
-                throw new Exception("User with this username is not exist"); // TODO: Exception
+                throw new UserNotFoundException("User with this username is not exist");
             }
         }
         

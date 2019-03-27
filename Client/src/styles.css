@@ -93,5 +93,14 @@ div.form-group.required>label:first-child:after{
     text-transform: uppercase;
     font-size: 0.9rem;
  }
-
+ .error-template {
+     padding: 40px 15px;
+     text-align: center;
+     color: #fff;
+    }
+ .error-actions {
+     margin-top:15px;
+     margin-bottom:15px;
+     color: #fff;
+    }
  

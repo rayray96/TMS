@@ -5,11 +5,18 @@ import { RegistrationComponent } from './user/registration/registration.componen
 import { LoginComponent } from './user/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth/auth.guard';
+import { Error404Component } from './components/errors/error404/error404.component';
+import { Error400Component } from './components/errors/error400/error400.component';
+import { Error500Component } from './components/errors/error500/error500.component';
+import { ErrorComponent } from './components/errors/error/error.component';
+import { AdminGuard } from './auth/admin.guard';
 
 const routes: Routes = [
-  {
-    path: '', redirectTo: '/user/login', pathMatch: 'full'
-  },
+  { path: '', redirectTo: '/user/login', pathMatch: 'full' },
+  { path: 'error404', component: Error404Component },
+  { path: 'error400', component: Error400Component },
+  { path: 'error500', component: Error500Component },
+  { path: 'error', component: ErrorComponent },
   {
     path: 'user', component: UserComponent,
     children: [
@@ -22,6 +29,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthGuard, AdminGuard] // Added.
 })
 export class AppRoutingModule { }

@@ -18,12 +18,12 @@ namespace BLL.Interfaces
         /// <returns>Information about result of creating</returns>
         Task<IdentityOperation> CreateUserAsync(UserDTO userDTO);
 
-        Task<IdentityOperation> UpdateUserRole(string userId, string roleName);
+        Task<IdentityOperation> UpdateUserRoleAsync(string userId, string roleName);
 
-        Task<IEnumerable<UserDTO>> GetAllWorkers();
+        Task<IEnumerable<UserDTO>> GetAllWorkersAsync();
 
-        Task<IEnumerable<UserDTO>> GetAllManagers();
+        Task<IEnumerable<UserDTO>> GetAllManagersAsync();
 
-        Task<UserDTO> GetUser(string id);
+        Task<UserDTO> GetUserAsync(string userName);
     }
 }

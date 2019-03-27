@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using BLL.DTO;
 using BLL.Interfaces;
@@ -69,14 +70,15 @@ namespace WebApi.Controllers
             }
 
             var token = tokenService.GenerateToken(identity.Claims, 120);
-
             var refreshToken = await tokenService.GenerateRefreshTokenAsync(login.UserName);
+            var role = await userService.GetUserAsync(login.UserName);
 
             var response = new
             {
                 AccessToken = token,
                 RefreshToken = refreshToken.Token,
-                Login = login.UserName
+                Login = login.UserName,
+                Role = role.Role
             };
 
             return Ok(response);
@@ -111,7 +113,14 @@ namespace WebApi.Controllers
             {
                 AccessToken = token,
                 RefreshToken = _refreshToken.Token,
-                Login = identity.Claims.First()
+                Login = identity.Claims
+                       .Where(c => c.Type == ClaimTypes.Role)
+                       .Select(c => c.Value)
+                       .FirstOrDefault(),
+                Role = identity.Claims
+                       .Where(c => c.Type == ClaimTypes.Role)
+                       .Select(c => c.Value)
+                       .FirstOrDefault()
             };
 
             return Ok(response);

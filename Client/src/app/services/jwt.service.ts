@@ -4,9 +4,9 @@ import * as jwt_decode from 'jwt-decode';
 
 @Injectable()
 export class JwtService {
+  readonly BaseURI = 'https://localhost:44360/api';
 
   constructor(private http: HttpClient) { }
-  readonly BaseURI = 'https://localhost:44360/api';
 
   persistAccessToken(accessToken: string): void {
     localStorage.setItem('accessToken', accessToken);

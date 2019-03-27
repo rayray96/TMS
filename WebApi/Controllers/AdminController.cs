@@ -31,8 +31,8 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var managers = await userService.GetAllManagers();
-            var workers = await userService.GetAllWorkers();
+            var managers = await userService.GetAllManagersAsync();
+            var workers = await userService.GetAllWorkersAsync();
 
             var users = new List<UserDTO>();
             users.AddRange(managers);
@@ -49,7 +49,7 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await userService.GetUser(id);
+            var user = await userService.GetUserAsync(id);
             if (user != null)
             {
                 return Ok(user);
@@ -74,7 +74,7 @@ namespace WebApi.Controllers
                 ModelState.AddModelError("", "Invalid userId or roleName");
                 return BadRequest(ModelState);
             }
-            var result = await userService.UpdateUserRole(Id, model.Role);
+            var result = await userService.UpdateUserRoleAsync(Id, model.Role);
             if (result.Succeeded)
             {
                 return Ok();

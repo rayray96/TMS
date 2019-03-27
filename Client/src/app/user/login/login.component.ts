@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { JwtService } from 'src/app/services/jwt.service';
 import { NgxSpinnerService } from 'ngx-spinner'
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -34,14 +35,18 @@ export class LoginComponent implements OnInit {
     this.service.login(form.value).subscribe(
       (res: any) => {
         this.jwt.persistAccessToken(res.accessToken);
+        this.service.setUserRole(res.role);
         this.router.navigateByUrl('/home');
         this.spinner.hide();
       },
       err => {
-        if (err.status == 400)
+        if (err.status == 400 || err.status == 404) {
           this.toastr.error('Incorrect username or password', 'Authentication failed');
-        else
+        }
+        else {
+          this.toastr.error('You cannot log in', 'Authentication failed');
           console.log(err);
+        }
         this.spinner.hide();
       }
     );
