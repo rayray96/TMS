@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using BLL.DTO;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.AccountModels;
+using WebApi.Configurations;
 
 namespace WebApi.Controllers
 {
@@ -17,10 +19,12 @@ namespace WebApi.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IUserService userService;
+        private readonly IMapper mapper;
 
         public AdminController(IUserService userService)
         {
             this.userService = userService;
+            mapper = MapperConfig.GetMapperResult();
         }
 
         [HttpGet]
@@ -38,7 +42,9 @@ namespace WebApi.Controllers
             users.AddRange(managers);
             users.AddRange(workers);
 
-            return Ok(users);
+            var model = mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserViewModel>>(users);
+
+            return Ok(model);
         }
 
         [HttpGet("{id}")]

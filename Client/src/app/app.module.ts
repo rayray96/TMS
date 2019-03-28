@@ -25,6 +25,8 @@ import { AdminRoutingModule } from './admin/admin-routing.module';
 import { AdminHomeComponent } from './admin/admin-home/admin-home.component';
 import { ManageUsersComponent } from './admin/manage-users/manage-users.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { UserDetailComponent } from './admin/user-detail/user-detail.component';
+import { UserDetailListComponent } from './admin/user-detail-list/user-detail-list.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,9 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
     Error400Component,
     Error500Component,
     ErrorComponent,
-    NavBarComponent
+    NavBarComponent,
+    UserDetailComponent,
+    UserDetailListComponent
   ],
   imports: [
     AppMaterialModule,

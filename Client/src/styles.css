@@ -91,18 +91,21 @@ div.form-group.required>label:first-child:after{
  div.form-group input.invalid{
     border: 1px solid #dc3545; 
  }
+ 
  div.form-group label:first-child{
     text-transform: uppercase;
     font-size: 0.9rem;
  }
- .error-template {
+
+.error-template {
      padding: 40px 15px;
      text-align: center;
      color: #fff;
-    }
- .error-actions {
+}
+
+.error-actions {
      margin-top:15px;
      margin-bottom:15px;
      color: #fff;
-    }
+}
  

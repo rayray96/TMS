@@ -25,15 +25,10 @@
   border: 3px solid black;
 }
 
-.spacer {
-  flex: 1 1 auto;
-}
-
 span.main-text {
   font-size: 22px;
-    display:table;
-    margin-left: auto;
-    margin-right: auto;
+    display: table;
+    margin: auto;
     position: static;
 }
 
