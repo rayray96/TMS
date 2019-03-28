@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using WebApi.Configurations;
+using Newtonsoft.Json.Serialization;
 
 namespace WebApi
 {
@@ -95,7 +96,13 @@ namespace WebApi
                                  .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            .AddJsonOptions(options =>
+            {
+                var resolver = options.SerializerSettings.ContractResolver;
+                if (resolver != null)
+                    (resolver as DefaultContractResolver).NamingStrategy = null;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

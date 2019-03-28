@@ -1,20 +1,4 @@
-<ngx-spinner
-  bdColor="rgba(51,51,51,0.8)"
-  size="medium"
-  color="#fff"
-  type="ball-scale-multiple">
- <p style="font-size: 20px; color: white">Loading...</p>
-</ngx-spinner>
-
-<nav class="navbar navbar-dark bg-dark">
-  <a class="navbar-brand text-white">Task Management System</a>
-  <button
-          *ngIf="service.getUserRole() == 'Admin'"
-          routerLink="/admin"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }">Admin</button>
-  <button class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">Logout</button>
-</nav>
+<app-nav-bar></app-nav-bar>
 
 <div class="card m-5" style="width:18rem" *ngIf="userDetails">
   <ul class="list-group">

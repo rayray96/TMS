@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+
 body{
-    background-color: #04c582;;
+    background-color: #04c582;
 }
 
 input.form-control,input.form-control:focus{

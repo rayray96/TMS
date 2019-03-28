@@ -20,14 +20,17 @@ import { Error404Component } from './components/errors/error404/error404.compone
 import { Error400Component } from './components/errors/error400/error400.component';
 import { Error500Component } from './components/errors/error500/error500.component';
 import { ErrorComponent } from './components/errors/error/error.component';
+import { AppMaterialModule } from './app-material/app-material.module';
+import { AdminRoutingModule } from './admin/admin-routing.module';
 import { AdminHomeComponent } from './admin/admin-home/admin-home.component';
 import { ManageUsersComponent } from './admin/manage-users/manage-users.component';
-import { AdminRoutingModule } from './admin/admin-routing.module';
-import { AdminModule } from './admin/admin.module';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AdminHomeComponent,
+    ManageUsersComponent,
     UserComponent,
     RegistrationComponent,
     LoginComponent,
@@ -36,12 +39,11 @@ import { AdminModule } from './admin/admin.module';
     Error400Component,
     Error500Component,
     ErrorComponent,
-    AdminHomeComponent,
-    ManageUsersComponent
+    NavBarComponent
   ],
   imports: [
+    AppMaterialModule,
     BrowserModule,
-    //AdminModule,
     AdminRoutingModule,
     AppRoutingModule,
     ReactiveFormsModule,
