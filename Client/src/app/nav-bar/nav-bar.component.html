@@ -1,10 +1,6 @@
 <!--Spinner for loading-->
-<ngx-spinner
-  bdColor="rgba(51,51,51,0.8)"
-  size="medium"
-  color="#fff"
-  type="ball-scale-multiple">
- <p style="font-size: 20px; color: white">Loading...</p>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
 </ngx-spinner>
 <!--Sidebar-->
 <mat-sidenav-container class="sidenav-container">
@@ -12,11 +8,8 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item routerLink="/home">Home</a>
-      <a mat-list-item
-      *ngIf="service.getUserRole() == 'Admin'"
-      routerLink="/admin"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }">Admin</a>
+      <a mat-list-item *ngIf="service.getUserRole() == 'Admin'" routerLink="/admin" routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">Admin</a>
       <a mat-list-item href="#">Link 2</a>
       <a mat-list-item href="#">Link 3</a>
     </mat-nav-list>
@@ -27,10 +20,10 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span class="main-text">Task Management System</span>
-        <button class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">Logout</button>
+      <button class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">Logout</button>
     </mat-toolbar>
 
   </mat-sidenav-content>
 </mat-sidenav-container>
-<!--Content-->
-<router-outlet></router-outlet>
+<!--Content???-->
+<!-- <router-outlet></router-outlet> -->

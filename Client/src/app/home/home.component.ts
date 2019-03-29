@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { UserModel } from '../models';
-import { NgxSpinnerService } from 'ngx-spinner'
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-home',
@@ -24,17 +24,9 @@ export class HomeComponent implements OnInit {
         this.spinner.hide();
       },
       err => {
-        console.log(err)
+        console.log(err);
         this.spinner.hide();
       },
     );
-  }
-
-  onLogout() {
-    this.spinner.show();
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('role');
-    this.router.navigate(['/user/login'])
-    this.spinner.hide();
   }
 }

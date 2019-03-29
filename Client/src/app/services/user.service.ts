@@ -27,7 +27,7 @@ export class UserService {
     //passwordMismatch
     //confirmPswrdCtrl.errors={passwordMismatch:true}
     if (confirmPswrdCtrl.errors == null || 'passwordMismatch' in confirmPswrdCtrl.errors) {
-      if (fb.get('Password').value != confirmPswrdCtrl.value)
+      if (fb.get('Password').value !== confirmPswrdCtrl.value)
         confirmPswrdCtrl.setErrors({ passwordMismatch: true });
       else
         confirmPswrdCtrl.setErrors(null);
@@ -54,17 +54,17 @@ export class UserService {
     return this.http.get(this.BaseURI + '/userProfile');
   }
 
-  setUserRole(role: string){
+  setUserRole(role: string) {
     //this.userRole=role;
     localStorage.setItem('role', role);
   }
 
-  getUserRole(){
+  getUserRole() {
     //return this.userRole;
     return localStorage.getItem('role');
   }
 
-  removeRoleFromStorage(){
+  removeRoleFromStorage() {
     localStorage.removeItem('role');
   }
 }

@@ -10,15 +10,15 @@ import { AdminGuard } from '../auth/admin.guard';
   imports: [
     RouterModule.forChild([
       {
-        path: "admin",
+        path: 'admin',
         component: AdminHomeComponent,
         canActivate: [AuthGuard, AdminGuard],
         children: [
           {
-            path: "",
+            path: '',
             children: [
-              { path: "users", component: ManageUsersComponent },
-              { path: "", redirectTo: "users", pathMatch: "full" }
+              { path: 'users', component: ManageUsersComponent },
+              { path: '', redirectTo: 'users', pathMatch: 'full' }
             ]
           }
         ]

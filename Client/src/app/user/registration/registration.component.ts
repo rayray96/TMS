@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
-import { NgxSpinnerService } from 'ngx-spinner'
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-registration',
@@ -27,7 +27,7 @@ export class RegistrationComponent implements OnInit {
         this.spinner.hide();
       },
       (err: any) => {
-        if (err.status == 400) {
+        if (err.status === 400) {
           this.toastr.error(err.error.message, 'Registration failed');
         }
         else {

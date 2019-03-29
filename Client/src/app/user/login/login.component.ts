@@ -4,7 +4,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { JwtService } from 'src/app/services/jwt.service';
-import { NgxSpinnerService } from 'ngx-spinner'
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   formModel = {
     UserName: '',
     Password: ''
-  }
+  };
 
   constructor(private service: UserService,
     private router: Router,
@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
         this.spinner.hide();
       },
       err => {
-        if (err.status == 400 || err.status == 404) {
+        if (err.status === 400 || err.status === 404) {
           this.toastr.error('Incorrect username or password', 'Authentication failed');
         }
         else {

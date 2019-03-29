@@ -26,25 +26,11 @@ export class NavBarComponent {
     private router: Router,
     private jwt: JwtService) {}
 
-    ngOnInit() {
-    this.spinner.show();
-    this.service.getUserProfile().subscribe(
-      res => {
-        this.userDetails = (res as UserModel);
-        this.spinner.hide();
-      },
-      err => {
-        console.log(err)
-        this.spinner.hide();
-      },
-    );
-  }
-
   onLogout() {
     this.spinner.show();
     this.jwt.clearAccessToken();
     this.service.removeRoleFromStorage();
-    this.router.navigate(['/user/login'])
+    this.router.navigate(['/user/login']);
     this.spinner.hide();
   }
 }

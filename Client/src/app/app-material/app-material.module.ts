@@ -17,6 +17,7 @@ import {
   MatDatepickerModule,
   MatOptionModule,
   MatSelectModule,
+  MatTableDataSource,
   MatNativeDateModule,
   MatSidenavModule,
   MatListModule
@@ -36,6 +37,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatButtonModule,
     MatCardModule,
     MatInputModule,
+    MatTableDataSource,
     MatDialogModule,
     MatTableModule,
     MatMenuModule,
@@ -64,6 +66,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatTableModule,
     MatMenuModule,
     MatIconModule,
+    MatTableDataSource,
     MatProgressSpinnerModule,
     MatGridListModule,
     MatDividerModule,
