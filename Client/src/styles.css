@@ -132,3 +132,14 @@ input.ng-valid{
 table tr:hover{
     cursor: pointer;
 }
+
+.user-card {
+    max-width: 400px;
+  }
+  
+  .user-header-image {
+    background-image: url('/assets/img/manager-icon.png');
+    background-size: cover;
+    width: 40px;
+    height: 40px;
+  }

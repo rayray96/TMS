@@ -1,11 +1,25 @@
 <app-nav-bar></app-nav-bar>
 
-<div class="card m-5" style="width:18rem" *ngIf="userDetails">
-  <ul class="list-group">
-    <li class="list-group-item"><strong>UserName : </strong>{{userDetails.userName}}</li>
-    <li class="list-group-item"><strong>First Name : </strong>{{userDetails.fName}}</li>
-    <li class="list-group-item"><strong>Last Name : </strong>{{userDetails.lName}}</li>
-    <li class="list-group-item"><strong>Email : </strong>{{userDetails.email}}</li>
-    <li class="list-group-item"><strong>Role : </strong>{{userDetails.role}}</li>
-  </ul>
-</div>
+<mat-card class="card m-5" style="width:18rem" *ngIf="userDetails">
+  <mat-card-header>
+    <div mat-card-avatar class="user-header-image"></div>
+    <mat-card-title>Your Profile</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item><strong>UserName : <br></strong> {{userDetails.userName}}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item><strong>First Name : <br></strong> {{userDetails.fName}}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item><strong>Last Name : <br></strong> {{userDetails.lName}}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item><strong>Email : <br></strong> {{userDetails.email}}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item><strong>Role : <br></strong> {{userDetails.role}}</mat-list-item>
+      <div *ngIf="userDetails.team">
+        <mat-divider></mat-divider>
+        <mat-list-item><strong>Team : <br></strong> {{userDetails.team}}</mat-list-item>
+      </div>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

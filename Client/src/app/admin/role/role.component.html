@@ -1,0 +1,12 @@
+<div class="container">
+  <div>
+    <mat-form-field>
+      <mat-select placeholder="Role" [(value)]="admin.currentUser.role">
+        <mat-option value="Worker">Worker</mat-option>
+        <mat-option value="Manager">Manager</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <button mat-flat-button color="accent" type="submit" mat-button (click)="onSaveCLick($event)">Save and Close</button>
+</div>

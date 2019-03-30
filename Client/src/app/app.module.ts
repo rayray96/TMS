@@ -27,6 +27,7 @@ import { ManageUsersComponent } from './admin/manage-users/manage-users.componen
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { UserDetailComponent } from './admin/user-detail/user-detail.component';
 import { UserDetailListComponent } from './admin/user-detail-list/user-detail-list.component';
+import { RoleComponent } from './admin/role/role.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { UserDetailListComponent } from './admin/user-detail-list/user-detail-li
     ErrorComponent,
     NavBarComponent,
     UserDetailComponent,
-    UserDetailListComponent
+    UserDetailListComponent,
+    RoleComponent
   ],
   imports: [
     AppMaterialModule,
@@ -72,7 +74,7 @@ import { UserDetailListComponent } from './admin/user-detail-list/user-detail-li
       multi: true
     }
   ],
-  entryComponents: [UserDetailListComponent],
+  entryComponents: [RoleComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -125,22 +125,30 @@ namespace BLL.Services
         public async Task<IEnumerable<UserDTO>> GetAllWorkersAsync()
         {
             var users = await Database.Users.GetUsersInRoleAsync("Worker");
+            var userDTOs = mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<UserDTO>>(users);
 
-            return mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<UserDTO>>(users);
+            foreach (var userDTO in userDTOs)
+                userDTO.Role = "Worker";
+            
+            return userDTOs;
         }
 
         public async Task<IEnumerable<UserDTO>> GetAllManagersAsync()
         {
             var users = await Database.Users.GetUsersInRoleAsync("Manager");
+            var userDTOs = mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<UserDTO>>(users);
 
-            return mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<UserDTO>>(users);
+            foreach (var userDTO in userDTOs)
+                userDTO.Role = "Manager";
+
+            return userDTOs;
         }
         // Fixed bugs with role.
         public async Task<UserDTO> GetUserAsync(string userName)
         {
             var user = await Database.Users.FindByNameAsync(userName);
             var role = await Database.Users.GetRolesAsync(user);
-            var userDTO =  mapper.Map<ApplicationUser, UserDTO>(user);
+            var userDTO = mapper.Map<ApplicationUser, UserDTO>(user);
             userDTO.Role = role.FirstOrDefault();
 
             return userDTO;

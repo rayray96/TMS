@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
+  MatSortModule,
+  MatPaginatorModule,
   MatButtonModule,
   MatCardModule,
   MatDialogModule,
@@ -17,7 +19,6 @@ import {
   MatDatepickerModule,
   MatOptionModule,
   MatSelectModule,
-  MatTableDataSource,
   MatNativeDateModule,
   MatSidenavModule,
   MatListModule
@@ -28,6 +29,8 @@ import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
   imports: [
+    MatSortModule,
+    MatPaginatorModule,
     CommonModule,
     MatToolbarModule,
     MatSidenavModule,
@@ -37,7 +40,6 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatButtonModule,
     MatCardModule,
     MatInputModule,
-    MatTableDataSource,
     MatDialogModule,
     MatTableModule,
     MatMenuModule,
@@ -53,6 +55,8 @@ import { LayoutModule } from '@angular/cdk/layout';
     DragDropModule
   ],
   exports: [
+    MatSortModule,
+    MatPaginatorModule,
     CommonModule,
     LayoutModule,
     MatSidenavModule,
@@ -66,7 +70,6 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatTableModule,
     MatMenuModule,
     MatIconModule,
-    MatTableDataSource,
     MatProgressSpinnerModule,
     MatGridListModule,
     MatDividerModule,

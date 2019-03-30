@@ -9,6 +9,8 @@ import { RoleModel } from '../models/role-model';
 })
 export class AdminService {
   readonly BaseURI = 'https://localhost:44360/api/admin';
+  userList: UserModel[];
+  currentUser: UserModel;
 
   constructor(private http: HttpClient, ) { }
 
@@ -25,5 +27,11 @@ export class AdminService {
     const path = `/${id}`;
     const body = { role };
     return this.http.put(this.BaseURI + path, body);
+  }
+
+  public refreshList() {
+    this.http.get(this.BaseURI)
+      .toPromise()
+      .then(res => this.userList = res as UserModel[]);
   }
 }

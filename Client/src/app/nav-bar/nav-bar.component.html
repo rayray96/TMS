@@ -4,17 +4,19 @@
 </ngx-spinner>
 <!--Sidebar-->
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport="true" mode="side">
-    <mat-toolbar>Menu</mat-toolbar>
-    <mat-nav-list>
-      <a mat-list-item routerLink="/home">Home</a>
-      <a mat-list-item *ngIf="service.getUserRole() == 'Admin'" routerLink="/admin" routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">Admin</a>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
-    </mat-nav-list>
-  </mat-sidenav>
   <mat-sidenav-content>
+    <mat-sidenav #drawer class="sidenav" fixedInViewport="true" mode="side">
+      <mat-toolbar>Menu <button class="position-icon" type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+          <mat-icon aria-label="Side nav toggle icon">arrow_back_ios</mat-icon>
+        </button></mat-toolbar>
+      <mat-nav-list>
+        <a mat-list-item routerLink="/home">Home</a>
+        <a mat-list-item *ngIf="service.getUserRole() == 'Admin'" routerLink="/admin" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">Admin</a>
+        <a mat-list-item href="#">Manager</a>
+        <a mat-list-item href="#">Worker</a>
+      </mat-nav-list>
+    </mat-sidenav>
     <mat-toolbar color="primary">
       <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
@@ -25,5 +27,3 @@
 
   </mat-sidenav-content>
 </mat-sidenav-container>
-<!--Content???-->
-<!-- <router-outlet></router-outlet> -->

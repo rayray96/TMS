@@ -1,4 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { AdminService } from 'src/app/services';
+import { Role, RoleModel } from 'src/app/models';
+import { MatDialog } from '@angular/material';
+import { RoleComponent } from '../role/role.component';
+import { filter, mergeMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-detail',
@@ -7,9 +14,34 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserDetailComponent implements OnInit {
 
-  constructor() { }
+  constructor(private admin: AdminService, private dialog: MatDialog, private toastr: ToastrService) { }
 
   ngOnInit() {
+
   }
 
+  public onEditRole(role: RoleModel): void {
+    const dialogRef = this.dialog.open(RoleComponent, {
+      height: '200px',
+      width: '300px',
+      data: { ...role }
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter(response => !!response),
+        mergeMap(response =>
+          this.admin
+            .updateRole(response as RoleModel, this.admin.currentUser.id)
+            .pipe(mergeMap(_ => of(response)))
+        )
+      )
+      .subscribe(
+        success => { },
+        error => {
+          this.toastr.error(error.error);
+        }
+      );
+  }
 }

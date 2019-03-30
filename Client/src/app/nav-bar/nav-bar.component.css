@@ -32,6 +32,10 @@ span.main-text {
     position: static;
 }
 
+.position-icon {
+    margin: 50%;
+}
+
 mat-nav-list a {
   display: inline-block;
   color: white;
