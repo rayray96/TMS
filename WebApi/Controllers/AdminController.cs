@@ -55,7 +55,7 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await userService.GetUserAsync(id);
+            var user = await userService.GetUserByIdAsync(id);
             if (user != null)
             {
                 return Ok(user);

@@ -6,6 +6,7 @@ import { RoleComponent } from '../role/role.component';
 import { filter, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-user-detail',
@@ -14,7 +15,10 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class UserDetailComponent implements OnInit {
 
-  constructor(private admin: AdminService, private dialog: MatDialog, private toastr: ToastrService) { }
+  constructor(private admin: AdminService,
+    private dialog: MatDialog,
+    private toastr: ToastrService,
+    private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
 
@@ -24,7 +28,7 @@ export class UserDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(RoleComponent, {
       height: '200px',
       width: '300px',
-      data: { ...role }
+      data: { role }
     });
 
     dialogRef
@@ -33,14 +37,21 @@ export class UserDetailComponent implements OnInit {
         filter(response => !!response),
         mergeMap(response =>
           this.admin
-            .updateRole(response as RoleModel, this.admin.currentUser.id)
+            .updateRole((response as RoleModel), this.admin.currentUser.id)
             .pipe(mergeMap(_ => of(response)))
         )
       )
       .subscribe(
-        success => { },
+        success => {
+
+          this.admin.currentUser.role = (success as RoleModel).role;
+          this.spinner.hide();
+          this.toastr.success("Role has changed!");
+        },
         error => {
-          this.toastr.error(error.error);
+          console.log(error);
+          this.spinner.hide();
+          this.toastr.warning(error.errors);
         }
       );
   }

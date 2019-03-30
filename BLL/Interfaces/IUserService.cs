@@ -25,5 +25,7 @@ namespace BLL.Interfaces
         Task<IEnumerable<UserDTO>> GetAllManagersAsync();
 
         Task<UserDTO> GetUserAsync(string userName);
+
+        Task<UserDTO> GetUserByIdAsync(string userId);
     }
 }

@@ -1,6 +1,9 @@
-﻿using BLL.DTO;
+﻿using AutoMapper;
+using BLL.DTO;
+using BLL.Configurations;
 using BLL.Infrastructure;
 using BLL.Interfaces;
+using BLL.Exceptions;
 using DAL.Entities;
 using DAL.Interfaces;
 using System;
@@ -8,8 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using AutoMapper;
-using BLL.Configurations;
 
 namespace BLL.Services
 {
@@ -86,28 +87,36 @@ namespace BLL.Services
         public async Task<IdentityOperation> UpdateUserRoleAsync(string userId, string roleName)
         {
             var user = await Database.Users.FindByIdAsync(userId);
-            if (user != null)
+            if (user == null)
                 return new IdentityOperation(false, "User with this Id is not found", "userId");
 
-            var userRole = user.People.FirstOrDefault().Role;
+            var userRole = (await Database.Users.GetRolesAsync(user)).FirstOrDefault();
 
             if ((roleName == "Manager") && (userRole == "Worker"))
             {
-                var team = user.People.FirstOrDefault().TeamId;
-                if (team != null)
-                    return new IdentityOperation(false, "In one team cannot be two manager", "userRole");
+                var person = await Database.People.GetSingleAsync(p => p.UserId == user.Id);
 
+                if (person.TeamId != null)
+                    return new IdentityOperation(false, "In one team cannot be two manager", "userRole");
+                // Changing role for User.
                 await Database.Users.AddToRoleAsync(user, "Manager");
                 await Database.Users.RemoveFromRoleAsync(user, "Worker");
+                // Changing role for Person.
+                person.Role = roleName;
+                Database.People.Update(person);
             }
             else if ((roleName == "Worker") && (userRole == "Manager"))
             {
-                var team = user.People.FirstOrDefault().TeamId;
-                if (team != null)
-                    return new IdentityOperation(false, "Cannot change role, this manager has got a team", "userRole");
+                var person = await Database.People.GetSingleAsync(p => p.UserId == user.Id);
 
+                if (person.TeamId != null)
+                    return new IdentityOperation(false, "Cannot change role, this manager has got a team", "userRole");
+                // Changing role for User.
                 await Database.Users.AddToRoleAsync(user, "Worker");
                 await Database.Users.RemoveFromRoleAsync(user, "Manager");
+                // Changing role for Person.
+                person.Role = roleName;
+                Database.People.Update(person);
             }
             else if ((roleName == "Admin") || (userRole == "Admin"))
             {
@@ -129,7 +138,7 @@ namespace BLL.Services
 
             foreach (var userDTO in userDTOs)
                 userDTO.Role = "Worker";
-            
+
             return userDTOs;
         }
 
@@ -147,6 +156,24 @@ namespace BLL.Services
         public async Task<UserDTO> GetUserAsync(string userName)
         {
             var user = await Database.Users.FindByNameAsync(userName);
+
+            if (user == null)
+                throw new UserNotFoundException("User with this username has not found");
+
+            var role = await Database.Users.GetRolesAsync(user);
+            var userDTO = mapper.Map<ApplicationUser, UserDTO>(user);
+            userDTO.Role = role.FirstOrDefault();
+
+            return userDTO;
+        }
+
+        public async Task<UserDTO> GetUserByIdAsync(string userId)
+        {
+            var user = await Database.Users.FindByIdAsync(userId);
+
+            if (user == null)
+                throw new UserNotFoundException("User with this id has not found");
+
             var role = await Database.Users.GetRolesAsync(user);
             var userDTO = mapper.Map<ApplicationUser, UserDTO>(user);
             userDTO.Role = role.FirstOrDefault();

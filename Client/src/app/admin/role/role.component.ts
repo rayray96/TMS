@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Role, RoleModel } from 'src/app/models';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { AdminService } from 'src/app/services';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-role',
@@ -10,18 +11,25 @@ import { AdminService } from 'src/app/services';
 })
 export class RoleComponent {
   Role: Role;
+  onSelectUserRole: string;
 
   constructor(
     public dialogRef: MatDialogRef<RoleComponent>,
     private admin: AdminService,
-    @Inject(MAT_DIALOG_DATA) public role: RoleModel
-  ) { }
+    private spinner: NgxSpinnerService,
+    @Inject(MAT_DIALOG_DATA) 
+    public role: RoleModel
+    ) { 
+      role.role = this.admin.currentUser.role;
+    }
+    
 
   public onNoClick(): void {
     this.dialogRef.close(this.role);
   }
 
   public onSaveCLick(): void {
+    this.spinner.show();
     this.dialogRef.close(this.role);
   }
 
