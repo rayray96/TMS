@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from 'src/app/services';
-import { Role, RoleModel } from 'src/app/models';
+import { RoleModel } from 'src/app/models';
 import { MatDialog } from '@angular/material';
 import { RoleComponent } from '../role/role.component';
 import { filter, mergeMap } from 'rxjs/operators';

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavBarService } from '../services/nav-bar.service';
 
 @Component({
   selector: 'app-user',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserComponent implements OnInit {
 
-  constructor() { }
+  constructor(public nav: NavBarService) { }
 
   ngOnInit() {
+    this.nav.hide();
   }
 
 }

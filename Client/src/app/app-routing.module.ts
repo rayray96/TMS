@@ -10,6 +10,7 @@ import { Error400Component } from './components/errors/error400/error400.compone
 import { Error500Component } from './components/errors/error500/error500.component';
 import { ErrorComponent } from './components/errors/error/error.component';
 import { AdminGuard } from './auth/admin.guard';
+import { ManagerGuard } from './auth/manager.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/user/login', pathMatch: 'full' },
@@ -31,6 +32,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [AuthGuard, AdminGuard] // Added.
+  providers: [AuthGuard, AdminGuard, ManagerGuard] // Added.
 })
 export class AppRoutingModule { }

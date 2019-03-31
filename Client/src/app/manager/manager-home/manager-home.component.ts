@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NavBarService } from 'src/app/services/nav-bar.service';
 
 @Component({
-  selector: 'app-admin-home',
-  templateUrl: './admin-home.component.html',
-  styleUrls: ['./admin-home.component.css']
+  selector: 'app-manager-home',
+  templateUrl: './manager-home.component.html',
+  styleUrls: ['./manager-home.component.css']
 })
-export class AdminHomeComponent implements OnInit {
+export class ManagerHomeComponent implements OnInit {
 
   constructor(public nav: NavBarService) { }
 

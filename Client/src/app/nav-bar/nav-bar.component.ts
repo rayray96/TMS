@@ -6,6 +6,7 @@ import { UserService, JwtService } from '../services';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
 import { UserModel } from '../models';
+import { NavBarService } from '../services/nav-bar.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -24,7 +25,8 @@ export class NavBarComponent {
     private service: UserService, 
     private spinner: NgxSpinnerService, 
     private router: Router,
-    private jwt: JwtService) {}
+    private jwt: JwtService,
+    public nav: NavBarService) {}
 
   onLogout() {
     this.spinner.show();

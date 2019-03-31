@@ -23,8 +23,7 @@ import { AdminGuard } from '../auth/admin.guard';
           }
         ]
       }
-    ])
-  ],
+    ])],
   exports: [RouterModule]
 })
 export class AdminRoutingModule { }

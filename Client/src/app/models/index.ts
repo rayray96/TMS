@@ -1,3 +1,4 @@
 export * from './user-model';
 export * from './role-model';
-export * from './role.enum';
+export * from './person-model';
+export * from './team-model';

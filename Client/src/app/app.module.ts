@@ -22,18 +22,20 @@ import { Error500Component } from './components/errors/error500/error500.compone
 import { ErrorComponent } from './components/errors/error/error.component';
 import { AppMaterialModule } from './app-material/app-material.module';
 import { AdminRoutingModule } from './admin/admin-routing.module';
-import { AdminHomeComponent } from './admin/admin-home/admin-home.component';
-import { ManageUsersComponent } from './admin/manage-users/manage-users.component';
+import { ManagerHomeComponent } from './manager/manager-home/manager-home.component';
+import { ManageTeamComponent } from './manager/manage-team/manage-team.component';
+import { TeamMembersListComponent } from './manager/team-members-list/team-members-list.component';
+import { TeamMemberInfoComponent } from './manager/team-member-info/team-member-info.component';
+import { PotentialMembersComponent } from './manager/potential-members/potential-members.component';
+import { FiredMemberComponent } from './manager/fired-member/fired-member.component';
+import { ManagerRoutingModule } from './manager/manager-routing.module';
+import { AdminModule } from './admin/admin.module';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
-import { UserDetailComponent } from './admin/user-detail/user-detail.component';
-import { UserDetailListComponent } from './admin/user-detail-list/user-detail-list.component';
-import { RoleComponent } from './admin/role/role.component';
+import { NavBarService } from './services/nav-bar.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AdminHomeComponent,
-    ManageUsersComponent,
     UserComponent,
     RegistrationComponent,
     LoginComponent,
@@ -43,15 +45,19 @@ import { RoleComponent } from './admin/role/role.component';
     Error500Component,
     ErrorComponent,
     NavBarComponent,
-    UserDetailComponent,
-    UserDetailListComponent,
-    RoleComponent
+    ManagerHomeComponent,
+    ManageTeamComponent,
+    TeamMembersListComponent,
+    TeamMemberInfoComponent,
+    PotentialMembersComponent,
+    FiredMemberComponent
   ],
   imports: [
+    AdminModule,
+    AdminRoutingModule,
     AppMaterialModule,
     BrowserModule,
-    AdminRoutingModule,
-    AppRoutingModule,
+    ManagerRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
@@ -59,7 +65,9 @@ import { RoleComponent } from './admin/role/role.component';
     NgxSpinnerModule,
     ToastrModule.forRoot({
       progressBar: true
-    })
+    }),
+    // Routing module should always be in the end of imports!
+    AppRoutingModule
   ],
   providers: [
     {
@@ -68,13 +76,13 @@ import { RoleComponent } from './admin/role/role.component';
     },
     JwtService,
     UserService,
+    NavBarService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
     }
   ],
-  entryComponents: [RoleComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

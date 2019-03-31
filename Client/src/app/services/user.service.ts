@@ -54,12 +54,10 @@ export class UserService {
   }
 
   setUserRole(role: string) {
-    //this.userRole=role;
     localStorage.setItem('role', role);
   }
 
   getUserRole() {
-    //return this.userRole;
     return localStorage.getItem('role');
   }
 

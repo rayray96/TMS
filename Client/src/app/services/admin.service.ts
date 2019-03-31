@@ -11,7 +11,7 @@ export class AdminService {
   readonly BaseURI = 'https://localhost:44360/api/admin';
   currentUser: UserModel;
 
-  constructor(private http: HttpClient, ) { }
+  constructor(private http: HttpClient) { }
 
   public getAll(): Observable<UserModel[]> {
     return this.http.get<UserModel[]>(this.BaseURI);
