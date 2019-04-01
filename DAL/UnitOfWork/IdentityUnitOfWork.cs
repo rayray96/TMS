@@ -13,6 +13,7 @@ namespace DAL.UnitOfWork
         private IUserRepository userRepository;
         private IRepository<RefreshToken> refreshTokenRepository;
         private IRepository<Person> personRepository;
+        private IRepository<Team> teamRepository;
 
         private ApplicationDbContext Context { get; }
         private ApplicationUserManager ApplicationUser { get; }
@@ -42,6 +43,17 @@ namespace DAL.UnitOfWork
                     refreshTokenRepository = new RefreshTokenRepository(Context);
 
                 return refreshTokenRepository;
+            }
+        }
+
+        public IRepository<Team> Teams
+        {
+            get
+            {
+                if (teamRepository == null)
+                    teamRepository = new TeamRepository(Context);
+
+                return teamRepository;
             }
         }
 

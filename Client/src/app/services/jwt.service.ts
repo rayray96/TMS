@@ -8,17 +8,36 @@ export class JwtService {
 
   constructor(private http: HttpClient) { }
 
-  persistAccessToken(accessToken: string): void {
+  persistData(accessToken: string, refreshToken: string, role: string, id: string): void {
     localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+    localStorage.setItem('role', role);
+    localStorage.setItem('id', id);
+  }
+
+  clearData(): void {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('role');
+    localStorage.removeItem('id');
   }
 
   getAccessToken(): string {
     return localStorage.getItem('accessToken');
   }
 
-  clearAccessToken(): void {
-    localStorage.removeItem('accessToken');
+  getRole(): string {
+    return localStorage.getItem('role');
   }
+
+  getId(): string {
+    return localStorage.getItem('id');
+  }
+
+  getRefreshToken(): string {
+    return localStorage.getItem('refreshToken');
+  }
+
   // TODO: Add posibility to use refresh token.
   getTokenExpirationDate(token: string): Date {
     const decoded = jwt_decode(token);
@@ -37,18 +56,6 @@ export class JwtService {
     const date = this.getTokenExpirationDate(token);
     if (date === undefined) return false;
     return !(date.valueOf() > new Date().valueOf());
-  }
-  // TODO: Add posibility to use refresh token.
-  getRefreshToken(): string {
-    return localStorage.getItem('refreshToken');
-  }
-  // TODO: Add posibility to use refresh token.
-  persistRefreshToken(refreshToken: string): void {
-    localStorage.setItem('refreshToken', refreshToken);
-  }
-  // TODO: Add posibility to use refresh token.
-  clearRefreshToken(): void {
-    localStorage.removeItem('refreshToken');
   }
   // TODO: Add posibility to use refresh token.
   refreshToken(refreshToken: string) {

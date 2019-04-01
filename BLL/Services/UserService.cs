@@ -10,20 +10,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 
 namespace BLL.Services
 {
     public class UserService : IUserService
     {
         private IIdentityUnitOfWork Database { get; set; }
-        private IConfiguration Configuration { get; set; }
         private IMapper mapper { get; set; }
 
-        public UserService(IIdentityUnitOfWork unitOfWork, IConfiguration configuration)
+        /// <summary>
+        /// Dependency Injection to database repositories.
+        /// </summary>
+        /// <param name="unitOfWork"> Point to context of dataBase </param>
+        public UserService(IIdentityUnitOfWork unitOfWork)
         {
             Database = unitOfWork;
-            Configuration = configuration;
             mapper = MapperConfig.GetIdentityMapperResult();
         }
 
@@ -103,7 +104,7 @@ namespace BLL.Services
                 await Database.Users.RemoveFromRoleAsync(user, "Worker");
                 // Changing role for Person.
                 person.Role = roleName;
-                Database.People.Update(person);
+                Database.People.Update(person.Id, person);
             }
             else if ((roleName == "Worker") && (userRole == "Manager"))
             {
@@ -116,7 +117,7 @@ namespace BLL.Services
                 await Database.Users.RemoveFromRoleAsync(user, "Manager");
                 // Changing role for Person.
                 person.Role = roleName;
-                Database.People.Update(person);
+                Database.People.Update(person.Id, person);
             }
             else if ((roleName == "Admin") || (userRole == "Admin"))
             {
@@ -134,10 +135,21 @@ namespace BLL.Services
         public async Task<IEnumerable<UserDTO>> GetAllWorkersAsync()
         {
             var users = await Database.Users.GetUsersInRoleAsync("Worker");
+            var persons = Database.People.Find(p => p.Role == "Worker");
             var userDTOs = mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<UserDTO>>(users);
 
-            foreach (var userDTO in userDTOs)
-                userDTO.Role = "Worker";
+            foreach (var person in persons)
+            {
+                foreach (var userDTO in userDTOs)
+                {
+                    if (userDTO.Id == person.UserId)
+                    {
+                        if (person.TeamId != null)
+                            userDTO.TeamName = Database.Teams.GetById(person.TeamId.Value).TeamName;
+                        userDTO.Role = "Worker";
+                    }
+                }
+            }
 
             return userDTOs;
         }
@@ -145,14 +157,25 @@ namespace BLL.Services
         public async Task<IEnumerable<UserDTO>> GetAllManagersAsync()
         {
             var users = await Database.Users.GetUsersInRoleAsync("Manager");
+            var persons = Database.People.Find(p => p.Role == "Manager");
             var userDTOs = mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<UserDTO>>(users);
 
-            foreach (var userDTO in userDTOs)
-                userDTO.Role = "Manager";
+            foreach (var person in persons)
+            {
+                foreach (var userDTO in userDTOs)
+                {
+                    if (userDTO.Id == person.UserId)
+                    {
+                        if (person.TeamId != null)
+                            userDTO.TeamName = Database.Teams.GetById(person.TeamId.Value).TeamName;
+                        userDTO.Role = "Manager";
+                    }
+                }
+            }
 
             return userDTOs;
         }
-        // Fixed bugs with role.
+
         public async Task<UserDTO> GetUserAsync(string userName)
         {
             var user = await Database.Users.FindByNameAsync(userName);
@@ -160,9 +183,13 @@ namespace BLL.Services
             if (user == null)
                 throw new UserNotFoundException("User with this username has not found");
 
-            var role = await Database.Users.GetRolesAsync(user);
+            var role = (await Database.Users.GetRolesAsync(user)).FirstOrDefault();
             var userDTO = mapper.Map<ApplicationUser, UserDTO>(user);
-            userDTO.Role = role.FirstOrDefault();
+            userDTO.Role = role;
+
+            var person = await Database.People.GetSingleAsync(p => p.UserId == user.Id);
+            if (person != null)
+                userDTO.TeamName = Database.Teams.GetById(person.TeamId.Value).TeamName;
 
             return userDTO;
         }
@@ -173,10 +200,13 @@ namespace BLL.Services
 
             if (user == null)
                 throw new UserNotFoundException("User with this id has not found");
-
-            var role = await Database.Users.GetRolesAsync(user);
+            var role = (await Database.Users.GetRolesAsync(user)).FirstOrDefault();
             var userDTO = mapper.Map<ApplicationUser, UserDTO>(user);
-            userDTO.Role = role.FirstOrDefault();
+            userDTO.Role = role;
+
+            var person = await Database.People.GetSingleAsync(p => p.UserId == user.Id);
+            if (person != null)
+                userDTO.TeamName = Database.Teams.GetById(person.TeamId.Value).TeamName;
 
             return userDTO;
         }

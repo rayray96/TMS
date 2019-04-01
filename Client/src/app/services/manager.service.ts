@@ -13,18 +13,19 @@ export class ManagerService {
 
   constructor(private http: HttpClient) { }
 
-  public getMyTeam(): Observable<PersonModel[]> {
-    return this.http.get<PersonModel[]>(this.BaseURI + '/team');
+  public getMyTeam(id: string): Observable<TeamModel> {
+    const path = `/${id}`;
+    return this.http.get<TeamModel>(this.BaseURI + '/team' + path);
   }
 
-  public getPossibleMembers(id: string): Observable<PersonModel[]> {
-    const path = `/${id}`;
-    return this.http.get<PersonModel[]>(this.BaseURI + '/team' + path);
+  public getPossibleMembers(): Observable<PersonModel[]> {
+    return this.http.get<PersonModel[]>(this.BaseURI + '/team/possibleMembers');
   }
 
-  public createTeam(id: string, team: TeamModel) {
+  public createTeam(id: string, teamName: string) {
     const path = `/${id}`;
-    return this.http.post(this.BaseURI + '/team' + path, team);
+    const body = { teamName };
+    return this.http.post(this.BaseURI + '/team' + path, body);
   }
 
   public deleteFromTeam(id: string) {

@@ -29,16 +29,14 @@ namespace WebApi.Controllers
             this.personService = personService;
             mapper = MapperConfig.GetMapperResult();
         }
-
-        [HttpGet]
-        public IActionResult GetMyTeam()
+        // TODO: need to change team.
+        [HttpGet("{id}")]
+        public IActionResult GetMyTeam(string id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             PersonDTO person = personService.GetPerson(id);
             TeamDTO team = person.Team;
@@ -53,7 +51,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("{id}")]
-        public IActionResult CreateTeam(int id, [FromBody] string teamName)
+        public IActionResult CreateTeam(string id, [FromBody]CreateTeamViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -61,16 +59,7 @@ namespace WebApi.Controllers
             }
 
             var author = personService.GetPerson(id);
-
-            try
-            {
-                teamService.CreateTeam(author, teamName);
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("Team hasn't created.", e.Message);
-                return BadRequest();
-            }
+            teamService.CreateTeam(author, model.TeamName);
 
             return Ok(new { result = "Team has created!" });
         }

@@ -112,7 +112,7 @@ namespace BLL.Services
                     taskForEdit.Deadline = task.Deadline;
                 }
 
-                db.Tasks.Update(taskForEdit);
+                db.Tasks.Update(taskForEdit.Id, taskForEdit);
                 db.Save();
             }
         }
@@ -243,7 +243,7 @@ namespace BLL.Services
                 throw new StatuskAccessException("Current person cannot change a status");
             task.Status = status ?? throw new StatusNotFoundException("Status with this name was not found");
 
-            db.Tasks.Update(task);
+            db.Tasks.Update(task.Id, task);
             db.Save();
         }
 

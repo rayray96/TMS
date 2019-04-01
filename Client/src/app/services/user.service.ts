@@ -52,16 +52,4 @@ export class UserService {
   getUserProfile() {
     return this.http.get(this.BaseURI + '/userProfile');
   }
-
-  setUserRole(role: string) {
-    localStorage.setItem('role', role);
-  }
-
-  getUserRole() {
-    return localStorage.getItem('role');
-  }
-
-  removeRoleFromStorage() {
-    localStorage.removeItem('role');
-  }
 }

@@ -9,7 +9,7 @@ namespace DAL.Interfaces
     public interface IRepository<T> where T : class
     {
         void Create(T item);
-        void Update(T item);
+        void Update(int id, T item);
         void Delete(int id);
 
         T GetById(int id);

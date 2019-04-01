@@ -143,7 +143,7 @@ namespace BLL.Services
             if (_refreshToken != null)
             {
                 _refreshToken.Token = Guid.NewGuid().ToString();
-                Database.RefreshTokens.Update(_refreshToken);
+                Database.RefreshTokens.Update(_refreshToken.Id, _refreshToken);
                 Database.Save();
             }
             else

@@ -34,8 +34,7 @@ export class LoginComponent implements OnInit {
     this.spinner.show();
     this.service.login(form.value).subscribe(
       (res: any) => {
-        this.jwt.persistAccessToken(res.accessToken);
-        this.service.setUserRole(res.role);
+        this.jwt.persistData(res.accessToken, res.refreshToken, res.role, res.userId);
         this.router.navigateByUrl('/home');
         this.spinner.hide();
       },

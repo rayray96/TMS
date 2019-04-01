@@ -24,8 +24,7 @@ export class AuthInterceptor implements HttpInterceptor {
                     succ => { },
                     err => {
                         if (err.status === 401) {
-                            this.jwt.clearAccessToken();
-                            this.service.removeRoleFromStorage();
+                            this.jwt.clearData();
                             this.router.navigateByUrl('/user/login');
                         }
                     }

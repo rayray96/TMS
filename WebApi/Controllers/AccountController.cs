@@ -71,14 +71,14 @@ namespace WebApi.Controllers
 
             var token = tokenService.GenerateToken(identity.Claims, 120);
             var refreshToken = await tokenService.GenerateRefreshTokenAsync(login.UserName);
-            var role = await userService.GetUserAsync(login.UserName);
+            var user = await userService.GetUserAsync(login.UserName);
 
             var response = new
             {
                 AccessToken = token,
                 RefreshToken = refreshToken.Token,
-                Login = login.UserName,
-                Role = role.Role
+                UserId = user.Id,
+                Role = user.Role
             };
 
             return Ok(response);
@@ -108,19 +108,14 @@ namespace WebApi.Controllers
 
             var token = tokenService.GenerateToken(identity.Claims, 10);
             tokenService.UpdateRefreshToken(_refreshToken);
+            var user = await userService.GetUserByIdAsync(_refreshToken.UserId);
 
             var response = new
             {
                 AccessToken = token,
                 RefreshToken = _refreshToken.Token,
-                Login = identity.Claims
-                       .Where(c => c.Type == ClaimTypes.Role)
-                       .Select(c => c.Value)
-                       .FirstOrDefault(),
-                Role = identity.Claims
-                       .Where(c => c.Type == ClaimTypes.Role)
-                       .Select(c => c.Value)
-                       .FirstOrDefault()
+                UserId = _refreshToken.UserId,
+                Role = user.Role
             };
 
             return Ok(response);

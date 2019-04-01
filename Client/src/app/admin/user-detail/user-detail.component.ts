@@ -51,7 +51,14 @@ export class UserDetailComponent implements OnInit {
         error => {
           console.log(error);
           this.spinner.hide();
-          this.toastr.warning(error.errors);
+          if (error.error.userRole)
+            this.toastr.warning(error.error.userRole);
+          else if (error.error.userId)
+            this.toastr.warning(error.error.userId);
+          else if (error.error.userName)
+            this.toastr.warning(error.error.roleName);
+          else
+            this.toastr.warning('Cannot create a team');
         }
       );
   }

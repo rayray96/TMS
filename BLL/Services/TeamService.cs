@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using BLL.Configurations;
 using BLL.DTO;
@@ -31,7 +31,7 @@ namespace BLL.Services
 
             return mapper.Map<IEnumerable<Team>, IEnumerable<TeamDTO>>(result);
         }
-
+        // TODO: Add to controller.
         public void ChangeTeamName(int teamId, string newName)
         {
             var team = db.Teams.GetById(teamId);
@@ -52,7 +52,7 @@ namespace BLL.Services
             var team = new Team { TeamName = teamName };
             IEnumerable<Team> checkTeamExists = db.Teams.Find(t => (t.TeamName == teamName));
 
-            if (checkTeamExists != null)
+            if (checkTeamExists.Count() != 0)
                 throw new TeamExistsException("This team already exists");
 
             if (manager.Role != "Manager")
@@ -60,7 +60,7 @@ namespace BLL.Services
 
             db.Teams.Create(team);
             manager.Team = mapper.Map<Team, TeamDTO>(team);
-            db.People.Create(mapper.Map<PersonDTO, Person>(manager));
+            db.People.Update(manager.Id, mapper.Map<PersonDTO, Person>(manager));
 
             db.Save();
         }

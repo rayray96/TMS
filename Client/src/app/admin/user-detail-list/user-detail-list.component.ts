@@ -23,7 +23,6 @@ export class UserDetailListComponent implements OnInit {
 
   ngOnInit() {
     this.spinner.show();
-    //this.admin.refreshList();
     this.admin.getAll().subscribe(
       res => {
         this.dataSource = new MatTableDataSource(res as UserModel[]);

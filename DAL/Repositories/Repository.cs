@@ -69,10 +69,12 @@ namespace DAL.Repositories
             Set.Add(item);
         }
 
-        public void Update(T item)
+        public void Update(int id, T item)
         {
-            Context.Entry(item).State = EntityState.Modified;
-            //Set.Update(item);
+            T _item = Set.Find(id);
+
+            if (_item != null)
+                Context.Entry(_item).CurrentValues.SetValues(item);
         }
 
         public void Delete(int id)

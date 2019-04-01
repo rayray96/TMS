@@ -22,7 +22,6 @@ export class NavBarComponent {
     );
 
   constructor(private breakpointObserver: BreakpointObserver, 
-    private service: UserService, 
     private spinner: NgxSpinnerService, 
     private router: Router,
     private jwt: JwtService,
@@ -30,8 +29,7 @@ export class NavBarComponent {
 
   onLogout() {
     this.spinner.show();
-    this.jwt.clearAccessToken();
-    this.service.removeRoleFromStorage();
+    this.jwt.clearData();
     this.router.navigate(['/user/login']);
     this.spinner.hide();
   }

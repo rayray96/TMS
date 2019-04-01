@@ -14,9 +14,9 @@
       <mat-list-item><strong>Email : <br></strong> {{userDetails.email}}</mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item><strong>Role : <br></strong> {{userDetails.role}}</mat-list-item>
-      <div *ngIf="userDetails.team">
+      <div *ngIf="userDetails.teamName">
         <mat-divider></mat-divider>
-        <mat-list-item><strong>Team : <br></strong> {{userDetails.team}}</mat-list-item>
+        <mat-list-item><strong>Team : <br></strong> {{userDetails.teamName}}</mat-list-item>
       </div>
     </mat-list>
   </mat-card-content>

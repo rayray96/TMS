@@ -15,6 +15,12 @@ namespace BLL.Configurations
                 cfg.CreateMap<Priority, PriorityDTO>();
                 cfg.CreateMap<Team, TeamDTO>();
                 cfg.CreateMap<TaskInfo, TaskDTO>();
+
+                cfg.CreateMap<PersonDTO, Person>();
+                cfg.CreateMap<StatusDTO, Status>();
+                cfg.CreateMap<PriorityDTO, Priority>();
+                cfg.CreateMap<TeamDTO, Team>();
+                cfg.CreateMap<TaskDTO, TaskInfo>();
             });
 
             return config.CreateMapper();
@@ -27,6 +33,10 @@ namespace BLL.Configurations
                 cfg.CreateMap<Person, PersonDTO>();
                 cfg.CreateMap<ApplicationUser, UserDTO>();
                 cfg.CreateMap<RefreshToken, RefreshTokenDTO>();
+
+                cfg.CreateMap<PersonDTO, Person>();
+                cfg.CreateMap<UserDTO, ApplicationUser>();
+                cfg.CreateMap<RefreshTokenDTO, RefreshToken>();
             });
 
             return config.CreateMapper();

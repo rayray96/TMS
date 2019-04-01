@@ -39,7 +39,7 @@ namespace BLL.Services
                 throw new PersonNotFoundException("This person was not found");
 
             person.TeamId = null;
-            db.People.Update(person);
+            db.People.Update(person.Id, person);
             db.Save();
         }
 
@@ -64,7 +64,7 @@ namespace BLL.Services
             foreach (var member in newTeamMembers)
             {
                 member.TeamId = manager.TeamId;
-                db.People.Update(member);
+                db.People.Update(member.Id, member);
             }
 
             db.Save();
