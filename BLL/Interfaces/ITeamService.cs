@@ -22,8 +22,10 @@ namespace BLL.Interfaces
         /// <param name="id">Id of team</param>
         /// <param name="NewName">New name for team</param>
         /// ///<exception cref="ArgumentException">Team wasn't found</exception>
-        void ChangeTeamName(int id, string newName);
+        void ChangeTeamName(int? id, string newName);
 
         void CreateTeam(PersonDTO manager, string teamName);
+
+        string GetTeamNameById(int? id);
     }
 }

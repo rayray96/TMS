@@ -31,19 +31,29 @@ namespace BLL.Services
 
             return mapper.Map<IEnumerable<Team>, IEnumerable<TeamDTO>>(result);
         }
-        // TODO: Add to controller.
-        public void ChangeTeamName(int teamId, string newName)
+
+        public string GetTeamNameById(int? id)
         {
-            var team = db.Teams.GetById(teamId);
+            var team = db.Teams.GetById(id.Value);
+
+            if (team == null)
+                throw new TeamNotFoundException("Team with current id does not exist");
+
+            return team.TeamName;
+        }
+
+        public void ChangeTeamName(int? Id, string newName)
+        {
+            var team = db.Teams.GetById(Id.Value);
 
             if (team == null)
                 throw new TeamNotFoundException("Invalid Team for changes");
 
             if (team.TeamName != newName)
             {
-                db.Teams.Delete(teamId);
                 team.TeamName = newName;
-                db.Teams.Create(team);
+                db.Teams.Update(Id.Value, team);
+                db.Save();
             }
         }
 

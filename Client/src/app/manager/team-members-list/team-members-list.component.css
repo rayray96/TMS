@@ -1,0 +1,25 @@
+table {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  th.mat-sort-header-sorted {
+    color: black;
+  }
+
+  .button-add-update{
+    text-align: center;
+    left: 50%;
+  }
+
+  .btn-space {
+    margin-right: 5px;
+}
+
+.option-position{
+  text-align: center;
+}

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using AutoMapper;
 using BLL.DTO;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Configurations;
 using WebApi.Models;
@@ -29,7 +26,7 @@ namespace WebApi.Controllers
             this.personService = personService;
             mapper = MapperConfig.GetMapperResult();
         }
-        // TODO: need to change team.
+
         [HttpGet("{id}")]
         public IActionResult GetMyTeam(string id)
         {
@@ -39,29 +36,17 @@ namespace WebApi.Controllers
             }
 
             PersonDTO person = personService.GetPerson(id);
-            TeamDTO team = person.Team;
+            string teamName = teamService.GetTeamNameById(person.TeamId);
 
-            IEnumerable<PersonViewModel> teamOfCurrentManager = mapper.Map<IEnumerable<PersonDTO>, IEnumerable<PersonViewModel>>(personService.GetTeam(id));
+            var teamOfCurrentManager = mapper.Map<IEnumerable<PersonDTO>, IEnumerable<PersonViewModel>>(personService.GetTeam(id));
 
-            return Ok(new
+            var teamModel = new TeamViewModel
             {
-                TeamName = (team != null) ? team.TeamName : string.Empty,
+                TeamName = (teamName != null) ? teamName : string.Empty,
                 Team = teamOfCurrentManager.ToList()
-            });
-        }
+            };
 
-        [HttpPost("{id}")]
-        public IActionResult CreateTeam(string id, [FromBody]CreateTeamViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var author = personService.GetPerson(id);
-            teamService.CreateTeam(author, model.TeamName);
-
-            return Ok(new { result = "Team has created!" });
+            return Ok(teamModel);
         }
 
         [HttpGet("possibleMembers")]
@@ -72,13 +57,50 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            IEnumerable<PersonViewModel> persons = mapper.Map<IEnumerable<PersonDTO>, IEnumerable<PersonViewModel>>(personService.GetPeopleWithoutTeam());
+            var persons = mapper.Map<IEnumerable<PersonDTO>, IEnumerable<PersonViewModel>>(personService.GetPeopleWithoutTeam());
 
-            return Ok(new
+            return Ok(persons);
+        }
+
+        [HttpPost("{id}")]
+        public IActionResult CreateTeam(string id, [FromBody]TeamNameViewModel model)
+        {
+            if (!ModelState.IsValid)
             {
-                Name = "Possible Members",
-                Value = persons.ToList()
-            });
+                return BadRequest(ModelState);
+            }
+
+            var author = personService.GetPerson(id);
+            teamService.CreateTeam(author, model.TeamName);
+
+            return Ok(new { message = "The team has created!" });
+        }
+
+        [HttpPost("addMembers/{Id}")]
+        public IActionResult AddMembersToTeam(string Id, [FromBody]AddMembersViewModel members)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            personService.AddPersonsToTeam(members.Members, Id);
+
+            return Ok(new { message = "Members have added to your team" });
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateTeamName(string Id, [FromBody]TeamNameViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var author = personService.GetPerson(Id);
+            teamService.ChangeTeamName(author.TeamId, model.TeamName);
+
+            return Ok(new { message = "The team name has been successfully changed" });
         }
 
         [HttpDelete("{id}")]
@@ -89,39 +111,9 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                personService.DeletePersonFromTeam(id);
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("Members hasn't deleted", e.Message);
-                return BadRequest();
-            }
-            return Ok("Members was deleted from your team");
-        }
+            personService.DeletePersonFromTeam(id);
 
-        [HttpPost("addMembers")]
-        public IActionResult AddMembersToTeam(int[] persons)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var managerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            try
-            {
-                personService.AddPersonsToTeam(persons, managerId);
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("Members hasn't added", e.Message);
-                return BadRequest();
-            }
-
-            return Ok("Members was added to your team");
+            return Ok(new { message = "Members have deleted from your team" });
         }
     }
 }

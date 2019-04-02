@@ -9,6 +9,8 @@
         public string LName { get; set; }
         public string Role { get; set; }
         public string Email { get; set; }
+        public int? TeamId { get; set; }
+
         public virtual TeamDTO Team { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PersonModel } from '../models';
+import { PersonModel, TeamNameModel, TeamMembersModel } from '../models';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { TeamModel } from '../models/team-model';
@@ -24,8 +24,14 @@ export class ManagerService {
 
   public createTeam(id: string, teamName: string) {
     const path = `/${id}`;
-    const body = { teamName };
-    return this.http.post(this.BaseURI + '/team' + path, body);
+    const model = { teamName } as TeamNameModel;
+    return this.http.post(this.BaseURI + '/team' + path, model);
+  }
+
+  public updateTeamName(id: string, teamName: string) {
+    const path = `/${id}`;
+    const model = { teamName } as TeamNameModel;
+    return this.http.put(this.BaseURI + '/team' + path, model);
   }
 
   public deleteFromTeam(id: string) {
@@ -33,7 +39,8 @@ export class ManagerService {
     return this.http.delete(this.BaseURI + '/team' + path);
   }
 
-  public addMembers(ids: string[]) {
-    return this.http.post(this.BaseURI + '/team/addMembers', ids);
+  public addMembers(id: string, members: TeamMembersModel) {
+    const path = `/${id}`;
+    return this.http.post(this.BaseURI + '/team/addMembers' + path, members);
   }
 }

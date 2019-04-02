@@ -1,7 +1,10 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Mail;
 using System.Configuration;
 using BLL.Interfaces;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace BLL.Services
 {
@@ -18,6 +21,11 @@ namespace BLL.Services
             "<p>Have a nice day,<br />" +
             "{2}</p>";
 
+        IConfigurationRoot configuration = new ConfigurationBuilder()
+                   .SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json")
+                   .Build();
+
         public void Send(string from, string to, string subject, string body)
         {
             var mail = new MailMessage();
@@ -28,12 +36,12 @@ namespace BLL.Services
             mail.IsBodyHtml = true;
 
             var smtp = new SmtpClient();
-            smtp.Host = ConfigurationManager.AppSettings["smtp.host"];
-            smtp.Port = int.Parse(ConfigurationManager.AppSettings["smtp.port"]);
+            smtp.Host = configuration.GetSection("Email:smtp.host").Value;
+            smtp.Port = int.Parse(configuration.GetSection("Email:smtp.port").Value);
             smtp.EnableSsl = true;
             smtp.UseDefaultCredentials = false;
-            smtp.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["smtp.user"],
-                                                     ConfigurationManager.AppSettings["smtp.password"]);
+            smtp.Credentials = new NetworkCredential(configuration.GetSection("Email:smtp.user").Value,
+                                                     configuration.GetSection("Email:smtp.password").Value);
 
             smtp.Send(mail);
         }

@@ -67,23 +67,25 @@ namespace BLL.Services
                 db.People.Update(member.Id, member);
             }
 
-            db.Save();
+            var team = db.Teams.GetById(manager.TeamId.Value);
 
             foreach (var member in newTeamMembers)
             {
                 string emailBody = string.Format(EmailService.BODY_NEW_TEAM_MEMBER,
-                                                 member.FName + " " + member.LName, manager.Team.TeamName, manager.FName + " " + manager.LName);
+                                                 member.FName + " " + member.LName, team.TeamName, manager.FName + " " + manager.LName);
                 emailService.Send(manager.Email, member.Email, EmailService.SUBJECT_NEW_TEAM_MEMBER, emailBody);
             }
-        }
 
+            db.Save();
+        }
+        // Using.
         public IEnumerable<PersonDTO> GetPeopleWithoutTeam()
         {
-            var people = db.People.Find(p => (p.TeamId == null));
+            var people = db.People.Find(p => (p.TeamId == null && p.Role == "Worker"));
 
             return mapper.Map<IEnumerable<Person>, IEnumerable<PersonDTO>>(people);
         }
-
+        // Using.
         public IEnumerable<PersonDTO> GetTeam(string managerId)
         {
             var manager = db.People.Find(p => (p.UserId == managerId)).SingleOrDefault();
@@ -91,7 +93,7 @@ namespace BLL.Services
 
             return people;
         }
-
+        // Using, but like a private.
         public IEnumerable<PersonDTO> GetPeopleInTeam(Person manager)
         {
             IEnumerable<PersonDTO> people = new List<PersonDTO>();

@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Models
 {
-    public class CreateTeamViewModel
+    public class TeamNameViewModel
     {
         public string TeamName { get; set; }
     }

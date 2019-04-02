@@ -31,6 +31,9 @@ export class GlobalErrorHandler implements ErrorHandler {
         router.navigate(['error500']);
         break;
       }
+      case (401):{
+        break;
+      }
       default: {
         router.navigate(['error']);
         break;
