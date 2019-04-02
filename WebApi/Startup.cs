@@ -1,26 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Bootstrap;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
-using WebApi.Configurations;
 using Newtonsoft.Json.Serialization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace WebApi
 {
@@ -38,6 +30,8 @@ namespace WebApi
         {
             // Using extension method from Bootstrap project.
             services.RegisterApplicationServices("DefaultConnection");
+            // Is that really need???
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             // Adding and configuring JwtBearer Authentication.
             services.AddAuthentication(options =>
             {
@@ -108,10 +102,9 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            // The change only affects 204, 205, and 304 status code responses,
-            // which aren't allowed to have a body anyways.
-            // This change only sets a bool to false on flush,
-            // which is checked when IIS is determining if it should set the encoding to chunked or not.
+            // In ASP.NET Core 2.2, we released a new Server which runs inside IIS for Windows scenarios.
+            // When sending the XMLHttpRequest, there is a preflight OPTIONS request which returns a status code of 204.
+            // This was incorrectly handled by the IIS server, returning an invalid response to the client.
             app.Use(async (ctx, next) =>
             {
                 await next();
@@ -137,7 +130,7 @@ namespace WebApi
             app.UseAuthentication();
 
             app.UseCors("AllowLocalHost4200");
-           // app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            // app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMvc();
         }
     }

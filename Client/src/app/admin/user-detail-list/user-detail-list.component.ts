@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { MatTableDataSource, MatSort, MatPaginator, MatSortable } from '@angular/material';
 import { AdminService } from 'src/app/services';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserModel } from 'src/app/models';
@@ -26,6 +26,7 @@ export class UserDetailListComponent implements OnInit {
     this.admin.getAll().subscribe(
       res => {
         this.dataSource = new MatTableDataSource(res as UserModel[]);
+        this.sort.sort(<MatSortable>({ id: 'fName', start: 'asc' }));
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.spinner.hide();

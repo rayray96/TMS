@@ -1,10 +1,8 @@
-﻿using System;
+﻿using BLL.Interfaces;
 using System.Net;
 using System.Net.Mail;
-using System.Configuration;
-using BLL.Interfaces;
-using Microsoft.Extensions.Configuration;
 using System.IO;
+using Microsoft.Extensions.Configuration;
 
 namespace BLL.Services
 {

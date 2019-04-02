@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using BLL.Configurations;
 using BLL.DTO;
 using BLL.Exceptions;
 using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BLL.Services
 {
@@ -36,7 +36,7 @@ namespace BLL.Services
             Person person = db.People.GetById(id);
 
             if (person == null)
-                throw new PersonNotFoundException("This person was not found");
+                throw new PersonNotFoundException("This person has not found");
 
             person.TeamId = null;
             db.People.Update(person.Id, person);
@@ -78,14 +78,14 @@ namespace BLL.Services
 
             db.Save();
         }
-        // Using.
+        
         public IEnumerable<PersonDTO> GetPeopleWithoutTeam()
         {
             var people = db.People.Find(p => (p.TeamId == null && p.Role == "Worker"));
 
             return mapper.Map<IEnumerable<Person>, IEnumerable<PersonDTO>>(people);
         }
-        // Using.
+        
         public IEnumerable<PersonDTO> GetTeam(string managerId)
         {
             var manager = db.People.Find(p => (p.UserId == managerId)).SingleOrDefault();
@@ -93,7 +93,7 @@ namespace BLL.Services
 
             return people;
         }
-        // Using, but like a private.
+        
         public IEnumerable<PersonDTO> GetPeopleInTeam(Person manager)
         {
             IEnumerable<PersonDTO> people = new List<PersonDTO>();

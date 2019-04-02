@@ -16,7 +16,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace BLL.Services
 {
-    public class TokenService: ITokenService
+    public class TokenService : ITokenService
     {
         private IIdentityUnitOfWork Database { get; set; }
         private IConfiguration Configuration { get; set; }
@@ -28,7 +28,7 @@ namespace BLL.Services
             Configuration = configuration;
             mapper = MapperConfig.GetMapperResult();
         }
-        
+
         public async Task<ClaimsIdentity> GetClaimsIdentityAsync(string userName, string password)
         {
             ClaimsIdentity claimsIdentity = null;
@@ -69,7 +69,7 @@ namespace BLL.Services
 
             return claimsIdentity;
         }
-        
+
         public async Task<ClaimsIdentity> GetClaimsIdentityAsync(string userId)
         {
             ClaimsIdentity claimsIdentity = null;
@@ -103,55 +103,7 @@ namespace BLL.Services
 
             return claimsIdentity;
         }
-        
-        public string GenerateToken(IEnumerable<Claim> claims, double lifeTime)
-        {
-            var now = DateTime.UtcNow;
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("Jwt:Key")));
-            var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
-            // Creating JWT-token.
-            var jwt = new JwtSecurityToken(
-                issuer: Configuration.GetValue<string>("Jwt:Issuer"),
-                audience: Configuration.GetValue<string>("Jwt:Audience"),
-                notBefore: now,
-                claims: claims,
-                expires: now.Add(TimeSpan.FromMinutes(lifeTime)),
-                signingCredentials: signingCredentials);
-
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-            return encodedJwt;
-        }
-        
-        public RefreshTokenDTO GetRefreshToken(string refreshToken)
-        {
-            if (refreshToken != null)
-            {
-                var result = Database.RefreshTokens.Find(t => t.Token == refreshToken).FirstOrDefault();
-                return mapper.Map<RefreshToken, RefreshTokenDTO>(result);
-            }
-            else
-            {
-                throw new RefreshTokenNotFoundException("Refresh token has not found");
-            }
-        }
-        
-        public void UpdateRefreshToken(RefreshTokenDTO refreshToken)
-        {
-            var _refreshToken = Database.RefreshTokens.GetById(refreshToken.Id);
-            if (_refreshToken != null)
-            {
-                _refreshToken.Token = Guid.NewGuid().ToString();
-                Database.RefreshTokens.Update(_refreshToken.Id, _refreshToken);
-                Database.Save();
-            }
-            else
-            {
-                throw new RefreshTokenNotFoundException("Refresh token has not found");
-            }
-        }
-        
         public async Task<RefreshTokenDTO> GenerateRefreshTokenAsync(string userName)
         {
             ApplicationUser appUser = await Database.Users.FindByNameAsync(userName);
@@ -182,7 +134,55 @@ namespace BLL.Services
                 throw new UserNotFoundException("User with this username is not exist");
             }
         }
-        
+
+        public RefreshTokenDTO GetRefreshToken(string refreshToken)
+        {
+            if (refreshToken != null)
+            {
+                var result = Database.RefreshTokens.Find(t => t.Token == refreshToken).FirstOrDefault();
+                return mapper.Map<RefreshToken, RefreshTokenDTO>(result);
+            }
+            else
+            {
+                throw new RefreshTokenNotFoundException("Refresh token has not found");
+            }
+        }
+
+        public string GenerateToken(IEnumerable<Claim> claims, double lifeTime)
+        {
+            var now = DateTime.UtcNow;
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("Jwt:Key")));
+            var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+
+            // Creating JWT-token.
+            var jwt = new JwtSecurityToken(
+                issuer: Configuration.GetValue<string>("Jwt:Issuer"),
+                audience: Configuration.GetValue<string>("Jwt:Audience"),
+                notBefore: now,
+                claims: claims,
+                expires: now.Add(TimeSpan.FromMinutes(lifeTime)),
+                signingCredentials: signingCredentials);
+
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            return encodedJwt;
+        }
+
+        public void UpdateRefreshToken(RefreshTokenDTO refreshToken)
+        {
+            var _refreshToken = Database.RefreshTokens.GetById(refreshToken.Id);
+            if (_refreshToken != null)
+            {
+                _refreshToken.Token = Guid.NewGuid().ToString();
+                Database.RefreshTokens.Update(_refreshToken.Id, _refreshToken);
+                Database.Save();
+            }
+            else
+            {
+                throw new RefreshTokenNotFoundException("Refresh token has not found");
+            }
+        }
+
         public void Dispose()
         {
             Database.Dispose();

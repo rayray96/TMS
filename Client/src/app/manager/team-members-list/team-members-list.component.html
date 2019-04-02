@@ -1,13 +1,12 @@
 <ng-content *ngIf="oldTeamName; then withTeam; else withoutTeam">
 </ng-content>
-
+<!-- If manager does not have a team -->
 <ng-template #withoutTeam>
   <button mat-raised-button color="primary" type="button" class="btn btn-info" data-toggle="modal"
     data-target="#myModal">
     Create Team
   </button>
-</ng-template>
-
+  <!-- Dialog window for creating team -->
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -20,7 +19,7 @@
       <div class="modal-body">
         <label for="newTeamName">Team name</label>
         <input class="form-control" type="text" name="newTeamName" [(ngModel)]="newTeamName"
-          placeholder="Enter name for new team" />
+        placeholder="Enter name for new team" />
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-info" data-dismiss="modal">
@@ -34,6 +33,8 @@
   </div>
 </div>
 
+</ng-template>
+<!-- If manager have a team -->
 <ng-template #withTeam>
   <h4 class="text-center">Members of my team "{{oldTeamName}}"</h4>
 
@@ -48,7 +49,7 @@
       Change Team Name
     </button>
   </div>
-
+<!-- Dialog window for adding new members -->
   <div id="addMembers" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -78,7 +79,7 @@
         </div>
       </div>
     </div>
-
+<!-- Dialog window for changing team name -->
     <div id="changeTeamName" class="modal fade" role="dialog">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -108,7 +109,7 @@
   <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
   </mat-form-field>
-
+<!-- Table of manager team members -->
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 

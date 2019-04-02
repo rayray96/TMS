@@ -5,5 +5,5 @@ export interface PersonModel {
     userName: string;
     email: string;
     role: string;
-    teamName: string;
+    teamId: string;
 }

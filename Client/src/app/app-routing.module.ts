@@ -14,10 +14,6 @@ import { ManagerGuard } from './auth/manager.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/user/login', pathMatch: 'full' },
-  { path: 'error404', component: Error404Component },
-  { path: 'error400', component: Error400Component },
-  { path: 'error500', component: Error500Component },
-  { path: 'error', component: ErrorComponent },
   {
     path: 'user', component: UserComponent,
     children: [

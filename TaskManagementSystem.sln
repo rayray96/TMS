@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{B172A594-D4F0-4A4C-AF28-B8B27F28BD31}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeLists", "C:\Users\vnovikov\Desktop\externalCoursesAngular_WebApi-master\AwesomeLists\AwesomeLists.csproj", "{F562AC6F-8E11-45D3-8478-A6AF866DD535}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{B172A594-D4F0-4A4C-AF28-B8B27F28BD31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B172A594-D4F0-4A4C-AF28-B8B27F28BD31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B172A594-D4F0-4A4C-AF28-B8B27F28BD31}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F562AC6F-8E11-45D3-8478-A6AF866DD535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F562AC6F-8E11-45D3-8478-A6AF866DD535}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F562AC6F-8E11-45D3-8478-A6AF866DD535}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F562AC6F-8E11-45D3-8478-A6AF866DD535}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

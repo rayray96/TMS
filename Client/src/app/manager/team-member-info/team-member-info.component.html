@@ -1,3 +1,46 @@
-<p>
-  team-member-info works!
-</p>
+<mat-card class="person-card" *ngIf="manager.currentPerson">
+  <mat-card-header>
+    <div mat-card-avatar class="person-header-image"></div>
+    <mat-card-title>Person Card</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item><strong>First Name : <br></strong> {{manager.currentPerson.fName}}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item><strong>Last Name : <br></strong> {{manager.currentPerson.lName}}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item><strong>Email : <br></strong> {{manager.currentPerson.email}}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item><strong>Role : <br></strong> {{manager.currentPerson.role}}</mat-list-item>
+    </mat-list>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="warn" type="button" class="btn btn-space btn btn-info" data-toggle="modal"
+      data-target="#deleteMember">
+      Delete From Team
+    </button>
+    <!-- For deleting member from team -->
+    <div id="deleteMember" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="question-position">Do you want to delete current member from your team?</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              &times;
+            </button>
+          </div>
+          <h5 class="text-position">{{manager.currentPerson.fName}} {{manager.currentPerson.lName}}</h5>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">
+              Cancel
+            </button>
+            <button type="button" (click)="deleteMember()" class="btn btn-success" data-dismiss="modal">
+              Yes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </mat-card-actions>
+</mat-card>

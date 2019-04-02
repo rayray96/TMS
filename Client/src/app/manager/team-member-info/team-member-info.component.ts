@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ManagerService } from 'src/app/services';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-team-member-info',
@@ -7,9 +10,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TeamMemberInfoComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private manager: ManagerService,
+    private spinner: NgxSpinnerService,
+    private toastr: ToastrService) { }
 
   ngOnInit() {
   }
 
+  deleteMember() {
+    this.spinner.show();
+    this.manager.deleteFromTeam(this.manager.currentPerson.id).subscribe(
+      (res: any) => {
+        this.manager.needCheck = true;
+        this.manager.currentPerson = undefined;
+        this.spinner.hide();
+        this.toastr.success(res.message);
+      },
+      (err: any) => {
+        this.spinner.hide();
+        this.toastr.success(err.error);
+      }
+    );
+  }
 }

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using BLL.DTO;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 using WebApi.Configurations;
 using WebApi.Models;
 
@@ -113,7 +112,7 @@ namespace WebApi.Controllers
 
             personService.DeletePersonFromTeam(id);
 
-            return Ok(new { message = "Members have deleted from your team" });
+            return Ok(new { message = "Member has deleted from your team" });
         }
     }
 }

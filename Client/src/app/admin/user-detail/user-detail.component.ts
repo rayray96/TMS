@@ -43,7 +43,6 @@ export class UserDetailComponent implements OnInit {
       )
       .subscribe(
         success => {
-
           this.admin.currentUser.role = (success as RoleModel).role;
           this.spinner.hide();
           this.toastr.success("Role has changed!");

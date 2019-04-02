@@ -8,6 +8,7 @@
         public string LName { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
+        public int? TeamId { get; set; }
         public TeamViewModel Team { get; set; }
     }
 }

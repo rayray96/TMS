@@ -188,8 +188,10 @@ namespace BLL.Services
             userDTO.Role = role;
 
             var person = await Database.People.GetSingleAsync(p => p.UserId == user.Id);
+
             if (person != null)
-                userDTO.TeamName = Database.Teams.GetById(person.TeamId.Value).TeamName;
+                if (person.TeamId != null)
+                    userDTO.TeamName = Database.Teams.GetById(person.TeamId.Value).TeamName;
 
             return userDTO;
         }
@@ -205,8 +207,10 @@ namespace BLL.Services
             userDTO.Role = role;
 
             var person = await Database.People.GetSingleAsync(p => p.UserId == user.Id);
+
             if (person != null)
-                userDTO.TeamName = Database.Teams.GetById(person.TeamId.Value).TeamName;
+                if (person.TeamId != null)
+                    userDTO.TeamName = Database.Teams.GetById(person.TeamId.Value).TeamName;
 
             return userDTO;
         }

@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, DoCheck } from '@angular/core';
-import { MatSort, MatPaginator, MatTableDataSource, MatListOption } from '@angular/material';
+import { Component, OnInit, ViewChild, DoCheck, AfterViewInit, AfterContentChecked, SimpleChanges } from '@angular/core';
+import { MatSort, MatPaginator, MatTableDataSource, MatListOption, MatSortable } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PersonModel, TeamModel, TeamMembersModel } from 'src/app/models';
 import { JwtService, ManagerService } from 'src/app/services';
@@ -16,7 +16,6 @@ export class TeamMembersListComponent implements OnInit, DoCheck {
   newMembers: TeamMembersModel;
   oldTeamName: string;
   newTeamName: string;
-  needCheck = false;
   managerId: string;
   dataSource;
 
@@ -35,11 +34,14 @@ export class TeamMembersListComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.getTeam();
+    console.log('ngOnInit');
   }
 
   ngDoCheck() {
-    if (this.oldTeamName !== this.newTeamName && this.needCheck)
+    if (this.manager.needCheck) {
       this.getTeam();
+      console.log('ngDoCheck');
+    }
   }
 
   applyFilter(filterValue: string) {
@@ -50,7 +52,8 @@ export class TeamMembersListComponent implements OnInit, DoCheck {
     this.spinner.show();
     this.manager.createTeam(this.managerId, this.newTeamName).subscribe(
       res => {
-        this.needCheck = true;
+        this.manager.needCheck = true;
+        this.manager.currentPerson = undefined;
         this.spinner.hide();
         this.toastr.success('The new team has created!');
       },
@@ -66,7 +69,7 @@ export class TeamMembersListComponent implements OnInit, DoCheck {
     this.spinner.show();
     this.manager.updateTeamName(this.managerId, this.newTeamName).subscribe(
       (res: any) => {
-        this.needCheck = true;
+        this.manager.needCheck = true;
         this.newTeamName = res.newName;
         this.spinner.hide();
         this.toastr.success('The team name has updated!');
@@ -92,6 +95,7 @@ export class TeamMembersListComponent implements OnInit, DoCheck {
     this.spinner.show();
     this.manager.addMembers(this.managerId, this.newMembers).subscribe(
       (res: any) => {
+        this.manager.needCheck = true;
         this.spinner.hide();
         this.toastr.success(res.message);
       },
@@ -125,20 +129,24 @@ export class TeamMembersListComponent implements OnInit, DoCheck {
 
   private getTeam() {
     this.spinner.show();
+    this.manager.needCheck = false;
     this.manager.getMyTeam(this.managerId).subscribe(
       res => {
-        this.needCheck = false;
+        this.dataSource = new MatTableDataSource((res as TeamModel).team);
+
+        setTimeout(() => {
+          this.sort.sort(<MatSortable>({ id: 'fName', start: 'asc' }));
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        });
+
         this.oldTeamName = res.teamName;
         this.newTeamName = res.teamName;
-        this.dataSource = new MatTableDataSource((res as TeamModel).team);
-        setTimeout(() => this.dataSource.paginator = this.paginator);
-        setTimeout(() => this.dataSource.sort = this.sort);
         this.spinner.hide();
       },
       err => {
-        this.needCheck = false;
         this.spinner.hide();
-        throw err;
+        console.log(err);
       }
     );
   }

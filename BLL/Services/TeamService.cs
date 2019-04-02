@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using BLL.Configurations;
 using BLL.DTO;
 using BLL.Exceptions;
 using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Entities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BLL.Services
 {
@@ -34,7 +34,10 @@ namespace BLL.Services
 
         public string GetTeamNameById(int? id)
         {
-            var team = db.Teams.GetById(id.Value);
+            Team team = null;
+
+            if (id != null)
+                team = db.Teams.GetById(id.Value);
 
             if (team == null)
                 throw new TeamNotFoundException("Team with current id does not exist");
@@ -59,6 +62,9 @@ namespace BLL.Services
 
         public void CreateTeam(PersonDTO manager, string teamName)
         {
+            if (manager.TeamId != null)
+                throw new TeamExistsException("This manager has got a team");
+
             var team = new Team { TeamName = teamName };
             IEnumerable<Team> checkTeamExists = db.Teams.Find(t => (t.TeamName == teamName));
 
@@ -69,7 +75,7 @@ namespace BLL.Services
                 throw new ManagerNotFoundException("This user is not a manager");
 
             db.Teams.Create(team);
-            manager.Team = mapper.Map<Team, TeamDTO>(team);
+            manager.TeamId = team.Id;
             db.People.Update(manager.Id, mapper.Map<PersonDTO, Person>(manager));
 
             db.Save();

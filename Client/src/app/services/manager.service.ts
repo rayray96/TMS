@@ -10,6 +10,7 @@ import { TeamModel } from '../models/team-model';
 export class ManagerService {
   readonly BaseURI = 'https://localhost:44360/api';
   currentPerson: PersonModel;
+  needCheck = false;
 
   constructor(private http: HttpClient) { }
 

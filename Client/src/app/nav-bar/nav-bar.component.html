@@ -14,7 +14,9 @@
         <a mat-list-item *ngIf="jwt.getRole() == 'Admin'" routerLink="/admin" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }">User Management</a>
         <a mat-list-item *ngIf="jwt.getRole() == 'Manager'" routerLink="/manager" routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }">Team</a>
+          [routerLinkActiveOptions]="{ exact: true }">Team Management</a>
+        <a mat-list-item *ngIf="jwt.getRole() == 'Manager'" routerLink="/manager/tasks" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">Tasks Management</a>
         <!-- <a mat-list-item href="#">Worker</a> -->
       </mat-nav-list>
     </mat-sidenav>

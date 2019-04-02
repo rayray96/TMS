@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using BLL.Configurations;
 using BLL.DTO;
 using BLL.Exceptions;
 using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BLL.Services
 {
