@@ -21,7 +21,7 @@ import {
   MatSelectModule,
   MatNativeDateModule,
   MatSidenavModule,
-  MatListModule
+  MatListModule,
 } from '@angular/material';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';

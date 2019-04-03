@@ -31,7 +31,7 @@ namespace WebApi
             // Using extension method from Bootstrap project.
             services.RegisterApplicationServices("DefaultConnection");
             // Is that really need???
-            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             // Adding and configuring JwtBearer Authentication.
             services.AddAuthentication(options =>
             {

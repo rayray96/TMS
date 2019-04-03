@@ -21,7 +21,7 @@ import { LoginComponent } from './user/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
-import { NavBarService, UserService, JwtService, GlobalErrorHandler } from './services';
+import { NavBarService, UserService, JwtService, GlobalErrorHandler, TaskService } from './services';
 
 @NgModule({
   declarations: [
@@ -30,7 +30,7 @@ import { NavBarService, UserService, JwtService, GlobalErrorHandler } from './se
     RegistrationComponent,
     LoginComponent,
     HomeComponent,
-    NavBarComponent
+    NavBarComponent,
   ],
   imports: [
     AdminModule,
@@ -60,6 +60,7 @@ import { NavBarService, UserService, JwtService, GlobalErrorHandler } from './se
     JwtService,
     UserService,
     NavBarService,
+    TaskService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

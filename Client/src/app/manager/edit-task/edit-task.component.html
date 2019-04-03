@@ -1,0 +1,46 @@
+<div class="container">
+  <!-- Name -->
+  <div>
+    <mat-form-field required>
+      <input matInput placeholder="Task Name" [(ngModel)]="task.name" />
+    </mat-form-field>
+  </div>
+  <!-- Description -->
+  <div>
+    <mat-form-field>
+      <textarea matInput placeholder="Description" [(ngModel)]="task.description"></textarea>
+    </mat-form-field>
+  </div>
+  <!-- Priority -->
+  <div>
+    <mat-form-field>
+      <mat-select placeholder="Priority" [(value)]="task.priorityId" required>
+        <mat-option [value]=1>High</mat-option>
+        <mat-option [value]=2>Middle</mat-option>
+        <mat-option [value]=3>Low</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <!-- Deadline -->
+  <div>
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker" placeholder="Choose a deadline" [(ngModel)]="task.deadline" />
+      <mat-datepicker-toggle matSuffix [for]="picker">
+        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <!-- Assignee -->
+  <div>
+    <mat-form-field>
+      <mat-select placeholder="Assignee" [(value)]="task.assignee" required>
+        <mat-option *ngFor="let member of myTeam" [value]="member.userName">
+          {{member.fName}} {{member.lName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <button mat-flat-button color="accent" type="submit" mat-button (click)="onSaveCLick($event)">Save and Close</button>
+</div>

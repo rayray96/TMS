@@ -10,7 +10,7 @@ namespace WebApi.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string PriorityId { get; set; }
+        public int? PriorityId { get; set; }
         public string Assignee { get; set; }
         public DateTime? Deadline { get; set; }
     }

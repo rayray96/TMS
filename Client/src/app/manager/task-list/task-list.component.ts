@@ -1,4 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ManagerService, TaskService, JwtService } from 'src/app/services';
+import { ToastrService } from 'ngx-toastr';
+import { MatDialog, MatSortable, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { filter, mergeMap } from 'rxjs/operators';
+import { CreateTaskModel, TaskModel } from 'src/app/models';
+import { of } from 'rxjs';
+import { EditTaskComponent } from '../edit-task/edit-task.component';
 
 @Component({
   selector: 'app-task-list',
@@ -6,10 +14,74 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent implements OnInit {
+  displayedColumns: string[] = ['name', 'priority', 'progress', 'deadline'];
+  managerId;
+  dataSource;
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private manager: ManagerService,
+    private dialog: MatDialog,
+    private toastr: ToastrService,
+    private spinner: NgxSpinnerService,
+    private task: TaskService,
+    private jwt: JwtService) {
+    this.managerId = this.jwt.getId();
   }
 
+  @ViewChild(MatSort)
+  sort: MatSort;
+
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+
+  ngOnInit() {
+    this.getTeam();
+  }
+
+  createTask(): void {
+    const dialogRef = this.dialog.open(EditTaskComponent, {
+      height: '450px',
+      width: '300px',
+      data: {}
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter(response => !!response),
+        mergeMap(response =>
+          this.task
+            .createTask(response as CreateTaskModel)
+            .pipe(mergeMap(_ => of(response)))
+        )
+      )
+      .subscribe(
+        success => {
+          this.spinner.hide();
+          this.toastr.success("Task has created!");
+        },
+        error => {
+          console.log(error);
+          this.toastr.warning('Cannot create a task');
+        }
+      );
+  }
+
+  private getTeam() {
+    this.spinner.show();
+    this.task.getTasksOfMyTeam(this.managerId).subscribe(
+      res => {
+        this.dataSource = new MatTableDataSource(res as TaskModel[]);
+
+        this.sort.sort(<MatSortable>({ id: 'name', start: 'asc' }));
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+
+        this.spinner.hide();
+      },
+      err => {
+        this.spinner.hide();
+        console.log(err);
+      }
+    );
+  }
 }

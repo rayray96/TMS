@@ -42,7 +42,7 @@ namespace WebApi.Controllers
             }
 
             IEnumerable<TaskViewModel> tasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(
-                taskService.GetTasksOfAssignee(User.FindFirstValue(ClaimTypes.NameIdentifier))).ToList();
+                taskService.GetTasksOfAssignee(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))).ToList();
 
             return Ok(tasks);
         }
@@ -70,6 +70,7 @@ namespace WebApi.Controllers
             return Ok(new { result = "Task has deleted" });
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public IActionResult CreateTask([FromBody]CreateTaskViewModel newTask)
         {
@@ -78,7 +79,7 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            string author = User.Identity.Name;
+            string author = HttpContext.User.Identity.Name;
 
             var task = new TaskViewModel
             {
@@ -86,15 +87,7 @@ namespace WebApi.Controllers
                 Description = newTask.Description
             };
 
-            try
-            {
-                taskService.CreateTask(mapper.Map<TaskViewModel, TaskDTO>(task), author, newTask.Assignee, newTask.PriorityId, newTask.Deadline);
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("Task hasn't created.", e.Message);
-                return BadRequest();
-            }
+            taskService.CreateTask(mapper.Map<TaskViewModel, TaskDTO>(task), author, newTask.Assignee, newTask.PriorityId, newTask.Deadline);
 
             return Ok(new { result = "Task has created!" });
         }
@@ -122,7 +115,7 @@ namespace WebApi.Controllers
                 FinishDate = task.FinishDate,
                 Id = task.Id,
                 Name = task.Name,
-                Priority = task.PriorityId,
+               // Priority = task.PriorityId,
                 Progress = task.Progress,
                 StartDate = task.StartDate,
                 Status = task.Status.Name
@@ -143,37 +136,28 @@ namespace WebApi.Controllers
             string author = User.Identity.Name;
             var task = new TaskDTO
             {
-                Id = taskUpdate.Id,
+                Id = id,
                 Name = taskUpdate.Name,
                 Description = taskUpdate.Description,
                 Deadline = taskUpdate.Deadline,
-                PriorityId = taskUpdate.Priority,
+               // PriorityId = taskUpdate.Priority,
                 Assignee = taskUpdate.Assignee ?? author
             };
 
-            try
-            {
-                taskService.UpdateTask(task, author);
-            }
-            catch
-            {
-                ModelState.AddModelError("", "Cannot change task!");
-                return BadRequest(ModelState);
-            }
+            taskService.UpdateTask(task, author);
 
-            return Ok("Task has changed");
+            return Ok(new { message = "Task has changed" });
         }
 
         [Authorize(Roles = "Manager")]
-        [HttpGet("teamTasks")]
-        public IActionResult TaskOfMyTeam()
+        [HttpGet("teamTasks/{id}")]
+        public IActionResult TaskOfMyTeam(string id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             PersonDTO manager = personService.GetPerson(id);
 
             var tasksOfMyTeam = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(taskService.GetTasksOfTeam(id));

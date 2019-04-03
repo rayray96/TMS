@@ -42,7 +42,7 @@ namespace BLL.Services
             }
         }
 
-        public void CreateTask(TaskDTO task, string authorName, string assigneeName, string priority, DateTime? deadline)
+        public void CreateTask(TaskDTO task, string authorName, string assigneeName, int? priority, DateTime? deadline)
         {
             if (string.IsNullOrWhiteSpace(authorName))
                 throw new PersonNotFoundException("Author is not shown");
@@ -62,7 +62,7 @@ namespace BLL.Services
 
             PriorityDTO prior;
             if (priority != null)
-                prior = mapper.Map<Priority, PriorityDTO>(db.Priorities.Find(s => (s.Name == priority)).SingleOrDefault());
+                prior = mapper.Map<Priority, PriorityDTO>(db.Priorities.Find(s => (s.Id == priority)).SingleOrDefault());
             else
                 prior = null;
 
@@ -76,7 +76,7 @@ namespace BLL.Services
             {
                 Name = task.Name,
                 Description = task.Description,
-                PriorityId = prior.Name,
+                PriorityId = priority,
                 Author = authorDTO,
                 Assignee = assigneeDTO.UserName,
                 Status = status,
@@ -85,7 +85,8 @@ namespace BLL.Services
                 FinishDate = null,
                 Deadline = deadline,
             };
-
+            //if (prior != null)
+               // newTask.PriorityId = prior.Id;
             db.Tasks.Create(mapper.Map<TaskDTO, TaskInfo>(newTask));
             db.Save();
         }
@@ -104,7 +105,7 @@ namespace BLL.Services
                     Person author = db.People.Find(p => (p.UserName == authorName)).Single();
 
                     taskForEdit.Name = task.Name;
-                    taskForEdit.Priority.Name = task.PriorityId;
+                    taskForEdit.Priority.Id = task.PriorityId.Value;
                     //taskForEdit.Status.Name = task.Status.Name;
                     //taskForEdit.StartDate = task.StartDate;
                     //taskForEdit.FinishDate = task.FinishDate;
