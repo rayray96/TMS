@@ -18,6 +18,8 @@ namespace WebApi.Configurations
                 cfg.CreateMap<TaskDTO, TaskViewModel>();
                 cfg.CreateMap<UserDTO, UserViewModel>();
                 cfg.CreateMap<TaskViewModel, TaskDTO>();
+                cfg.CreateMap<EditTaskViewModel, TaskDTO>();
+                cfg.CreateMap<EditTaskViewModel, EditTaskDTO>();
             });
 
             return config.CreateMapper();

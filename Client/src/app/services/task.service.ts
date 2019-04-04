@@ -8,23 +8,28 @@ import { Observable } from 'rxjs';
 })
 export class TaskService {
   readonly BaseURI = 'https://localhost:44360/api/task';
-  currentPerson: TaskModel;
+  currentTask: TaskModel;
   needCheck = false;
 
   constructor(private http: HttpClient) { }
 
   public getTasksOfMyTeam(id: string): Observable<TaskModel[]> {
     const path = `/${id}`;
-    return this.http.get<TaskModel[]>(this.BaseURI + '/teamTasks'+ path);
+    return this.http.get<TaskModel[]>(this.BaseURI + '/teamTasks' + path);
   }
 
   public createTask(task: CreateTaskModel): Observable<CreateTaskModel> {
     return this.http.post<CreateTaskModel>(this.BaseURI, task);
   }
 
-  public updateTask(id: number, task: TaskModel): Observable<CreateTaskModel> {
+  public updateTask(id: number, task: CreateTaskModel): Observable<CreateTaskModel> {
     const path = `/${id}`;
     return this.http.put<CreateTaskModel>(this.BaseURI + path, task);
+  }
+
+  public deleteTask(id: number) {
+    const path = `/${id}`;
+    return this.http.delete(this.BaseURI + path);
   }
 
   // public getMyTeam(id: string): Observable<TeamModel> {

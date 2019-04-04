@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, DoCheck } from '@angular/core';
 import { ManagerService, TaskService, JwtService } from 'src/app/services';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog, MatSortable, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -13,7 +13,7 @@ import { EditTaskComponent } from '../edit-task/edit-task.component';
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
-export class TaskListComponent implements OnInit {
+export class TaskListComponent implements OnInit, DoCheck {
   displayedColumns: string[] = ['name', 'priority', 'progress', 'deadline'];
   managerId;
   dataSource;
@@ -34,7 +34,15 @@ export class TaskListComponent implements OnInit {
   paginator: MatPaginator;
 
   ngOnInit() {
-    this.getTeam();
+    this.getTasksOfMyTeam();
+    console.log('ngOnInit');
+  }
+
+  ngDoCheck() {
+    if (this.task.needCheck) {
+      this.getTasksOfMyTeam();
+      console.log('ngDoCheck');
+    }
   }
 
   createTask(): void {
@@ -56,6 +64,7 @@ export class TaskListComponent implements OnInit {
       )
       .subscribe(
         success => {
+          this.task.needCheck = true;
           this.spinner.hide();
           this.toastr.success("Task has created!");
         },
@@ -66,8 +75,13 @@ export class TaskListComponent implements OnInit {
       );
   }
 
-  private getTeam() {
+  onSelect(taskModel: TaskModel): void {
+    this.task.currentTask = taskModel;
+  }
+
+  private getTasksOfMyTeam() {
     this.spinner.show();
+    this.task.needCheck = false;
     this.task.getTasksOfMyTeam(this.managerId).subscribe(
       res => {
         this.dataSource = new MatTableDataSource(res as TaskModel[]);

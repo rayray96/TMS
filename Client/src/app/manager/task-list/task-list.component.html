@@ -29,13 +29,13 @@
     <!-- Progress Column -->
     <ng-container matColumnDef="progress">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Progress </th>
-      <td mat-cell *matCellDef="let element" (click)="onSelect(element)"> {{element.progress}} </td>
+      <td mat-cell *matCellDef="let element" (click)="onSelect(element)"> {{element.progress}} % </td>
     </ng-container>
 
     <!-- Deadline Column -->
     <ng-container matColumnDef="deadline">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Deadline </th>
-      <td mat-cell *matCellDef="let element" (click)="onSelect(element)"> {{element.deadline}} % </td>
+      <td mat-cell *matCellDef="let element" (click)="onSelect(element)"> {{element.deadline}} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

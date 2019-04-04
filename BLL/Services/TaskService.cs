@@ -23,7 +23,7 @@ namespace BLL.Services
         }
 
         #region Main CRUD-operations for Tasks.
-
+        // Finished!!!
         public void DeleteTask(int taskId, string currentUserName)
         {
             TaskDTO task = mapper.Map<TaskInfo, TaskDTO>(db.Tasks.GetById(taskId));
@@ -31,7 +31,9 @@ namespace BLL.Services
             if (task == null)
                 throw new TaskNotFoundException("Task with this id not found");
 
-            if (task.Author.UserName == currentUserName)
+            PersonDTO managerDTO = mapper.Map<Person, PersonDTO>(db.People.Find(m => m.UserName == currentUserName).SingleOrDefault());
+
+            if (task.AuthorId == managerDTO.Id)
             {
                 db.Tasks.Delete(task.Id);
                 db.Save();
@@ -41,108 +43,60 @@ namespace BLL.Services
                 throw new TaskAccessException("Access error. You cannot delete this task");
             }
         }
-
-        public void CreateTask(TaskDTO task, string authorName, string assigneeName, int? priority, DateTime? deadline)
+        // Finished!!!
+        public void CreateTask(EditTaskDTO task, string authorName, int assigneeId, string priority)
         {
-            if (string.IsNullOrWhiteSpace(authorName))
-                throw new PersonNotFoundException("Author is not shown");
+            var newTask = EditTask(task, authorName, assigneeId, priority);
 
-            PersonDTO authorDTO = mapper.Map<Person, PersonDTO>(db.People.Find(p => p.UserName == authorName).Single());
-
-            PersonDTO assigneeDTO;
-            if (string.IsNullOrEmpty(assigneeName))
-                assigneeDTO = authorDTO;
-            else
-                assigneeDTO = mapper.Map<Person, PersonDTO>(db.People.Find(p => p.UserName == assigneeName).Single());
-
-            StatusDTO status = mapper.Map<Status, StatusDTO>(db.Statuses.Find(s => (s.Name == "Not Started")).SingleOrDefault());
-            if (status == null)
-                throw new StatusNotFoundException("Status \"New\" was not found in database");
-
-
-            PriorityDTO prior;
-            if (priority != null)
-                prior = mapper.Map<Priority, PriorityDTO>(db.Priorities.Find(s => (s.Id == priority)).SingleOrDefault());
-            else
-                prior = null;
-
-            //DateTime? endDate;
-            //if (deadline != null)
-            //    endDate = Convert.ToDateTime(deadline);
-            //else
-            //    endDate = null;
-
-            var newTask = new TaskDTO
-            {
-                Name = task.Name,
-                Description = task.Description,
-                PriorityId = priority,
-                Author = authorDTO,
-                Assignee = assigneeDTO.UserName,
-                Status = status,
-                Progress = 0,
-                StartDate = null,
-                FinishDate = null,
-                Deadline = deadline,
-            };
-            //if (prior != null)
-               // newTask.PriorityId = prior.Id;
-            db.Tasks.Create(mapper.Map<TaskDTO, TaskInfo>(newTask));
+            db.Tasks.Create(newTask);
             db.Save();
         }
-
-        public void UpdateTask(TaskDTO task, string authorName)
+        // Finished!!!
+        public void UpdateTask(EditTaskDTO task, int id, string authorName, int assigneeId, string priority)
         {
-            TaskInfo taskForEdit = db.Tasks.GetById(task.Id);
+            TaskInfo taskForEdit = db.Tasks.GetById(id);
 
             if (taskForEdit != null)
             {
-                if ((authorName == null))
-                    throw new ManagerNotFoundException("The author name cannot be null");
+                var newTask = EditTask(task, authorName, assigneeId, priority);
 
-                if (taskForEdit.Author.UserName == authorName)
-                {
-                    Person author = db.People.Find(p => (p.UserName == authorName)).Single();
+                newTask.Id = taskForEdit.Id;
+                newTask.Progress = taskForEdit.Progress;
+                newTask.StartDate = taskForEdit.StartDate;
+                newTask.StatusId = taskForEdit.StatusId;
+                newTask.FinishDate = taskForEdit.FinishDate;
 
-                    taskForEdit.Name = task.Name;
-                    taskForEdit.Priority.Id = task.PriorityId.Value;
-                    //taskForEdit.Status.Name = task.Status.Name;
-                    //taskForEdit.StartDate = task.StartDate;
-                    //taskForEdit.FinishDate = task.FinishDate;
-                    taskForEdit.Description = task.Description;
-                    taskForEdit.Deadline = task.Deadline;
-                }
-
-                db.Tasks.Update(taskForEdit.Id, taskForEdit);
+                db.Tasks.Update(taskForEdit.Id, newTask);
                 db.Save();
             }
         }
-
+        // Finished!!!
         public TaskDTO GetTask(int id)
         {
-            var result = db.Tasks.GetById(id);
-            return mapper.Map<TaskInfo, TaskDTO>(result);
-        }
+            var condition = db.Tasks.Find(t => t.Id == id);
+            var task = GetTasksWithCondition(condition).FirstOrDefault();
 
+            return task;
+        }
+        // Finished!!!
         public IEnumerable<TaskDTO> GetAllTasks()
         {
-            var tasks = db.Tasks.GetAll();
-            IEnumerable<TaskDTO> resulttasks = mapper.Map<IEnumerable<TaskInfo>, IEnumerable<TaskDTO>>(tasks);
-
-            return resulttasks;
+            var condition = db.Tasks.GetAll();
+            var allTasks = GetTasksWithCondition(condition);
+            
+            return allTasks;
         }
-
+        // Finished!!!
         public IEnumerable<TaskDTO> GetTasksOfTeam(string managerId)
         {
             var manager = db.People.Find(p => p.UserId == managerId).SingleOrDefault();
             if (manager == null)
                 throw new ManagerNotFoundException("Manager is not found");
 
-            IEnumerable<TaskInfo> tasks = db.Tasks.Find(t => ((t.Author.Id == manager.Id) &&
-                                            (t.Assignee.Id != manager.Id))).OrderBy(tsk => tsk.Assignee.UserName).ToList();
+            var condition = db.Tasks.Find(t => t.AuthorId == manager.Id);
+            var tasks = GetTasksWithCondition(condition);
 
-            IEnumerable<TaskDTO> resulttasks = mapper.Map<IEnumerable<TaskInfo>, IEnumerable<TaskDTO>>(tasks);
-            return resulttasks;
+            return tasks;
         }
 
         public IEnumerable<TaskDTO> GetInactiveTasks(int teamId)
@@ -286,6 +240,67 @@ namespace BLL.Services
             sumProgress = (counter != 0) ? (sumProgress / counter) : 0;
 
             return sumProgress;
+        }
+
+        private TaskInfo EditTask(EditTaskDTO task, string authorName, int assigneeId, string priority)
+        {
+            PersonDTO authorDTO = mapper.Map<Person, PersonDTO>(db.People.Find(p => p.UserName == authorName).SingleOrDefault());
+            if (authorDTO == null)
+                throw new PersonNotFoundException("Author has not found");
+
+            PersonDTO assigneeDTO = mapper.Map<Person, PersonDTO>(db.People.Find(p => p.Id == assigneeId).SingleOrDefault());
+            if (assigneeDTO == null)
+                throw new PersonNotFoundException("Assignee has not found");
+
+            PriorityDTO priorityDTO = mapper.Map<Priority, PriorityDTO>(db.Priorities.Find(p => p.Name == priority).SingleOrDefault());
+            if (priorityDTO == null)
+                throw new PriorityNotFoundException("Priority has not known");
+
+            StatusDTO status = mapper.Map<Status, StatusDTO>(db.Statuses.Find(s => (s.Name == "Not Started")).SingleOrDefault());
+            if (status == null)
+                throw new StatusNotFoundException("Status \"Not Started\" has not found in database");
+
+            var newTask = new TaskInfo
+            {
+                Name = task.Name,
+                Description = task.Description,
+                PriorityId = priorityDTO.Id,
+                AuthorId = authorDTO.Id,
+                AssigneeId = assigneeDTO.Id,
+                StatusId = status.Id,
+                Progress = 0,
+                StartDate = null,
+                FinishDate = null,
+                Deadline = task.Deadline,
+            };
+
+            return newTask;
+        }
+
+        private IEnumerable<TaskDTO> GetTasksWithCondition(IEnumerable<TaskInfo> condition)
+        {
+            IEnumerable<TaskDTO> tasks = condition
+                            .Join(db.People.GetAll(), x => x.AssigneeId, y => y.Id, (x, y) => new { x, Assignee = y.FName + " " + y.LName })
+                            .Join(db.People.GetAll(), x => x.x.AuthorId, y => y.Id, (x, y) => new { x.x, x.Assignee, Author = y.FName + " " + y.LName })
+                            .Join(db.Statuses.GetAll(), x => x.x.StatusId, y => y.Id, (x, y) => new { x.x, x.Assignee, x.Author, Status = y.Name })
+                            .Join(db.Priorities.GetAll(), x => x.x.PriorityId, y => y.Id, (x, y) => new { x.x, x.Assignee, x.Author, x.Status, Priority = y.Name })
+                            .Select(n => new TaskDTO
+                            {
+                                Assignee = n.Assignee,
+                                Author = n.Author,
+                                Status = n.Status,
+                                Priority = n.Priority,
+                                Id = n.x.Id,
+                                Deadline = n.x.Deadline,
+                                Description = n.x.Description,
+                                FinishDate = n.x.FinishDate,
+                                Name = n.x.Name,
+                                Progress = n.x.Progress,
+                                StartDate = n.x.StartDate,
+                                AssigneeId = n.x.AssigneeId
+                            });
+
+            return tasks;
         }
     }
 }

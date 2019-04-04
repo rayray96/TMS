@@ -15,7 +15,9 @@ namespace BLL.Configurations
                 cfg.CreateMap<Priority, PriorityDTO>();
                 cfg.CreateMap<Team, TeamDTO>();
                 cfg.CreateMap<TaskInfo, TaskDTO>();
+                cfg.CreateMap<TaskInfo, EditTaskDTO>();
 
+                cfg.CreateMap<EditTaskDTO, TaskInfo>();
                 cfg.CreateMap<PersonDTO, Person>();
                 cfg.CreateMap<StatusDTO, Status>();
                 cfg.CreateMap<PriorityDTO, Priority>();

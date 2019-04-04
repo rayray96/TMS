@@ -36,7 +36,7 @@ namespace WebApi.Configurations
             if (exception is InvalidPasswordException) code = HttpStatusCode.BadRequest;
             else if (exception is ManagerNotFoundException) code = HttpStatusCode.NotFound;
             else if (exception is PersonNotFoundException) code = HttpStatusCode.NotFound;
-            else if (exception is PriorityIsNullException) code = HttpStatusCode.BadRequest;
+            else if (exception is PriorityNotFoundException) code = HttpStatusCode.BadRequest;
             else if (exception is RefreshTokenNotFoundException) code = HttpStatusCode.NotFound;
             else if (exception is RoleException) code = HttpStatusCode.BadRequest;
             else if (exception is StatusNotFoundException) code = HttpStatusCode.NotFound;

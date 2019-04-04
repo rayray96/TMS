@@ -28,7 +28,7 @@ namespace BLL.Interfaces
         /// <param name="deadline">The end date of current task</param>
         /// ///<exception cref="ArgumentNullException">Name of author is null or empty</exception>
         /// ///<exception cref="Exception">Problem with status new in database. </exception>  
-        void CreateTask(TaskDTO task, string authorName, string assigneeName, int? priority, DateTime? deadline);
+        void CreateTask(EditTaskDTO task, string authorName, int assigneeId, string priority);
 
         /// <summary>
         /// Update task by author.
@@ -36,7 +36,7 @@ namespace BLL.Interfaces
         /// <param name="task">Task with edits</param>
         /// <param name="authorName">Name of author of the current task</param>
         /// ///<exception cref="ArgumentNullException">Name of author is null or empty</exception>  
-        void UpdateTask(TaskDTO task, string authorName);
+        void UpdateTask(EditTaskDTO task, int id, string authorName, int assigneeId, string priority);
 
         /// <summary>
         /// Set new status to task.

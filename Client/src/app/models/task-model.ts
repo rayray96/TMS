@@ -4,6 +4,7 @@ export interface TaskModel {
     description: string;
     author: string;
     assignee: string;
+    assigneeId: number;
     priority: string;
     status: string;
     progress: number;

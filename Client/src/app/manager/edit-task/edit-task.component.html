@@ -13,17 +13,17 @@
   </div>
   <!-- Priority -->
   <div>
-    <mat-form-field>
-      <mat-select placeholder="Priority" [(value)]="task.priorityId" required>
-        <mat-option [value]=1>High</mat-option>
-        <mat-option [value]=2>Middle</mat-option>
-        <mat-option [value]=3>Low</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+      <mat-form-field>
+        <mat-select placeholder="Priority" [(value)]="task.priority">
+          <mat-option value="High">High</mat-option>
+          <mat-option value="Middle">Middle</mat-option>
+          <mat-option value="Low">Low</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   <!-- Deadline -->
   <div>
-    <mat-form-field>
+    <mat-form-field required>
       <input matInput [matDatepicker]="picker" placeholder="Choose a deadline" [(ngModel)]="task.deadline" />
       <mat-datepicker-toggle matSuffix [for]="picker">
         <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
@@ -33,9 +33,9 @@
   </div>
   <!-- Assignee -->
   <div>
-    <mat-form-field>
-      <mat-select placeholder="Assignee" [(value)]="task.assignee" required>
-        <mat-option *ngFor="let member of myTeam" [value]="member.userName">
+    <mat-form-field required>
+      <mat-select placeholder="Assignee" [(value)]="task.assigneeId" >
+        <mat-option *ngFor="let member of myTeam" [value]="member.id">
           {{member.fName}} {{member.lName}}
         </mat-option>
       </mat-select>

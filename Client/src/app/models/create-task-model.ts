@@ -2,6 +2,7 @@ export interface CreateTaskModel {
     name: string;
     description: string;
     assignee: string;
-    priorityId: number;
+    assigneeId: number;
+    priority: string;
     deadline: Date;
 }

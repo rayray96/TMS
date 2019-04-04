@@ -18,6 +18,7 @@ using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
+    [Authorize(Roles = "Manager")]
     [Route("api/[controller]")]
     [ApiController]
     public class TaskController : ControllerBase
@@ -47,109 +48,6 @@ namespace WebApi.Controllers
             return Ok(tasks);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteTask(int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                // Try to delete this task and check task id and current user UserName if he can delete it,
-                // because deleting task is available only for author of task.
-                taskService.DeleteTask(id, User.Identity.Name);
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("Task hasn't deleted.", e.Message);
-                return BadRequest();
-            }
-
-            return Ok(new { result = "Task has deleted" });
-        }
-
-        [Authorize(Roles = "Manager")]
-        [HttpPost]
-        public IActionResult CreateTask([FromBody]CreateTaskViewModel newTask)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            string author = HttpContext.User.Identity.Name;
-
-            var task = new TaskViewModel
-            {
-                Name = newTask.Name,
-                Description = newTask.Description
-            };
-
-            taskService.CreateTask(mapper.Map<TaskViewModel, TaskDTO>(task), author, newTask.Assignee, newTask.PriorityId, newTask.Deadline);
-
-            return Ok(new { result = "Task has created!" });
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetTask(int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var task = taskService.GetTask(id);
-            if (task == null)
-            {
-                ModelState.AddModelError("id", "Task hasn't found");
-                return BadRequest(ModelState);
-            }
-            var resultTask = new TaskViewModel
-            {
-                Assignee = task.Assignee,
-                Author = task.Author.FName + " " + task.Author.LName,
-                Deadline = task.Deadline,
-                Description = task.Description,
-                FinishDate = task.FinishDate,
-                Id = task.Id,
-                Name = task.Name,
-               // Priority = task.PriorityId,
-                Progress = task.Progress,
-                StartDate = task.StartDate,
-                Status = task.Status.Name
-            };
-
-            return Ok(resultTask);
-        }
-
-        [Authorize(Roles = "Manager")]
-        [HttpPut("{id}")]
-        public IActionResult UpdateTask(int id, [FromBody]TaskUpdateViewModel taskUpdate)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            string author = User.Identity.Name;
-            var task = new TaskDTO
-            {
-                Id = id,
-                Name = taskUpdate.Name,
-                Description = taskUpdate.Description,
-                Deadline = taskUpdate.Deadline,
-               // PriorityId = taskUpdate.Priority,
-                Assignee = taskUpdate.Assignee ?? author
-            };
-
-            taskService.UpdateTask(task, author);
-
-            return Ok(new { message = "Task has changed" });
-        }
-
-        [Authorize(Roles = "Manager")]
         [HttpGet("teamTasks/{id}")]
         public IActionResult TaskOfMyTeam(string id)
         {
@@ -168,6 +66,86 @@ namespace WebApi.Controllers
             }
 
             return Ok(tasksOfMyTeam);
+        }
+
+        [HttpPost]
+        public IActionResult CreateTask([FromBody]EditTaskViewModel newTask)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            string author = HttpContext.User.Identity.Name;
+
+            taskService.CreateTask(mapper.Map<EditTaskViewModel, EditTaskDTO>(newTask), author, newTask.AssigneeId, newTask.Priority);
+
+            return Ok(new { message = "Task has created!" });
+        }
+
+        [Authorize(Roles = "Manager")]
+        [HttpPut("{id}")]
+        public IActionResult UpdateTask(int id, [FromBody]EditTaskViewModel taskUpdate)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            string author = HttpContext.User.Identity.Name;
+
+            var task = mapper.Map<EditTaskViewModel, EditTaskDTO>(taskUpdate);
+
+            taskService.UpdateTask(task, id, author, taskUpdate.AssigneeId, taskUpdate.Priority);
+
+            return Ok(new { message = "Task has changed" });
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteTask(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            string author = HttpContext.User.Identity.Name;
+
+            taskService.DeleteTask(id, author);
+
+            return Ok(new { message = "Task has deleted" });
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetTask(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var task = taskService.GetTask(id);
+            if (task == null)
+            {
+                ModelState.AddModelError("id", "Task hasn't found");
+                return BadRequest(ModelState);
+            }
+            var resultTask = new TaskViewModel
+            {
+                // Assignee = task.Assignee,
+                // Author = task.Author.FName + " " + task.Author.LName,
+                Deadline = task.Deadline,
+                Description = task.Description,
+                FinishDate = task.FinishDate,
+                Id = task.Id,
+                Name = task.Name,
+                // Priority = task.PriorityId,
+                Progress = task.Progress,
+                StartDate = task.StartDate,
+                //Status = task.Status.Name
+            };
+
+            return Ok(resultTask);
         }
 
         [HttpGet("assignees/{id}")]
