@@ -92,7 +92,7 @@ export class TaskListComponent implements OnInit, DoCheck {
   private getTasksOfMyTeam() {
     this.spinner.show();
     this.task.needCheck = false;
-    this.task.getTasksOfMyTeam(this.managerId).subscribe(
+    this.task.getTasksOfManager(this.managerId).subscribe(
       res => {
         this.dataSource = new MatTableDataSource(res as TaskModel[]);
 

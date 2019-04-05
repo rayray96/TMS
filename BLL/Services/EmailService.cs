@@ -9,6 +9,16 @@ namespace BLL.Services
     public class EmailService : IEmailService
     {
         public const string SUBJECT_NEW_TEAM_MEMBER = "A new team member!";
+        public const string SUBJECT_NEW_TASK = "You have a new task!";
+        public const string SUBJECT_EXECUTED_TASK = "Your team member has finished task!";
+
+        public const string BODY_NEW_TASK =
+            "<p>Hello {0},</p>" +
+            "<br />" +
+            "<p>You have just received the task \"{1}\" from your manager! Let's begin to work!</p>" +
+            "<br />" +
+            "<p>Have a nice day,<br />" +
+            "{2}</p>";
 
         public const string BODY_NEW_TEAM_MEMBER =
             "<p>Hello {0},</p>" +
@@ -18,6 +28,14 @@ namespace BLL.Services
             "<br />" +
             "<p>Have a nice day,<br />" +
             "{2}</p>";
+
+        public const string BODY_EXECUTED_TASK =
+            "<p>Hello {0},</p>" +
+            "<br />" +
+            "<p>Your team member {1} has just executed task \"{2}\"! Let's check it out!</p>" +
+            "<br />" +
+            "<p>Have a nice day,<br />" +
+            "{3}</p>";
 
         IConfigurationRoot configuration = new ConfigurationBuilder()
                    .SetBasePath(Directory.GetCurrentDirectory())

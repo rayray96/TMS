@@ -18,7 +18,7 @@ using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
-    [Authorize(Roles = "Worker")]
+    [Authorize(Roles = "Manager")]
     [Route("api/[controller]")]
     [ApiController]
     public class TaskController : ControllerBase

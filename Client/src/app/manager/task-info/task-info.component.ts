@@ -6,7 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { EditTaskComponent } from '../edit-task/edit-task.component';
 import { filter, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { CreateTaskModel, TaskModel } from 'src/app/models';
+import { CreateTaskModel, TaskModel, StatusModel, EditStatusModel } from 'src/app/models';
 
 @Component({
   selector: 'app-task-info',
@@ -15,12 +15,16 @@ import { CreateTaskModel, TaskModel } from 'src/app/models';
 })
 export class TaskInfoComponent implements OnInit, OnDestroy {
   taskForChange: TaskModel;
+  statusForChange: EditStatusModel;
+  managerId: string;
+
   constructor(private manager: ManagerService,
     private dialog: MatDialog,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
     private task: TaskService,
     private jwt: JwtService) {
+    this.managerId = this.jwt.getId();
   }
 
   ngOnInit() {
@@ -32,7 +36,7 @@ export class TaskInfoComponent implements OnInit, OnDestroy {
 
   updateTask(): void {
     const taskForChange = Object.assign({}, this.task.currentTask);
-    
+
     const dialogRef = this.dialog.open(EditTaskComponent, {
       height: '450px',
       width: '300px',
@@ -80,7 +84,75 @@ export class TaskInfoComponent implements OnInit, OnDestroy {
     );
   }
 
-  setStatus() {
+finishTask(){
+this.spinner.show();
+this.statusForChange.id = this.task.currentTask.id;
+this.statusForChange.status = 'Completed';
+this.task.updateStatus(this.managerId, this.statusForChange ).subscribe(
+  success => {
+    this.task.currentTask.status = this.statusForChange.status;
+    this.task.needCheck = true;
+    this.spinner.hide();
+    this.toastr.warning("Status has finished!");
+  },
+  error => {
+    console.log(error);
+    this.spinner.hide();
+    this.toastr.error('Cannot finish a task');
+  }
+);
+}
 
+cancelTask(){
+  this.spinner.show();
+  this.statusForChange.id = this.task.currentTask.id;
+  this.statusForChange.status = 'Canceled';
+  this.task.updateStatus(this.managerId, this.statusForChange ).subscribe(
+    success => {
+      this.task.currentTask.status = this.statusForChange.status;
+      this.task.needCheck = true;
+      this.spinner.hide();
+      this.toastr.warning("Status has canceled!");
+    },
+    error => {
+      console.log(error);
+      this.spinner.hide();
+      this.toastr.error('Cannot cancel a task');
+    }
+  );
+}
+
+  setStatus(): void {
+    const statusForChange = Object.assign({}, this.task.currentTask as StatusModel);
+
+    const dialogRef = this.dialog.open(EditTaskComponent, {
+      height: '200px',
+      width: '300px',
+      data: statusForChange
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter(response => !!response),
+        mergeMap(response =>
+          this.task
+            .updateStatus(this.managerId, (response as EditStatusModel))
+            .pipe(mergeMap(_ => of(response)))
+        )
+      )
+      .subscribe(
+        success => {
+          this.task.currentTask.status = (success as StatusModel).name;
+          this.task.needCheck = true;
+          this.spinner.hide();
+          this.toastr.success("Status has updated!");
+        },
+        error => {
+          console.log(error);
+          this.spinner.hide();
+          this.toastr.error('Cannot update a status');
+        }
+      );
   }
 }

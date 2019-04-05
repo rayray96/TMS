@@ -78,14 +78,14 @@ namespace BLL.Services
 
             var team = db.Teams.GetById(manager.TeamId.Value);
 
+            db.Save();
+
             foreach (var member in newTeamMembers)
             {
                 string emailBody = string.Format(EmailService.BODY_NEW_TEAM_MEMBER,
                                                  member.FName + " " + member.LName, team.TeamName, manager.FName + " " + manager.LName);
                 emailService.Send(manager.Email, member.Email, EmailService.SUBJECT_NEW_TEAM_MEMBER, emailBody);
             }
-
-            db.Save();
         }
 
         public IEnumerable<PersonDTO> GetPeopleWithoutTeam()

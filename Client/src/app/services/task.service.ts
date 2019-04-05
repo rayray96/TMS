@@ -15,16 +15,16 @@ export class TaskService {
 
   public getTasksOfManager(id: string): Observable<TaskModel[]> {
     const path = `/${id}`;
-    return this.http.get<TaskModel[]>(this.BaseURI  + 'managerTasks/' + path);
+    return this.http.get<TaskModel[]>(this.BaseURI  + '/managerTasks' + path);
   }
 
   public getTasksOfWorker(id: string): Observable<TaskModel[]> {
     const path = `/${id}`;
-    return this.http.get<TaskModel[]>(this.BaseURI  + 'workerTasks/' + path);
+    return this.http.get<TaskModel[]>(this.BaseURI  + '/workerTasks' + path);
   }
 
   public getStatuses(): Observable<StatusModel[]> {
-    return this.http.get<StatusModel[]>(this.BaseURI  + 'statuses');
+    return this.http.get<StatusModel[]>(this.BaseURI  + '/statuses');
   }
 
   public createTask(task: CreateTaskModel): Observable<CreateTaskModel> {
@@ -36,9 +36,9 @@ export class TaskService {
     return this.http.put<CreateTaskModel>(this.BaseURI + path, task);
   }
 
-  public updateStatus(id: number, status: EditStatusModel): Observable<EditStatusModel> {
+  public updateStatus(id: string, status: EditStatusModel): Observable<EditStatusModel> {
     const path = `/${id}`;
-    return this.http.put<EditStatusModel>(this.BaseURI + path + 'statuses', status);
+    return this.http.put<EditStatusModel>(this.BaseURI + path + '/statuses', status);
   }
 
   public deleteTask(id: number) {

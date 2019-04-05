@@ -14,11 +14,17 @@ namespace BLL.Services
     public class TaskService : ITaskService
     {
         private IUnitOfWork db { get; set; }
+        private IEmailService emailService { get; set; }
         private IMapper mapper { get; set; }
 
-        public TaskService(IUnitOfWork uow)
+        private string EmailBody { get; set; }
+        private string EmailSender { get; set; }
+        private string EmailRecipient { get; set; }
+
+        public TaskService(IUnitOfWork uow, IEmailService emailService)
         {
             db = uow;
+            this.emailService = emailService;
             mapper = MapperConfig.GetMapperResult();
         }
 
@@ -50,6 +56,8 @@ namespace BLL.Services
 
             db.Tasks.Create(newTask);
             db.Save();
+
+            emailService.Send(EmailSender, EmailRecipient, EmailService.SUBJECT_NEW_TASK, EmailBody);
         }
 
         public void UpdateTask(EditTaskDTO task, int id, string authorName, int assigneeId, string priority)
@@ -68,6 +76,8 @@ namespace BLL.Services
 
                 db.Tasks.Update(taskForEdit.Id, newTask);
                 db.Save();
+
+                emailService.Send(EmailSender, EmailRecipient, EmailService.SUBJECT_NEW_TASK, EmailBody);
             }
         }
 
@@ -177,6 +187,17 @@ namespace BLL.Services
 
             db.Tasks.Update(task.Id, task);
             db.Save();
+
+            if (task.Progress == 80)
+            {
+                Person manager = db.People.GetById(task.AuthorId);
+                Person worker = db.People.GetById(task.AssigneeId);
+
+                EmailBody = string.Format(EmailService.BODY_EXECUTED_TASK,
+                   worker.FName + " " + worker.LName, task.Name, manager.FName + " " + manager.LName);
+
+                emailService.Send(worker.Email, manager.Email, EmailService.SUBJECT_EXECUTED_TASK, EmailBody);
+            }
         }
 
         public int GetProgressOfTeam(string managerId)
@@ -252,6 +273,11 @@ namespace BLL.Services
                 FinishDate = null,
                 Deadline = task.Deadline,
             };
+
+            EmailBody = string.Format(EmailService.BODY_NEW_TASK,
+                               assigneeDTO.FName + " " + assigneeDTO.LName, task.Name, authorDTO.FName + " " + authorDTO.LName);
+            EmailSender = authorDTO.Email;
+            EmailRecipient = assigneeDTO.Email;
 
             return newTask;
         }
