@@ -3,7 +3,7 @@
   }
   
   .task-header-image {
-    background-image: url('/assets/img/task-icon.png');
+    background-image: url('/assets/img/task-icon.jpg');
     background-size: cover;
     width: 40px;
     height: 40px;
@@ -17,3 +17,12 @@
     text-align: center;
     margin: 10px;
   }
+
+  .buttons{
+    text-align: center;
+    left: 50%;
+  }
+
+  .btn-space {
+    margin-right: 5px;
+}

@@ -1,7 +1,7 @@
 <h4 class="text-center">Tasks of my team</h4>
 
 <div class="button-add">
-  <button mat-raised-button color="primary" (click)="createTask($event)">
+  <button mat-raised-button color="primary" (click)="createTask()">
     Add Task
   </button>
 </div>
@@ -29,13 +29,21 @@
     <!-- Progress Column -->
     <ng-container matColumnDef="progress">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Progress </th>
-      <td mat-cell *matCellDef="let element" (click)="onSelect(element)"> {{element.progress}} % </td>
+      <td mat-cell *matCellDef="let element" (click)="onSelect(element)">
+        <div class="progress" style="width:90%">
+          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="element.progress"
+            aria-valuemin="0" aria-valuemax="100" [style.width]=" element.progress + '%'">
+            {{element.progress}} %
+          </div>
+        </div>
+
+      </td>
     </ng-container>
 
     <!-- Deadline Column -->
     <ng-container matColumnDef="deadline">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Deadline </th>
-      <td mat-cell *matCellDef="let element" (click)="onSelect(element)"> {{element.deadline}} </td>
+      <td mat-cell *matCellDef="let element" (click)="onSelect(element)"> {{element.deadline | date}} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

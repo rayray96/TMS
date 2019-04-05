@@ -1,5 +1,5 @@
 export interface PersonModel {
-    id: number;
+    id: string;
     fName: string;
     lName: string;
     userName: string;

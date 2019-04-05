@@ -61,35 +61,14 @@ namespace BLL.Interfaces
         /// <param name="managerId">Id of manager of team</param>
         /// ///<exception cref="ArgumentException">Manager with this Id wasn't found</exception>   
         /// <returns>Enumeration of tasks</returns>
-        IEnumerable<TaskDTO> GetTasksOfTeam(string managerId);
-
-        /// <summary>
-        /// Get tasks of team which are inactive.
-        /// </summary>
-        /// <param name="teamId">Id of team</param>
-        /// <returns>Enumeration of tasks</returns>
-        IEnumerable<TaskDTO> GetInactiveTasks(int teamId);
-
-        /// <summary>
-        /// Get tasks of team where status is completed.
-        /// </summary>
-        /// <param name="teamId">Id of team</param>
-        /// <returns>Enumerations of tasks</returns>
-        IEnumerable<TaskDTO> GetCompletedTasks(int teamId);
+        IEnumerable<TaskDTO> GetTasksOfAuthor(string managerId);
 
         /// <summary>
         /// Get all tasks of shown assignee.
         /// </summary>
         /// <param name="id">String Id of assignee</param>
         /// <returns>Enumerations of tasks</returns>
-        IEnumerable<TaskDTO> GetTasksOfAssignee(string id);
-
-        /// <summary>
-        /// Get all tasks of shown author.
-        /// </summary>
-        /// <param name="id">String Id of assignee</param>
-        /// <returns>Enumerations of tasks</returns>
-        IEnumerable<TaskDTO> GetTasksOfAuthor(string id);
+        IEnumerable<TaskDTO> GetTasksOfAssignee(string workerId);
 
         /// <summary>
         /// Get all tasks.

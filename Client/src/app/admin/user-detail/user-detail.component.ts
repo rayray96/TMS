@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AdminService } from 'src/app/services';
 import { RoleModel } from 'src/app/models';
 import { MatDialog } from '@angular/material';
@@ -13,7 +13,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   templateUrl: './user-detail.component.html',
   styleUrls: ['./user-detail.component.css']
 })
-export class UserDetailComponent implements OnInit {
+export class UserDetailComponent implements OnInit, OnDestroy {
 
   constructor(private admin: AdminService,
     private dialog: MatDialog,
@@ -21,7 +21,9 @@ export class UserDetailComponent implements OnInit {
     private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
-
+  }
+  ngOnDestroy(): void {
+    this.admin.currentUser = undefined;
   }
 
   public onEditRole(role: RoleModel): void {

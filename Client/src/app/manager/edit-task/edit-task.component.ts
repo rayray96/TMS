@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatListOption } from '@angular/material';
-import { CreateTaskModel, PersonModel, TeamModel, TaskModel } from 'src/app/models';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { PersonModel, TeamModel, TaskModel } from 'src/app/models';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ManagerService, JwtService, TaskService } from 'src/app/services';
+import { ManagerService, JwtService } from 'src/app/services';
 
 @Component({
   selector: 'app-edit-task',
@@ -15,13 +15,11 @@ export class EditTaskComponent {
 
   constructor(
     public dialogRef: MatDialogRef<EditTaskComponent>,
-    @Inject(MAT_DIALOG_DATA) public task: TaskModel,
     private spinner: NgxSpinnerService,
     private manager: ManagerService,
-    private taskService: TaskService,
-    private jwt: JwtService
+    private jwt: JwtService,
+    @Inject(MAT_DIALOG_DATA) public task: TaskModel
   ) {
-    this.task = this.taskService.currentTask;
     this.managerId = this.jwt.getId();
     this.getTeam();
   }
@@ -31,16 +29,12 @@ export class EditTaskComponent {
   }
 
   public onSaveCLick(): void {
+    this.spinner.show();
     this.dialogRef.close(this.task);
   }
 
   public onCloseCLick(): void {
     this.dialogRef.close();
-  }
-
-  onGroupsChange(options: MatListOption[]) {
-    const members = options.map(o => o.value);
-    //this.newMembers = { members } as TeamMembersModel;
   }
 
   private getTeam() {

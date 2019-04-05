@@ -5,7 +5,6 @@ import { MatDialog, MatSortable, MatPaginator, MatSort, MatTableDataSource } fro
 import { NgxSpinnerService } from 'ngx-spinner';
 import { filter, mergeMap } from 'rxjs/operators';
 import { CreateTaskModel, TaskModel } from 'src/app/models';
-import { of } from 'rxjs';
 import { EditTaskComponent } from '../edit-task/edit-task.component';
 
 @Component({
@@ -15,6 +14,7 @@ import { EditTaskComponent } from '../edit-task/edit-task.component';
 })
 export class TaskListComponent implements OnInit, DoCheck {
   displayedColumns: string[] = ['name', 'priority', 'progress', 'deadline'];
+  type: string;
   managerId;
   dataSource;
 
@@ -45,6 +45,18 @@ export class TaskListComponent implements OnInit, DoCheck {
     }
   }
 
+  setTypeForProgressBar(value: number) {
+    if (value < 25) {
+      this.type = 'progress-bar progress-bar-danger';
+    } else if (value < 50) {
+      this.type = 'progress-bar progress-bar-warning';
+    } else if (value < 75) {
+      this.type = 'progress-bar progress-bar-info';
+    } else {
+      this.type = 'progress-bar progress-bar-success';
+    }
+    return this.type;
+  }
   createTask(): void {
     const dialogRef = this.dialog.open(EditTaskComponent, {
       height: '450px',
@@ -57,9 +69,7 @@ export class TaskListComponent implements OnInit, DoCheck {
       .pipe(
         filter(response => !!response),
         mergeMap(response =>
-          this.task
-            .createTask(response as CreateTaskModel)
-            .pipe(mergeMap(_ => of(response)))
+          this.task.createTask(response as CreateTaskModel)
         )
       )
       .subscribe(

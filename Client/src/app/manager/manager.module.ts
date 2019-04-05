@@ -14,6 +14,7 @@ import {
     TaskListComponent
 } from '.';
 import { EditTaskComponent } from './edit-task/edit-task.component';
+import { EditStatusComponent } from './edit-status/edit-status.component';
 
 @NgModule({
     imports: [
@@ -30,7 +31,8 @@ import { EditTaskComponent } from './edit-task/edit-task.component';
         ManageTasksComponent,
         TaskInfoComponent,
         TaskListComponent,
-        EditTaskComponent
+        EditTaskComponent,
+        EditStatusComponent
     ],
     entryComponents: [
         EditTaskComponent

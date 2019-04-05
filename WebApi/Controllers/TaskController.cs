@@ -18,38 +18,69 @@ using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Worker")]
     [Route("api/[controller]")]
     [ApiController]
     public class TaskController : ControllerBase
     {
         private readonly ITaskService taskService;
+        private readonly IStatusService statusService;
         private readonly IPersonService personService;
         private readonly IMapper mapper;
 
-        public TaskController(ITaskService taskService, IPersonService personService)
+        public TaskController(ITaskService taskService, IPersonService personService, IStatusService statusService)
         {
             this.taskService = taskService;
             this.personService = personService;
+            this.statusService = statusService;
+
             mapper = MapperConfig.GetMapperResult();
         }
 
-        [HttpGet]
-        public IActionResult GetTasks()
+        [Authorize(Roles = "Worker")]
+        [HttpGet("statuses")]
+        public IActionResult GetStatuses()
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            IEnumerable<TaskViewModel> tasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(
-                taskService.GetTasksOfAssignee(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))).ToList();
-
-            return Ok(tasks);
+            IEnumerable<StatusViewModel> statuses;
+            if (User.IsInRole("Worker"))
+            {
+                statuses = mapper.Map<IEnumerable<StatusDTO>, IEnumerable<StatusViewModel>>(statusService.GetActiveStatuses());
+            }
+            else
+            {
+                statuses = mapper.Map<IEnumerable<StatusDTO>, IEnumerable<StatusViewModel>>(statusService.GetNotActiveStatuses());
+            }
+            return Ok(statuses);
         }
 
-        [HttpGet("teamTasks/{id}")]
-        public IActionResult TaskOfMyTeam(string id)
+        [Authorize(Roles = "Worker")]
+        [HttpGet("workerTasks/{id}")]
+        public IActionResult GetTasksOfAssignee(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            PersonDTO worker = personService.GetPerson(id);
+
+            var myTasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(taskService.GetTasksOfAssignee(id));
+            if (myTasks == null)
+            {
+                ModelState.AddModelError("", "Cannot find the tasks of current worker!");
+                return BadRequest(ModelState);
+            }
+
+            return Ok(myTasks);
+        }
+
+        [HttpGet("managerTasks/{id}")]
+        public IActionResult GetTasksOfAuthor(string id)
         {
             if (!ModelState.IsValid)
             {
@@ -58,14 +89,14 @@ namespace WebApi.Controllers
 
             PersonDTO manager = personService.GetPerson(id);
 
-            var tasksOfMyTeam = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(taskService.GetTasksOfTeam(id));
-            if (tasksOfMyTeam == null)
+            var myTasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(taskService.GetTasksOfAuthor(id));
+            if (myTasks == null)
             {
-                ModelState.AddModelError("", "Cannot find the tasks of current manager team!");
+                ModelState.AddModelError("", "Cannot find the tasks of current manager!");
                 return BadRequest(ModelState);
             }
 
-            return Ok(tasksOfMyTeam);
+            return Ok(myTasks);
         }
 
         [HttpPost]
@@ -83,7 +114,6 @@ namespace WebApi.Controllers
             return Ok(new { message = "Task has created!" });
         }
 
-        [Authorize(Roles = "Manager")]
         [HttpPut("{id}")]
         public IActionResult UpdateTask(int id, [FromBody]EditTaskViewModel taskUpdate)
         {
@@ -101,6 +131,25 @@ namespace WebApi.Controllers
             return Ok(new { message = "Task has changed" });
         }
 
+        [Authorize(Roles = "Worker")]
+        [HttpPut("{id}/status")]
+        public IActionResult UpdateStatus(string id, [FromBody]EditStatusViewModel status)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            PersonDTO person = personService.GetPerson(id);
+
+            if (status != null)
+            {
+                taskService.UpdateStatus(status.TaskId, status.Status, person.Id);
+            }
+
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteTask(int id)
         {
@@ -114,51 +163,6 @@ namespace WebApi.Controllers
             taskService.DeleteTask(id, author);
 
             return Ok(new { message = "Task has deleted" });
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetTask(int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var task = taskService.GetTask(id);
-            if (task == null)
-            {
-                ModelState.AddModelError("id", "Task hasn't found");
-                return BadRequest(ModelState);
-            }
-            var resultTask = new TaskViewModel
-            {
-                // Assignee = task.Assignee,
-                // Author = task.Author.FName + " " + task.Author.LName,
-                Deadline = task.Deadline,
-                Description = task.Description,
-                FinishDate = task.FinishDate,
-                Id = task.Id,
-                Name = task.Name,
-                // Priority = task.PriorityId,
-                Progress = task.Progress,
-                StartDate = task.StartDate,
-                //Status = task.Status.Name
-            };
-
-            return Ok(resultTask);
-        }
-
-        [HttpGet("assignees/{id}")]
-        public IActionResult GetAssignees(int managerId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            IEnumerable<PersonViewModel> assignees = mapper.Map<IEnumerable<PersonDTO>, IEnumerable<PersonViewModel>>(personService.GetAssignees(managerId));
-
-            return Ok(assignees);
         }
     }
 }

@@ -39,6 +39,15 @@ namespace BLL.Services
                 throw new PersonNotFoundException("This person has not found");
 
             person.TeamId = null;
+
+            IEnumerable<TaskInfo> tasks = db.Tasks.Find(t => t.AssigneeId == person.Id);
+            foreach (var task in tasks)
+            {
+                task.Assignee = null;
+                task.AssigneeId = task.AuthorId;
+                db.Tasks.Update(task.Id, task);
+            }
+
             db.People.Update(person.Id, person);
             db.Save();
         }
@@ -78,14 +87,14 @@ namespace BLL.Services
 
             db.Save();
         }
-        
+
         public IEnumerable<PersonDTO> GetPeopleWithoutTeam()
         {
             var people = db.People.Find(p => (p.TeamId == null && p.Role == "Worker"));
 
             return mapper.Map<IEnumerable<Person>, IEnumerable<PersonDTO>>(people);
         }
-        
+
         public IEnumerable<PersonDTO> GetTeam(string managerId)
         {
             var manager = db.People.Find(p => (p.UserId == managerId)).SingleOrDefault();
@@ -93,7 +102,7 @@ namespace BLL.Services
 
             return people;
         }
-        
+
         public IEnumerable<PersonDTO> GetPeopleInTeam(Person manager)
         {
             IEnumerable<PersonDTO> people = new List<PersonDTO>();
@@ -126,18 +135,18 @@ namespace BLL.Services
             return mapper.Map<Person, PersonDTO>(person);
         }
 
-        public IEnumerable<PersonDTO> GetAssignees(string managerId)
+        public IEnumerable<PersonDTO> GetAssignees(string Id)
         {
-            var manager = db.People.Find(p => p.UserId == managerId).SingleOrDefault();
-            var people = GetPeopleInTeam(manager);
+            var person = db.People.Find(p => p.UserId == Id).SingleOrDefault();
+            var people = GetPeopleInTeam(person);
 
             return people;
         }
 
-        public IEnumerable<PersonDTO> GetAssignees(int managerId)
+        public IEnumerable<PersonDTO> GetAssignees(int Id)
         {
-            var manager = db.People.Find(p => p.Id == managerId).SingleOrDefault();
-            var people = GetPeopleInTeam(manager);
+            var person = db.People.Find(p => p.Id == Id).SingleOrDefault();
+            var people = GetPeopleInTeam(person);
 
             return people;
         }

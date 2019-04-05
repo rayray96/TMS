@@ -5,9 +5,10 @@
   </mat-card-header>
   <mat-card-content>
     <mat-list>
-      <mat-list-item><strong>Name : <br></strong> {{task.currentTask.name}}</mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item><strong>Description : <br></strong> {{task.currentTask.description}}</mat-list-item>
+      <mat-list-item><strong>Name and description: <br></strong> {{task.currentTask.name}}</mat-list-item>
+      <mat-list-item>
+        <p>{{task.currentTask.description}}</p>
+      </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item><strong>Author : <br></strong> {{task.currentTask.author}}</mat-list-item>
       <mat-divider></mat-divider>
@@ -17,54 +18,51 @@
       <mat-divider></mat-divider>
       <mat-list-item><strong>Status : <br></strong> {{task.currentTask.status}}</mat-list-item>
       <mat-divider></mat-divider>
-      <mat-list-item><strong>Progress : <br></strong> {{task.currentTask.progress}}</mat-list-item>
+      <mat-list-item><strong>Progress : <br></strong> {{task.currentTask.progress}} %</mat-list-item>
       <mat-divider></mat-divider>
-      <mat-list-item><strong>Start Date : <br></strong> {{task.currentTask.startDate}}</mat-list-item>
+      <mat-list-item><strong>Start Date : <br></strong> {{task.currentTask.startDate | date}}</mat-list-item>
       <mat-divider></mat-divider>
-      <mat-list-item><strong>Finish Date : <br></strong> {{task.currentTask.finishDate}}</mat-list-item>
+      <mat-list-item><strong>Finish Date : <br></strong> {{task.currentTask.finishDate | date}}</mat-list-item>
       <mat-divider></mat-divider>
-      <mat-list-item><strong>Deadline : <br></strong> {{task.currentTask.deadline}}</mat-list-item>
+      <mat-list-item><strong>Deadline : <br></strong> {{task.currentTask.deadline | date}}</mat-list-item>
     </mat-list>
   </mat-card-content>
   <mat-card-actions>
-    
-    <div class="button-add-update">
-      <button mat-raised-button color="primary" (click)="updateTask($event)">
-        Update Task
-      </button>
-  
-      <button mat-raised-button color="primary" (click)="onEditStatus($event)">
-        Set Status
-      </button>
 
-      <button mat-raised-button color="warn" type="button" class="btn btn-space btn btn-info" data-toggle="modal"
-        data-target="#deleteTask">
-        Delete Task
-      </button>
-    </div>
-    
-<!-- For deleting current task -->
-<div id="deleteTask" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="question-position">Do you want to delete current task?</h5>
-        <button type="button" class="close" data-dismiss="modal">
-          &times;
-        </button>
+    <button mat-raised-button color="primary" (click)="updateTask()">
+      Update Task
+    </button>
+
+    <button mat-raised-button color="primary" (click)="onEditStatus($event)">
+      Set Status
+    </button>
+
+    <button mat-raised-button color="warn" data-toggle="modal" data-target="#deleteTask">
+      Delete Task
+    </button>
+
+    <!-- For deleting current task -->
+    <div id="deleteTask" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="question-position">Do you want to delete current task?</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              &times;
+            </button>
+          </div>
+          <h5 class="text-position">{{task.currentTask.name}}</h5>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">
+              Cancel
+            </button>
+            <button type="button" (click)="deleteTask()" class="btn btn-success" data-dismiss="modal">
+              Yes
+            </button>
+          </div>
+        </div>
       </div>
-      <h5 class="text-position">{{task.currentTask.name}}</h5>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-info" data-dismiss="modal">
-          Cancel
-        </button>
-        <button type="button" (click)="deleteTask()" class="btn btn-success" data-dismiss="modal">
-          Yes
-        </button>
-      </div>
     </div>
-  </div>
-</div>
 
   </mat-card-actions>
 </mat-card>

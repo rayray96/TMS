@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TaskModel, CreateTaskModel } from '../models';
+import { TaskModel, CreateTaskModel, StatusModel, EditStatusModel } from '../models';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -13,9 +13,18 @@ export class TaskService {
 
   constructor(private http: HttpClient) { }
 
-  public getTasksOfMyTeam(id: string): Observable<TaskModel[]> {
+  public getTasksOfManager(id: string): Observable<TaskModel[]> {
     const path = `/${id}`;
-    return this.http.get<TaskModel[]>(this.BaseURI + '/teamTasks' + path);
+    return this.http.get<TaskModel[]>(this.BaseURI  + 'managerTasks/' + path);
+  }
+
+  public getTasksOfWorker(id: string): Observable<TaskModel[]> {
+    const path = `/${id}`;
+    return this.http.get<TaskModel[]>(this.BaseURI  + 'workerTasks/' + path);
+  }
+
+  public getStatuses(): Observable<StatusModel[]> {
+    return this.http.get<StatusModel[]>(this.BaseURI  + 'statuses');
   }
 
   public createTask(task: CreateTaskModel): Observable<CreateTaskModel> {
@@ -27,39 +36,13 @@ export class TaskService {
     return this.http.put<CreateTaskModel>(this.BaseURI + path, task);
   }
 
+  public updateStatus(id: number, status: EditStatusModel): Observable<EditStatusModel> {
+    const path = `/${id}`;
+    return this.http.put<EditStatusModel>(this.BaseURI + path + 'statuses', status);
+  }
+
   public deleteTask(id: number) {
     const path = `/${id}`;
     return this.http.delete(this.BaseURI + path);
   }
-
-  // public getMyTeam(id: string): Observable<TeamModel> {
-  //   const path = `/${id}`;
-  //   return this.http.get<TeamModel>(this.BaseURI + '' + path);
-  // }
-
-  // public getPossibleMembers(): Observable<PersonModel[]> {
-  //   return this.http.get<PersonModel[]>(this.BaseURI + '/possibleMembers');
-  // }
-
-  // public createTeam(id: string, teamName: string) {
-  //   const path = `/${id}`;
-  //   const model = { teamName } as TeamNameModel;
-  //   return this.http.post(this.BaseURI + path, model);
-  // }
-
-  // public updateTeamName(id: string, teamName: string) {
-  //   const path = `/${id}`;
-  //   const model = { teamName } as TeamNameModel;
-  //   return this.http.put(this.BaseURI + path, model);
-  // }
-
-  // public deleteFromTeam(id: string) {
-  //   const path = `/${id}`;
-  //   return this.http.delete(this.BaseURI + '/team' + path);
-  // }
-
-  // public addMembers(id: string, members: TeamMembersModel) {
-  //   const path = `/${id}`;
-  //   return this.http.post(this.BaseURI + '/team/addMembers' + path, members);
-  // }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ManagerService } from 'src/app/services';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './team-member-info.component.html',
   styleUrls: ['./team-member-info.component.css']
 })
-export class TeamMemberInfoComponent implements OnInit {
+export class TeamMemberInfoComponent implements OnInit, OnDestroy {
 
   constructor(
     private manager: ManagerService,
@@ -16,6 +16,10 @@ export class TeamMemberInfoComponent implements OnInit {
     private toastr: ToastrService) { }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy(): void {
+    this.manager.currentPerson = undefined;
   }
 
   deleteMember() {

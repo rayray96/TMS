@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ManagerService, TaskService, JwtService } from 'src/app/services';
 import { MatDialog } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
@@ -13,23 +13,30 @@ import { CreateTaskModel, TaskModel } from 'src/app/models';
   templateUrl: './task-info.component.html',
   styleUrls: ['./task-info.component.css']
 })
-export class TaskInfoComponent implements OnInit {
-
+export class TaskInfoComponent implements OnInit, OnDestroy {
+  taskForChange: TaskModel;
   constructor(private manager: ManagerService,
     private dialog: MatDialog,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
     private task: TaskService,
-    private jwt: JwtService) { }
+    private jwt: JwtService) {
+  }
 
   ngOnInit() {
   }
 
-  updateTask(task: TaskModel): void {
+  ngOnDestroy(): void {
+    this.task.currentTask = undefined;
+  }
+
+  updateTask(): void {
+    const taskForChange = Object.assign({}, this.task.currentTask);
+    
     const dialogRef = this.dialog.open(EditTaskComponent, {
       height: '450px',
       width: '300px',
-      data: { task }
+      data: taskForChange
     });
 
     dialogRef
@@ -44,12 +51,14 @@ export class TaskInfoComponent implements OnInit {
       )
       .subscribe(
         success => {
+          this.task.currentTask = success as TaskModel;
           this.task.needCheck = true;
           this.spinner.hide();
           this.toastr.success("Task has updated!");
         },
         error => {
           console.log(error);
+          this.spinner.hide();
           this.toastr.warning('Cannot update a task');
         }
       );

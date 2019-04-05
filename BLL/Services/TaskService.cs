@@ -23,7 +23,7 @@ namespace BLL.Services
         }
 
         #region Main CRUD-operations for Tasks.
-        // Finished!!!
+
         public void DeleteTask(int taskId, string currentUserName)
         {
             TaskDTO task = mapper.Map<TaskInfo, TaskDTO>(db.Tasks.GetById(taskId));
@@ -43,7 +43,7 @@ namespace BLL.Services
                 throw new TaskAccessException("Access error. You cannot delete this task");
             }
         }
-        // Finished!!!
+
         public void CreateTask(EditTaskDTO task, string authorName, int assigneeId, string priority)
         {
             var newTask = EditTask(task, authorName, assigneeId, priority);
@@ -51,7 +51,7 @@ namespace BLL.Services
             db.Tasks.Create(newTask);
             db.Save();
         }
-        // Finished!!!
+
         public void UpdateTask(EditTaskDTO task, int id, string authorName, int assigneeId, string priority)
         {
             TaskInfo taskForEdit = db.Tasks.GetById(id);
@@ -70,7 +70,7 @@ namespace BLL.Services
                 db.Save();
             }
         }
-        // Finished!!!
+
         public TaskDTO GetTask(int id)
         {
             var condition = db.Tasks.Find(t => t.Id == id);
@@ -78,18 +78,18 @@ namespace BLL.Services
 
             return task;
         }
-        // Finished!!!
+
         public IEnumerable<TaskDTO> GetAllTasks()
         {
             var condition = db.Tasks.GetAll();
             var allTasks = GetTasksWithCondition(condition);
-            
+
             return allTasks;
         }
-        // Finished!!!
-        public IEnumerable<TaskDTO> GetTasksOfTeam(string managerId)
+
+        public IEnumerable<TaskDTO> GetTasksOfAuthor(string managerId)
         {
-            var manager = db.People.Find(p => p.UserId == managerId).SingleOrDefault();
+            var manager = db.People.Find(p => (p.UserId == managerId) && (p.Role == "Manager")).SingleOrDefault();
             if (manager == null)
                 throw new ManagerNotFoundException("Manager is not found");
 
@@ -99,39 +99,16 @@ namespace BLL.Services
             return tasks;
         }
 
-        public IEnumerable<TaskDTO> GetInactiveTasks(int teamId)
+        public IEnumerable<TaskDTO> GetTasksOfAssignee(string workerId)
         {
-            var manager = db.Teams.GetById(teamId);
-            var tasks = db.Tasks.Find(t => ((t.Author.Id == manager.Id) && ((t.Deadline < DateTime.Now) || (t.Deadline == null))));
+            var worker = db.People.Find(p => (p.UserId == workerId) && (p.Role == "Worker")).SingleOrDefault();
+            if (worker == null)
+                throw new WorkerNotFoundException("Worker is not found");
 
-            return mapper.Map<IEnumerable<TaskInfo>, IEnumerable<TaskDTO>>(tasks);
-        }
+            var condition = db.Tasks.Find(t => t.AssigneeId == worker.Id);
+            var tasks = GetTasksWithCondition(condition);
 
-        public IEnumerable<TaskDTO> GetCompletedTasks(int teamId)
-        {
-            var manager = db.Teams.GetById(teamId);
-            var tasks = db.Tasks.Find(t => ((t.Author.Id == manager.Id))
-                                        && (t.Status.Name == "Completed"));
-
-            return mapper.Map<IEnumerable<TaskInfo>, IEnumerable<TaskDTO>>(tasks);
-        }
-
-        public IEnumerable<TaskDTO> GetTasksOfAssignee(string id)
-        {
-            IEnumerable<TaskInfo> tasks = db.Tasks.Find(t => (t.Assignee.UserId == id))
-                                               .OrderByDescending(t => t.Progress);
-            IEnumerable<TaskDTO> result = mapper.Map<IEnumerable<TaskInfo>, IEnumerable<TaskDTO>>(tasks);
-
-            return result;
-        }
-
-        public IEnumerable<TaskDTO> GetTasksOfAuthor(string id)
-        {
-            IEnumerable<TaskInfo> tasks = db.Tasks.Find(t => (t.Author.UserId == id))
-                                               .OrderByDescending(t => t.Progress);
-            IEnumerable<TaskDTO> result = mapper.Map<IEnumerable<TaskInfo>, IEnumerable<TaskDTO>>(tasks);
-
-            return result;
+            return tasks;
         }
 
         #endregion
@@ -204,7 +181,7 @@ namespace BLL.Services
 
         public int GetProgressOfTeam(string managerId)
         {
-            var tasksOfTeam = GetTasksOfTeam(managerId);
+            var tasksOfTeam = GetTasksOfAuthor(managerId);
 
             int sumProgress = 0;
             int counter = 0;
@@ -241,6 +218,8 @@ namespace BLL.Services
 
             return sumProgress;
         }
+
+        #region Private methods.
 
         private TaskInfo EditTask(EditTaskDTO task, string authorName, int assigneeId, string priority)
         {
@@ -302,5 +281,8 @@ namespace BLL.Services
 
             return tasks;
         }
+
+        #endregion
+
     }
 }
