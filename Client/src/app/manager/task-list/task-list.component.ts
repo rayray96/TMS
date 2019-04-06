@@ -14,7 +14,6 @@ import { EditTaskComponent } from '../edit-task/edit-task.component';
 })
 export class TaskListComponent implements OnInit, DoCheck {
   displayedColumns: string[] = ['name', 'priority', 'progress', 'deadline'];
-  type: string;
   managerId;
   dataSource;
 
@@ -45,18 +44,6 @@ export class TaskListComponent implements OnInit, DoCheck {
     }
   }
 
-  setTypeForProgressBar(value: number) {
-    if (value < 25) {
-      this.type = 'progress-bar progress-bar-danger';
-    } else if (value < 50) {
-      this.type = 'progress-bar progress-bar-warning';
-    } else if (value < 75) {
-      this.type = 'progress-bar progress-bar-info';
-    } else {
-      this.type = 'progress-bar progress-bar-success';
-    }
-    return this.type;
-  }
   createTask(): void {
     const dialogRef = this.dialog.open(EditTaskComponent, {
       height: '450px',
@@ -80,6 +67,7 @@ export class TaskListComponent implements OnInit, DoCheck {
         },
         error => {
           console.log(error);
+          this.spinner.hide();
           this.toastr.warning('Cannot create a task');
         }
       );

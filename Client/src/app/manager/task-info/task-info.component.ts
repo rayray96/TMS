@@ -15,7 +15,6 @@ import { CreateTaskModel, TaskModel, StatusModel, EditStatusModel } from 'src/ap
 })
 export class TaskInfoComponent implements OnInit, OnDestroy {
   taskForChange: TaskModel;
-  statusForChange: EditStatusModel;
   managerId: string;
 
   constructor(private manager: ManagerService,
@@ -55,8 +54,8 @@ export class TaskInfoComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         success => {
-          this.task.currentTask = success as TaskModel;
           this.task.needCheck = true;
+          this.task.currentTask = success as TaskModel;
           this.spinner.hide();
           this.toastr.success("Task has updated!");
         },
@@ -75,84 +74,66 @@ export class TaskInfoComponent implements OnInit, OnDestroy {
         this.task.needCheck = true;
         this.task.currentTask = undefined;
         this.spinner.hide();
-        this.toastr.success(res.message);
+        this.toastr.warning(res.message);
       },
       (err: any) => {
         this.spinner.hide();
-        this.toastr.success(err.error);
+        this.toastr.error(err.error);
       }
     );
   }
 
-finishTask(){
-this.spinner.show();
-this.statusForChange.id = this.task.currentTask.id;
-this.statusForChange.status = 'Completed';
-this.task.updateStatus(this.managerId, this.statusForChange ).subscribe(
-  success => {
-    this.task.currentTask.status = this.statusForChange.status;
-    this.task.needCheck = true;
-    this.spinner.hide();
-    this.toastr.warning("Status has finished!");
-  },
-  error => {
-    console.log(error);
-    this.spinner.hide();
-    this.toastr.error('Cannot finish a task');
+  finishTask() {
+    this.spinner.show();
+    const status = 'Completed';
+    this.task.updateStatus(this.managerId, { taskId: this.task.currentTask.id, status: status }).subscribe(
+      success => {
+        this.task.needCheck = true;
+        this.task.currentTask.status = status;
+        this.spinner.hide();
+        this.toastr.success("Status has finished!");
+      },
+      error => {
+        console.log(error);
+        this.spinner.hide();
+        this.toastr.error('Cannot finish a task');
+      }
+    );
   }
-);
-}
 
-cancelTask(){
-  this.spinner.show();
-  this.statusForChange.id = this.task.currentTask.id;
-  this.statusForChange.status = 'Canceled';
-  this.task.updateStatus(this.managerId, this.statusForChange ).subscribe(
-    success => {
-      this.task.currentTask.status = this.statusForChange.status;
-      this.task.needCheck = true;
-      this.spinner.hide();
-      this.toastr.warning("Status has canceled!");
-    },
-    error => {
-      console.log(error);
-      this.spinner.hide();
-      this.toastr.error('Cannot cancel a task');
-    }
-  );
-}
+  cancelTask() {
+    this.spinner.show();
+    const status = 'Canceled';
+    this.task.updateStatus(this.managerId, { taskId: this.task.currentTask.id, status: status }).subscribe(
+      success => {
+        this.task.needCheck = true;
+        this.task.currentTask.status = status;
+        this.spinner.hide();
+        this.toastr.warning("Status has canceled!");
+      },
+      error => {
+        console.log(error);
+        this.spinner.hide();
+        this.toastr.error('Cannot cancel a task');
+      }
+    );
+  }
 
-  setStatus(): void {
-    const statusForChange = Object.assign({}, this.task.currentTask as StatusModel);
-
-    const dialogRef = this.dialog.open(EditTaskComponent, {
-      height: '200px',
-      width: '300px',
-      data: statusForChange
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(
-        filter(response => !!response),
-        mergeMap(response =>
-          this.task
-            .updateStatus(this.managerId, (response as EditStatusModel))
-            .pipe(mergeMap(_ => of(response)))
-        )
-      )
-      .subscribe(
-        success => {
-          this.task.currentTask.status = (success as StatusModel).name;
-          this.task.needCheck = true;
-          this.spinner.hide();
-          this.toastr.success("Status has updated!");
-        },
-        error => {
-          console.log(error);
-          this.spinner.hide();
-          this.toastr.error('Cannot update a status');
-        }
-      );
+  resumeTask() {
+    this.spinner.show();
+    const status = 'Not Started';
+    this.task.updateStatus(this.managerId, { taskId: this.task.currentTask.id, status: status }).subscribe(
+      success => {
+        this.task.needCheck = true;
+        this.task.currentTask.status = status;
+        this.spinner.hide();
+        this.toastr.success("Status has resumed!");
+      },
+      error => {
+        console.log(error);
+        this.spinner.hide();
+        this.toastr.error('Cannot resume a task');
+      }
+    );
   }
 }

@@ -81,48 +81,6 @@ namespace BLL.Services
             }
         }
 
-        public TaskDTO GetTask(int id)
-        {
-            var condition = db.Tasks.Find(t => t.Id == id);
-            var task = GetTasksWithCondition(condition).FirstOrDefault();
-
-            return task;
-        }
-
-        public IEnumerable<TaskDTO> GetAllTasks()
-        {
-            var condition = db.Tasks.GetAll();
-            var allTasks = GetTasksWithCondition(condition);
-
-            return allTasks;
-        }
-
-        public IEnumerable<TaskDTO> GetTasksOfAuthor(string managerId)
-        {
-            var manager = db.People.Find(p => (p.UserId == managerId) && (p.Role == "Manager")).SingleOrDefault();
-            if (manager == null)
-                throw new ManagerNotFoundException("Manager is not found");
-
-            var condition = db.Tasks.Find(t => t.AuthorId == manager.Id);
-            var tasks = GetTasksWithCondition(condition);
-
-            return tasks;
-        }
-
-        public IEnumerable<TaskDTO> GetTasksOfAssignee(string workerId)
-        {
-            var worker = db.People.Find(p => (p.UserId == workerId) && (p.Role == "Worker")).SingleOrDefault();
-            if (worker == null)
-                throw new WorkerNotFoundException("Worker is not found");
-
-            var condition = db.Tasks.Find(t => t.AssigneeId == worker.Id);
-            var tasks = GetTasksWithCondition(condition);
-
-            return tasks;
-        }
-
-        #endregion
-
         public void UpdateStatus(int taskId, string statusName, int changerId)
         {
             if (string.IsNullOrWhiteSpace(statusName))
@@ -134,19 +92,28 @@ namespace BLL.Services
             if (task == null)
                 throw new TaskNotFoundException("Task wasn't found");
 
+            Status taskStatus = db.Statuses.GetById(task.StatusId);
+
             if (task.AuthorId == changerId)
             {
-                if ((task.Status.Name == "Executed") && (statusName == "Completed"))
+                if ((taskStatus.Name == "Executed") && (statusName == "Completed"))
                 {
                     task.Progress = 100;
                     task.FinishDate = DateTime.Now;
                 }
                 else if (statusName == "Canceled")
+                {
                     task.Progress = 0;
+                    task.StartDate = null;
+                    task.FinishDate = null;
+                }
+                else if((taskStatus.Name == "Canceled") && (statusName == "Not Started"))
+                {
+                }
                 else
                     throw new StatuskAccessException("This is status cannot belong to Author");
             }
-            else if (task.AssigneeId == changerId)
+            else if ((task.AssigneeId == changerId) && (taskStatus.Name != "Canceled"))
             {
                 switch (statusName)
                 {
@@ -199,6 +166,48 @@ namespace BLL.Services
                 emailService.Send(worker.Email, manager.Email, EmailService.SUBJECT_EXECUTED_TASK, EmailBody);
             }
         }
+
+        public TaskDTO GetTask(int id)
+        {
+            var condition = db.Tasks.Find(t => t.Id == id);
+            var task = GetTasksWithCondition(condition).FirstOrDefault();
+
+            return task;
+        }
+
+        public IEnumerable<TaskDTO> GetAllTasks()
+        {
+            var condition = db.Tasks.GetAll();
+            var allTasks = GetTasksWithCondition(condition);
+
+            return allTasks;
+        }
+
+        public IEnumerable<TaskDTO> GetTasksOfAuthor(string managerId)
+        {
+            var manager = db.People.Find(p => (p.UserId == managerId) && (p.Role == "Manager")).SingleOrDefault();
+            if (manager == null)
+                throw new ManagerNotFoundException("Manager is not found");
+
+            var condition = db.Tasks.Find(t => t.AuthorId == manager.Id);
+            var tasks = GetTasksWithCondition(condition);
+
+            return tasks;
+        }
+
+        public IEnumerable<TaskDTO> GetTasksOfAssignee(string workerId)
+        {
+            var worker = db.People.Find(p => (p.UserId == workerId) && (p.Role == "Worker")).SingleOrDefault();
+            if (worker == null)
+                throw new WorkerNotFoundException("Worker is not found");
+
+            var condition = db.Tasks.Find(t => t.AssigneeId == worker.Id);
+            var tasks = GetTasksWithCondition(condition);
+
+            return tasks;
+        }
+
+        #endregion
 
         public int GetProgressOfTeam(string managerId)
         {

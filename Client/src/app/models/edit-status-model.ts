@@ -1,4 +1,4 @@
 export interface EditStatusModel {
-    id: number;
+    taskId: number;
     status: string;
 }

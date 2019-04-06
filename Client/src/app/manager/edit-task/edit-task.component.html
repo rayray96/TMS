@@ -2,19 +2,19 @@
   <!-- Name -->
   <div>
     <mat-form-field required>
-      <input matInput placeholder="Task Name" [(ngModel)]="task.name" />
+      <input matInput placeholder="Task Name" [(ngModel)]="task.name" required/>
     </mat-form-field>
   </div>
   <!-- Description -->
   <div>
     <mat-form-field>
-      <textarea matInput placeholder="Description" [(ngModel)]="task.description"></textarea>
+      <textarea matInput placeholder="Description" [(ngModel)]="task.description" required></textarea>
     </mat-form-field>
   </div>
   <!-- Priority -->
   <div>
       <mat-form-field>
-        <mat-select placeholder="Priority" [(value)]="task.priority">
+        <mat-select placeholder="Priority" [(value)]="task.priority" required>
           <mat-option value="High">High</mat-option>
           <mat-option value="Middle">Middle</mat-option>
           <mat-option value="Low">Low</mat-option>
@@ -24,7 +24,7 @@
   <!-- Deadline -->
   <div>
     <mat-form-field required>
-      <input matInput [matDatepicker]="picker" placeholder="Choose a deadline" [(ngModel)]="task.deadline" />
+      <input matInput [matDatepicker]="picker" placeholder="Choose a deadline" [(ngModel)]="task.deadline" required/>
       <mat-datepicker-toggle matSuffix [for]="picker">
         <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
       </mat-datepicker-toggle>
@@ -34,7 +34,7 @@
   <!-- Assignee -->
   <div>
     <mat-form-field required>
-      <mat-select placeholder="Assignee" [(value)]="task.assigneeId" >
+      <mat-select placeholder="Assignee" [(value)]="task.assigneeId" (selectionChange)="writeAssignee($event)" required>
         <mat-option *ngFor="let member of myTeam" [value]="member.id">
           {{member.fName}} {{member.lName}}
         </mat-option>

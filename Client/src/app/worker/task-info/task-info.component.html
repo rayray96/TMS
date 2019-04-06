@@ -1,0 +1,35 @@
+<mat-card class="task-card" *ngIf="task.currentTask">
+  <mat-card-header>
+    <div mat-card-avatar class="task-header-image"></div>
+    <mat-card-title>Task Info</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item><strong>Name and description: <br></strong> {{task.currentTask.name}}</mat-list-item>
+      <mat-list-item>
+        <p>{{task.currentTask.description}}</p>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item><strong>Author : <br></strong> {{task.currentTask.author}}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item><strong>Priority : <br></strong> {{task.currentTask.priority}}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item><strong>Status : <br></strong> {{task.currentTask.status}}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item><strong>Progress : <br></strong> {{task.currentTask.progress}} %</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item><strong>Start Date : <br></strong> {{task.currentTask.startDate | date}}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item><strong>Finish Date : <br></strong> {{task.currentTask.finishDate | date}}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item><strong>Deadline : <br></strong> {{task.currentTask.deadline | date}}</mat-list-item>
+    </mat-list>
+  </mat-card-content>
+  <mat-card-actions class="btn-space">
+
+    <button mat-raised-button color="primary" class="btn-space" (click)="updateStatus()">
+      Update Status
+    </button>
+
+  </mat-card-actions>
+</mat-card>

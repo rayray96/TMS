@@ -17,7 +17,8 @@
           [routerLinkActiveOptions]="{ exact: true }">Team Management</a>
         <a mat-list-item *ngIf="jwt.getRole() == 'Manager'" routerLink="/manager/tasks" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }">Tasks Management</a>
-        <!-- <a mat-list-item href="#">Worker</a> -->
+        <a mat-list-item *ngIf="jwt.getRole() == 'Worker'" routerLink="/worker" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">My Tasks</a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-toolbar color="primary">

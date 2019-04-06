@@ -29,12 +29,12 @@ namespace BLL.Services
 
         public IEnumerable<StatusDTO> GetActiveStatuses()
         {
-            return GetAllStatuses().Where(s => s.Name != "Canceled" || s.Name != "Completed");
+            return GetAllStatuses().Where(s => s.Name != "Canceled" || s.Name != "Completed" || s.Name != "Not Started");
         }
 
         public IEnumerable<StatusDTO> GetNotActiveStatuses()
         {
-            return GetAllStatuses().Where(s => s.Name == "Canceled" || s.Name == "Completed");
+            return GetAllStatuses().Where(s => s.Name == "Canceled" || s.Name == "Completed" || s.Name != "Not Started");
         }
     }
 }

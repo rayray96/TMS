@@ -22,6 +22,8 @@ import { HomeComponent } from './home/home.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { NavBarService, UserService, JwtService, GlobalErrorHandler, TaskService } from './services';
+import { WorkerModule } from './worker/worker.module';
+import { WorkerRoutingModule } from './worker/worker-routing.module';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { NavBarService, UserService, JwtService, GlobalErrorHandler, TaskService
     AdminRoutingModule,
     ManagerModule,
     ManagerRoutingModule,
+    WorkerModule,
+    WorkerRoutingModule,
     ComponentsModule,
     ComponentsRoutingModule,
     AppMaterialModule,

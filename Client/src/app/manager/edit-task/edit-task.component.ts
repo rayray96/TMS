@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatOptionSelectionChange } from '@angular/material';
 import { PersonModel, TeamModel, TaskModel } from 'src/app/models';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ManagerService, JwtService } from 'src/app/services';
@@ -31,6 +31,11 @@ export class EditTaskComponent {
   public onSaveCLick(): void {
     this.spinner.show();
     this.dialogRef.close(this.task);
+  }
+
+  public writeAssignee(event) {
+    const assignee = this.myTeam.filter(x => x.id === event.source.value)[0];
+    this.task.assignee = assignee.fName + ' ' + assignee.lName;
   }
 
   public onCloseCLick(): void {

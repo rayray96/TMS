@@ -38,7 +38,7 @@ export class TaskService {
 
   public updateStatus(id: string, status: EditStatusModel): Observable<EditStatusModel> {
     const path = `/${id}`;
-    return this.http.put<EditStatusModel>(this.BaseURI + path + '/statuses', status);
+    return this.http.put<EditStatusModel>(this.BaseURI + path + '/status', status);
   }
 
   public deleteTask(id: number) {

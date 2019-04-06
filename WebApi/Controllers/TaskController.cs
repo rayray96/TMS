@@ -131,7 +131,7 @@ namespace WebApi.Controllers
             return Ok(new { message = "Task has changed" });
         }
 
-        [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Worker, Manager")]
         [HttpPut("{id}/status")]
         public IActionResult UpdateStatus(string id, [FromBody]EditStatusViewModel status)
         {
