@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, DoCheck } from '@angular/core';
 import { MatDialog, MatSort, MatPaginator, MatTableDataSource, MatSortable } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -10,8 +10,7 @@ import { TaskModel } from 'src/app/models';
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
-export class TaskListComponent implements OnInit {
-
+export class TaskListComponent implements OnInit, DoCheck {
   displayedColumns: string[] = ['name', 'priority', 'progress', 'deadline'];
   workerId;
   dataSource;
@@ -52,6 +51,10 @@ export class TaskListComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
+        if(this.task.currentTask){
+          this.task.currentTask = this.dataSource.data.filter(x=>x.id === this.task.currentTask.id)[0];
+          console.log(this.task.currentTask);
+        }
         this.spinner.hide();
       },
       err => {
@@ -59,6 +62,10 @@ export class TaskListComponent implements OnInit {
         console.log(err);
       }
     );
+
   }
 
+  onSelect(taskModel: TaskModel): void {
+    this.task.currentTask = taskModel;
+  }
 }

@@ -1,20 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
+﻿using BLL.Interfaces;
+using BLL.Services;
 using DAL.Entities;
 using DAL.EF;
 using DAL.Interfaces;
-using DAL.UnitOfWork;
-using BLL.Services;
-using BLL.Interfaces;
-using Microsoft.Extensions.Configuration;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using AutoMapper;
-using BLL.DTO;
 using DAL.Identity;
 using DAL.Repositories;
+using DAL.UnitOfWork;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace Bootstrap
 {
@@ -47,7 +43,6 @@ namespace Bootstrap
             // Registering services.
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IPersonService, PersonService>();
-            services.AddScoped<IPriorityService, PriorityService>();
             services.AddScoped<IStatusService, StatusService>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<ITeamService, TeamService>();

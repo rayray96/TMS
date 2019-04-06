@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace BLL.Services
 {
-    public class StatusService: IStatusService
+    public class StatusService : IStatusService
     {
         private IUnitOfWork db { get; set; }
         private IMapper mapper { get; set; }
@@ -27,14 +27,14 @@ namespace BLL.Services
             return mapper.Map<IEnumerable<Status>, IEnumerable<StatusDTO>>(statuses);
         }
 
-        public IEnumerable<StatusDTO> GetActiveStatuses()
+        public IEnumerable<StatusDTO> GetStatusesForAssignee()
         {
-            return GetAllStatuses().Where(s => s.Name != "Canceled" || s.Name != "Completed" || s.Name != "Not Started");
+            return GetAllStatuses().Where(s => s.Name != "Canceled" && s.Name != "Completed");
         }
 
-        public IEnumerable<StatusDTO> GetNotActiveStatuses()
+        public IEnumerable<StatusDTO> GetStatusesForAuthor()
         {
-            return GetAllStatuses().Where(s => s.Name == "Canceled" || s.Name == "Completed" || s.Name != "Not Started");
+            return GetAllStatuses().Where(s => s.Name == "Canceled" && s.Name == "Completed" && s.Name == "Not started");
         }
     }
 }

@@ -18,16 +18,22 @@
       <mat-divider></mat-divider>
       <mat-list-item><strong>Progress : <br></strong> {{task.currentTask.progress}} %</mat-list-item>
       <mat-divider></mat-divider>
-      <mat-list-item><strong>Start Date : <br></strong> {{task.currentTask.startDate | date}}</mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item><strong>Finish Date : <br></strong> {{task.currentTask.finishDate | date}}</mat-list-item>
-      <mat-divider></mat-divider>
+      <div *ngIf="task.currentTask.startDate">
+        <mat-list-item><strong>Start Date : <br></strong> {{task.currentTask.startDate | date}}</mat-list-item>
+        <mat-divider></mat-divider>
+      </div>
+      <div *ngIf="task.currentTask.finishDate">
+        <mat-list-item><strong>Finish Date : <br></strong> {{task.currentTask.finishDate | date}}</mat-list-item>
+        <mat-divider></mat-divider>
+      </div>
       <mat-list-item><strong>Deadline : <br></strong> {{task.currentTask.deadline | date}}</mat-list-item>
     </mat-list>
   </mat-card-content>
   <mat-card-actions class="btn-space">
 
-    <button mat-raised-button color="primary" class="btn-space" (click)="updateStatus()">
+    <button *ngIf="task.currentTask.status !== 'Canceled'
+    && task.currentTask.status !== 'Completed'" mat-raised-button color="primary" class="btn-space"
+      (click)="updateStatus()">
       Update Status
     </button>
 

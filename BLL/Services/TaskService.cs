@@ -107,7 +107,7 @@ namespace BLL.Services
                     task.StartDate = null;
                     task.FinishDate = null;
                 }
-                else if((taskStatus.Name == "Canceled") && (statusName == "Not Started"))
+                else if ((taskStatus.Name == "Canceled") && (statusName == "Not Started"))
                 {
                 }
                 else
@@ -125,7 +125,8 @@ namespace BLL.Services
                         }
                     case "In Progress":
                         {
-                            task.StartDate = DateTime.Now;
+                            if (task.StartDate == null)
+                                task.StartDate = DateTime.Now;
                             task.Progress = 20;
                             break;
                         }
@@ -155,13 +156,13 @@ namespace BLL.Services
             db.Tasks.Update(task.Id, task);
             db.Save();
 
-            if (task.Progress == 80)
+            if (status.Name == "Executed")
             {
                 Person manager = db.People.GetById(task.AuthorId);
                 Person worker = db.People.GetById(task.AssigneeId);
 
-                EmailBody = string.Format(EmailService.BODY_EXECUTED_TASK,
-                   worker.FName + " " + worker.LName, task.Name, manager.FName + " " + manager.LName);
+                EmailBody = string.Format(EmailService.BODY_EXECUTED_TASK, manager.FName + " " + manager.LName,
+                   worker.FName + " " + worker.LName, task.Name);
 
                 emailService.Send(worker.Email, manager.Email, EmailService.SUBJECT_EXECUTED_TASK, EmailBody);
             }
@@ -209,6 +210,8 @@ namespace BLL.Services
 
         #endregion
 
+        #region Methods for getting progress.
+
         public int GetProgressOfTeam(string managerId)
         {
             var tasksOfTeam = GetTasksOfAuthor(managerId);
@@ -248,6 +251,8 @@ namespace BLL.Services
 
             return sumProgress;
         }
+
+        #endregion
 
         #region Private methods.
 

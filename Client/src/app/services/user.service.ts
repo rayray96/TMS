@@ -50,6 +50,10 @@ export class UserService {
   }
 
   getUserProfile() {
-    return this.http.get(this.BaseURI + '/userProfile');
+    return this.http.get(this.BaseURI + '/home/userProfile');
+  }
+
+  getAllTasks(){
+    return this.http.get(this.BaseURI + '/home/tasks');
   }
 }

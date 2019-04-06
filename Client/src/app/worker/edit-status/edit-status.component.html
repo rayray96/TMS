@@ -1,10 +1,11 @@
 <div class="container">
   <!-- Status -->
   <div>
-    <mat-form-field required>
-      <mat-select placeholder="Assignee" [(value)]="task.status">
+    <mat-form-field>
+      <mat-select placeholder="Status" [(value)]="task.status">
         <mat-option *ngFor="let status of statuses" [value]="status.name">
           {{status.name}}
+        </mat-option>
       </mat-select>
     </mat-form-field>
   </div>

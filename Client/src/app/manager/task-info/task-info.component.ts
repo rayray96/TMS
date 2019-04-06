@@ -55,7 +55,6 @@ export class TaskInfoComponent implements OnInit, OnDestroy {
       .subscribe(
         success => {
           this.task.needCheck = true;
-          this.task.currentTask = success as TaskModel;
           this.spinner.hide();
           this.toastr.success("Task has updated!");
         },

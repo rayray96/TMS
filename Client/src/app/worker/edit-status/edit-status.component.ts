@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { StatusModel } from 'src/app/models';
+import { StatusModel, TaskModel } from 'src/app/models';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { TaskService } from 'src/app/services';
@@ -15,8 +15,8 @@ export class EditStatusComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<EditStatusComponent>,
     private spinner: NgxSpinnerService,
-    private task: TaskService,
-    @Inject(MAT_DIALOG_DATA) public status: StatusModel
+    private taskService: TaskService,
+    @Inject(MAT_DIALOG_DATA) public task: TaskModel
   ) {
     this.getStatuses();
   }
@@ -39,7 +39,7 @@ export class EditStatusComponent implements OnInit {
 
   private getStatuses() {
     this.spinner.show();
-    this.task.getStatuses().subscribe(
+    this.taskService.getStatuses().subscribe(
       res => {
         this.statuses = res as StatusModel[];
         this.spinner.hide();

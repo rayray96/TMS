@@ -11,10 +11,9 @@ import {
     TeamMembersListComponent,
     ManageTasksComponent,
     TaskInfoComponent,
-    TaskListComponent
+    TaskListComponent,
+    EditTaskComponent
 } from '.';
-import { EditTaskComponent } from './edit-task/edit-task.component';
-import { EditStatusComponent } from './edit-status/edit-status.component';
 
 @NgModule({
     imports: [
@@ -32,7 +31,6 @@ import { EditStatusComponent } from './edit-status/edit-status.component';
         TaskInfoComponent,
         TaskListComponent,
         EditTaskComponent,
-        EditStatusComponent
     ],
     entryComponents: [
         EditTaskComponent

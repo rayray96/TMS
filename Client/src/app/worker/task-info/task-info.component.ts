@@ -14,7 +14,6 @@ import { of } from 'rxjs';
   styleUrls: ['./task-info.component.css']
 })
 export class TaskInfoComponent implements OnInit {
-
   taskForChange: TaskModel;
   workerId: string;
 
@@ -34,8 +33,8 @@ export class TaskInfoComponent implements OnInit {
     this.task.currentTask = undefined;
   }
 
-    setStatus(): void {
-    const statusForChange = Object.assign({}, this.task.currentTask as StatusModel);
+  updateStatus(): void {
+    const statusForChange = Object.assign({}, this.task.currentTask );
 
     const dialogRef = this.dialog.open(EditStatusComponent, {
       height: '200px',
@@ -49,14 +48,15 @@ export class TaskInfoComponent implements OnInit {
         filter(response => !!response),
         mergeMap(response =>
           this.task
-            .updateStatus(this.workerId, (response as EditStatusModel))
+            .updateStatus(this.workerId, { taskId: this.task.currentTask.id, 
+              status: (response as TaskModel).status })
             .pipe(mergeMap(_ => of(response)))
         )
       )
       .subscribe(
         success => {
           this.task.needCheck = true;
-          this.task.currentTask.status = (success as StatusModel).name;
+          this.task.currentTask = success as TaskModel;
           this.spinner.hide();
           this.toastr.success("Status has updated!");
         },
@@ -66,5 +66,7 @@ export class TaskInfoComponent implements OnInit {
           this.toastr.error('Cannot update a status');
         }
       );
+
+      
   }
 }

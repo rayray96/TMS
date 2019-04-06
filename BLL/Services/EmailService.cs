@@ -1,8 +1,8 @@
 ﻿using BLL.Interfaces;
+using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
 using System.IO;
-using Microsoft.Extensions.Configuration;
 
 namespace BLL.Services
 {
@@ -35,7 +35,7 @@ namespace BLL.Services
             "<p>Your team member {1} has just executed task \"{2}\"! Let's check it out!</p>" +
             "<br />" +
             "<p>Have a nice day,<br />" +
-            "{3}</p>";
+            "Task Management System</p>";
 
         IConfigurationRoot configuration = new ConfigurationBuilder()
                    .SetBasePath(Directory.GetCurrentDirectory())

@@ -25,7 +25,7 @@ namespace WebApi.Controllers
             this.personService = personService;
             mapper = MapperConfig.GetMapperResult();
         }
-
+        // GET api/team/{id}
         [HttpGet("{id}")]
         public IActionResult GetMyTeam(string id)
         {
@@ -47,7 +47,7 @@ namespace WebApi.Controllers
 
             return Ok(teamModel);
         }
-
+        // GET api/team/possibleMembers
         [HttpGet("possibleMembers")]
         public IActionResult GetPossibleMembers()
         {
@@ -60,7 +60,7 @@ namespace WebApi.Controllers
 
             return Ok(persons);
         }
-
+        // POST api/team/{id}
         [HttpPost("{id}")]
         public IActionResult CreateTeam(string id, [FromBody]TeamNameViewModel model)
         {
@@ -74,7 +74,7 @@ namespace WebApi.Controllers
 
             return Ok(new { message = "The team has created!" });
         }
-
+        // POST api/team/addMembers/{id}
         [HttpPost("addMembers/{Id}")]
         public IActionResult AddMembersToTeam(string Id, [FromBody]AddMembersViewModel members)
         {
@@ -87,7 +87,7 @@ namespace WebApi.Controllers
 
             return Ok(new { message = "Members have added to your team" });
         }
-
+        // PUT api/team/{id}
         [HttpPut("{id}")]
         public IActionResult UpdateTeamName(string Id, [FromBody]TeamNameViewModel model)
         {
@@ -101,7 +101,7 @@ namespace WebApi.Controllers
 
             return Ok(new { message = "The team name has been successfully changed" });
         }
-
+        // DELETE api/team/{id}
         [HttpDelete("{id}")]
         public IActionResult DeleteFromTeam(int id)
         {

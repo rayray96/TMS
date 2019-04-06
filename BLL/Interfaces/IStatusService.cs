@@ -18,12 +18,12 @@ namespace BLL.Interfaces
         /// Get all active statuses.
         /// </summary>
         /// <returns>Enumeration of statuses</returns>
-        IEnumerable<StatusDTO> GetActiveStatuses();
+        IEnumerable<StatusDTO> GetStatusesForAssignee();
 
         /// <summary>
         /// Get all not active statuses.
         /// </summary>
         /// <returns>Enumeration of statuses</returns>
-        IEnumerable<StatusDTO> GetNotActiveStatuses();
+        IEnumerable<StatusDTO> GetStatusesForAuthor();
     }
 }

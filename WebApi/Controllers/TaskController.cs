@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using AutoMapper;
-using WebApi.Configurations;
+﻿using AutoMapper;
 using BLL.DTO;
 using BLL.Interfaces;
-using BLL.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using WebApi.Configurations;
 using WebApi.Models;
-using System.Security.Principal;
-using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
-    [Authorize(Roles = "Manager")]
     [Route("api/[controller]")]
     [ApiController]
     public class TaskController : ControllerBase
@@ -36,8 +27,8 @@ namespace WebApi.Controllers
 
             mapper = MapperConfig.GetMapperResult();
         }
-
-        [Authorize(Roles = "Worker")]
+        // GET api/task/statuses
+        [Authorize(Roles = "Worker, Manager")]
         [HttpGet("statuses")]
         public IActionResult GetStatuses()
         {
@@ -49,15 +40,16 @@ namespace WebApi.Controllers
             IEnumerable<StatusViewModel> statuses;
             if (User.IsInRole("Worker"))
             {
-                statuses = mapper.Map<IEnumerable<StatusDTO>, IEnumerable<StatusViewModel>>(statusService.GetActiveStatuses());
+                statuses = mapper.Map<IEnumerable<StatusDTO>, IEnumerable<StatusViewModel>>(statusService.GetStatusesForAssignee());
             }
             else
             {
-                statuses = mapper.Map<IEnumerable<StatusDTO>, IEnumerable<StatusViewModel>>(statusService.GetNotActiveStatuses());
+                statuses = mapper.Map<IEnumerable<StatusDTO>, IEnumerable<StatusViewModel>>(statusService.GetStatusesForAuthor());
             }
+
             return Ok(statuses);
         }
-
+        // GET api/task/workerTasks/{id}
         [Authorize(Roles = "Worker")]
         [HttpGet("workerTasks/{id}")]
         public IActionResult GetTasksOfAssignee(string id)
@@ -78,7 +70,8 @@ namespace WebApi.Controllers
 
             return Ok(myTasks);
         }
-
+        // GET api/task/managerrTasks/{id}
+        [Authorize(Roles = "Manager")]
         [HttpGet("managerTasks/{id}")]
         public IActionResult GetTasksOfAuthor(string id)
         {
@@ -98,7 +91,8 @@ namespace WebApi.Controllers
 
             return Ok(myTasks);
         }
-
+        // POST api/task
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public IActionResult CreateTask([FromBody]EditTaskViewModel newTask)
         {
@@ -113,7 +107,8 @@ namespace WebApi.Controllers
 
             return Ok(new { message = "Task has created!" });
         }
-
+        // PUT api/task/{id}
+        [Authorize(Roles = "Manager")]
         [HttpPut("{id}")]
         public IActionResult UpdateTask(int id, [FromBody]EditTaskViewModel taskUpdate)
         {
@@ -130,7 +125,7 @@ namespace WebApi.Controllers
 
             return Ok(new { message = "Task has changed" });
         }
-
+        // PUT api/task/{id}/status
         [Authorize(Roles = "Worker, Manager")]
         [HttpPut("{id}/status")]
         public IActionResult UpdateStatus(string id, [FromBody]EditStatusViewModel status)
@@ -149,7 +144,8 @@ namespace WebApi.Controllers
 
             return Ok();
         }
-
+        // DELETE api/task/{id}
+        [Authorize(Roles = "Manager")]
         [HttpDelete("{id}")]
         public IActionResult DeleteTask(int id)
         {

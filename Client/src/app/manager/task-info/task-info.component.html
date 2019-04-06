@@ -20,15 +20,19 @@
       <mat-divider></mat-divider>
       <mat-list-item><strong>Progress : <br></strong> {{task.currentTask.progress}} %</mat-list-item>
       <mat-divider></mat-divider>
-      <mat-list-item><strong>Start Date : <br></strong> {{task.currentTask.startDate | date}}</mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item><strong>Finish Date : <br></strong> {{task.currentTask.finishDate | date}}</mat-list-item>
-      <mat-divider></mat-divider>
+      <div *ngIf="task.currentTask.startDate">
+        <mat-list-item><strong>Start Date : <br></strong> {{task.currentTask.startDate | date}}</mat-list-item>
+        <mat-divider></mat-divider>
+      </div>
+      <div *ngIf="task.currentTask.finishDate">
+        <mat-list-item><strong>Finish Date : <br></strong> {{task.currentTask.finishDate | date}}</mat-list-item>
+        <mat-divider></mat-divider>
+      </div>
       <mat-list-item><strong>Deadline : <br></strong> {{task.currentTask.deadline | date}}</mat-list-item>
     </mat-list>
   </mat-card-content>
-                <mat-card-actions class="btn-space">
-  
+  <mat-card-actions class="btn-space">
+
     <button mat-raised-button color="primary" class="btn-space" (click)="updateTask()">
       Update Task
     </button>
@@ -58,87 +62,92 @@
         </div>
       </div>
     </div>
-    
+
     <!-- <ng-content *ngIf="task.currentTask.status === Executed; then finish; else cancel">
     </ng-content> -->
 
-      <button *ngIf="task.currentTask.status === 'Executed'" mat-raised-button color="primary" data-toggle="modal" class="btn-space" data-target="#finishTask">
-        Finish
-      </button>
-      <!-- For finishing current task -->
-      <div id="finishTask" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="question-position">Do you want to finish current task?</h5>
-              <button type="button" class="close" data-dismiss="modal">
-                &times;
-              </button>
-            </div>
-            <h5 class="text-position">{{task.currentTask.name}}</h5>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-info" data-dismiss="modal">
-                Cancel
-              </button>
-              <button type="button" (click)="finishTask($event)" class="btn btn-success" data-dismiss="modal">
-                Yes
-              </button>
-            </div>
+    <button *ngIf="task.currentTask.status === 'Executed'" mat-raised-button color="primary" data-toggle="modal"
+      class="btn-space" data-target="#finishTask">
+      Finish
+    </button>
+    <!-- For finishing current task -->
+    <div id="finishTask" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="question-position">Do you want to finish current task?</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              &times;
+            </button>
+          </div>
+          <h5 class="text-position">{{task.currentTask.name}}</h5>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">
+              Cancel
+            </button>
+            <button type="button" (click)="finishTask($event)" class="btn btn-success" data-dismiss="modal">
+              Yes
+            </button>
           </div>
         </div>
       </div>
+    </div>
 
-      <button *ngIf="task.currentTask.status !== 'Canceled'" mat-raised-button color="warn" data-toggle="modal" class="btn-space" data-target="#cancelTask">
-        Cancel
-      </button>
-      <!-- For canceling current task -->
-      <div id="cancelTask" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="question-position">Do you want to cancel current task?</h5>
-              <button type="button" class="close" data-dismiss="modal">
-                &times;
-              </button>
-            </div>
-            <h5 class="text-position">{{task.currentTask.name}}</h5>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-info" data-dismiss="modal">
-                Cancel
-              </button>
-              <button type="button" (click)="cancelTask($event)" class="btn btn-success" data-dismiss="modal">
-                Yes
-              </button>
-            </div>
+    <button *ngIf="task.currentTask.status !== 'Canceled' &&
+       task.currentTask.status !== 'Executed' &&
+       task.currentTask.status !== 'Completed'" mat-raised-button color="warn" data-toggle="modal" class="btn-space"
+      data-target="#cancelTask">
+      Cancel
+    </button>
+    <!-- For canceling current task -->
+    <div id="cancelTask" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="question-position">Do you want to cancel current task?</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              &times;
+            </button>
+          </div>
+          <h5 class="text-position">{{task.currentTask.name}}</h5>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">
+              Cancel
+            </button>
+            <button type="button" (click)="cancelTask($event)" class="btn btn-success" data-dismiss="modal">
+              Yes
+            </button>
           </div>
         </div>
       </div>
+    </div>
 
-      <button *ngIf="task.currentTask.status === 'Canceled'" mat-raised-button color="primary" data-toggle="modal" class="btn-space" data-target="#resumeTask">
-          Resume
-        </button>
-        <!-- For canceling current task -->
-        <div id="resumeTask" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="question-position">Do you want to resume current task?</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                  &times;
-                </button>
-              </div>
-              <h5 class="text-position">{{task.currentTask.name}}</h5>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-dismiss="modal">
-                  Cancel
-                </button>
-                <button type="button" (click)="resumeTask($event)" class="btn btn-success" data-dismiss="modal">
-                  Yes
-                </button>
-              </div>
-            </div>
+    <button *ngIf="task.currentTask.status === 'Canceled'" mat-raised-button color="primary" data-toggle="modal"
+      class="btn-space" data-target="#resumeTask">
+      Resume
+    </button>
+    <!-- For canceling current task -->
+    <div id="resumeTask" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="question-position">Do you want to resume current task?</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              &times;
+            </button>
+          </div>
+          <h5 class="text-position">{{task.currentTask.name}}</h5>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">
+              Cancel
+            </button>
+            <button type="button" (click)="resumeTask($event)" class="btn btn-success" data-dismiss="modal">
+              Yes
+            </button>
           </div>
         </div>
+      </div>
+    </div>
 
   </mat-card-actions>
 </mat-card>

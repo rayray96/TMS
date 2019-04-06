@@ -88,6 +88,10 @@ export class TaskListComponent implements OnInit, DoCheck {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
+        if (this.task.currentTask) {
+          this.task.currentTask = this.dataSource.data.filter(x => x.id === this.task.currentTask.id)[0];
+        }
+
         this.spinner.hide();
       },
       err => {
