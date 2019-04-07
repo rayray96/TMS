@@ -19,6 +19,8 @@
           [routerLinkActiveOptions]="{ exact: true }">Tasks Management</a>
         <a mat-list-item *ngIf="jwt.getRole() == 'Worker'" routerLink="/worker" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }">My Tasks</a>
+        <a mat-list-item routerLink="/about">About</a>
+        <a mat-list-item routerLink="/contact-me">Contact Me</a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-toolbar color="primary">

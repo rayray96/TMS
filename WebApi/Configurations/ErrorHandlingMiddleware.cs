@@ -47,6 +47,7 @@ namespace WebApi.Configurations
             else if (exception is TeamExistsException) code = HttpStatusCode.BadRequest;
             else if (exception is TeamNotFoundException) code = HttpStatusCode.NotFound;
             else if (exception is UserNotFoundException) code = HttpStatusCode.NotFound;
+            else if (exception is DateIsWrongException) code = HttpStatusCode.BadRequest;
 
             var result = JsonConvert.SerializeObject(new { error = exception.Message });
             context.Response.ContentType = "application/json";

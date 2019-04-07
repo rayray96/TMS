@@ -258,6 +258,9 @@ namespace BLL.Services
 
         private TaskInfo EditTask(EditTaskDTO task, string authorName, int assigneeId, string priority)
         {
+            if (task.Deadline < DateTime.Now)
+                throw new DateIsWrongException("Deadline date cannot be less than current date");
+
             PersonDTO authorDTO = mapper.Map<Person, PersonDTO>(db.People.Find(p => p.UserName == authorName).SingleOrDefault());
             if (authorDTO == null)
                 throw new PersonNotFoundException("Author has not found");

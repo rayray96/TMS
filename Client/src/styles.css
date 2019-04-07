@@ -143,3 +143,27 @@ table tr:hover{
     width: 40px;
     height: 40px;
   }
+
+  .about-template {
+    padding: 15px 15px;
+    color: #fff;
+}
+
+.wrapper-about {
+    display: flex;
+    align-items: center;
+    flex-direction: column; 
+    justify-content: center;
+    width: 100%;
+  }
+
+  .wrapped-about {
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border-radius: 10px 10px 10px 10px;
+    background: #2e3137;
+    padding: 15px;
+    position: relative;
+    padding: 0px;
+    -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+  }

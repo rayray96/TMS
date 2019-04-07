@@ -7,36 +7,49 @@
     Create Team
   </button>
   <!-- Dialog window for creating team -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Add Team</h4>
-        <button type="button" class="close" data-dismiss="modal">
-          &times;
-        </button>
-      </div>
-      <div class="modal-body">
-        <label for="newTeamName">Team name</label>
-        <input class="form-control" type="text" name="newTeamName" [(ngModel)]="newTeamName"
-        placeholder="Enter name for new team" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-info" data-dismiss="modal">
-          Cancel
-        </button>
-        <button type="button" (click)="createTeam()" class="btn btn-success" data-dismiss="modal">
-          Save
-        </button>
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Add Team</h4>
+          <button type="button" class="close" data-dismiss="modal">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <label for="newTeamName">Team name</label>
+          <input class="form-control" type="text" name="newTeamName" [(ngModel)]="newTeamName"
+            placeholder="Enter name for new team" />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal">
+            Cancel
+          </button>
+          <button type="button" (click)="createTeam()" class="btn btn-success" data-dismiss="modal">
+            Save
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 </ng-template>
 <!-- If manager have a team -->
 <ng-template #withTeam>
-  <h4 class="text-center">Members of my team "{{oldTeamName}}"</h4>
+
+  <div class="wrapper-about">
+    <div class="wrapped-about">
+      <div class="container">
+        <div class="row">
+          <div class="about-template">
+            <h5>Members of my team "{{oldTeamName}}"
+            </h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
 
   <div class="button-add-update">
     <button mat-raised-button color="primary" type="button" class="btn btn-space btn btn-info" data-toggle="modal"
@@ -49,67 +62,67 @@
       Change Team Name
     </button>
   </div>
-<!-- Dialog window for adding new members -->
+  <!-- Dialog window for adding new members -->
   <div id="addMembers" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Add Members</h4>
-            <button type="button" class="close" data-dismiss="modal">
-              &times;
-            </button>
-          </div>
-          <mat-selection-list #people (selectionChange)="onGroupsChange(people.selectedOptions.selected)">
-              <mat-list-option *ngFor="let possibleMember of possibleMembers" [value]="possibleMember.id">
-                {{possibleMember.fName}} {{possibleMember.lName}}
-              </mat-list-option>
-            </mat-selection-list>
-            
-            <p class="option-position">
-              People selected: {{people.selectedOptions.selected.length}}
-            </p>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-info" data-dismiss="modal">
-              Cancel
-            </button>
-            <button type="button" (click)="addNewMembers()" class="btn btn-success" data-dismiss="modal">
-              Add and Save
-            </button>
-          </div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Add Members</h4>
+          <button type="button" class="close" data-dismiss="modal">
+            &times;
+          </button>
+        </div>
+        <mat-selection-list #people (selectionChange)="onGroupsChange(people.selectedOptions.selected)">
+          <mat-list-option *ngFor="let possibleMember of possibleMembers" [value]="possibleMember.id">
+            {{possibleMember.fName}} {{possibleMember.lName}}
+          </mat-list-option>
+        </mat-selection-list>
+
+        <p class="option-position">
+          People selected: {{people.selectedOptions.selected.length}}
+        </p>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal">
+            Cancel
+          </button>
+          <button type="button" (click)="addNewMembers()" class="btn btn-success" data-dismiss="modal">
+            Add and Save
+          </button>
         </div>
       </div>
     </div>
-<!-- Dialog window for changing team name -->
-    <div id="changeTeamName" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Change Team Name</h4>
-              <button type="button" class="close" data-dismiss="modal">
-                &times;
-              </button>
-            </div>
-            <div class="modal-body">
-              <label for="newTeamName">Team name</label>
-              <input class="form-control" type="text" name="newTeamName" [(ngModel)]="newTeamName"
-                placeholder="Enter new name of the current team" />
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-info" data-dismiss="modal">
-                Cancel
-              </button>
-              <button type="button" (click)="updateTeamName()" class="btn btn-success" data-dismiss="modal">
-                Save
-              </button>
-            </div>
-          </div>
+  </div>
+  <!-- Dialog window for changing team name -->
+  <div id="changeTeamName" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Change Team Name</h4>
+          <button type="button" class="close" data-dismiss="modal">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <label for="newTeamName">Team name</label>
+          <input class="form-control" type="text" name="newTeamName" [(ngModel)]="newTeamName"
+            placeholder="Enter new name of the current team" />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal">
+            Cancel
+          </button>
+          <button type="button" (click)="updateTeamName()" class="btn btn-success" data-dismiss="modal">
+            Save
+          </button>
         </div>
       </div>
+    </div>
+  </div>
 
   <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
   </mat-form-field>
-<!-- Table of manager team members -->
+  <!-- Table of manager team members -->
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
