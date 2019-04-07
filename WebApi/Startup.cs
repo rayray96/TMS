@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Newtonsoft.Json.Serialization;
 using System.IdentityModel.Tokens.Jwt;
+using WebApi.Configurations;
 
 namespace WebApi
 {
@@ -130,7 +131,7 @@ namespace WebApi
             app.UseAuthentication();
 
             app.UseCors("AllowLocalHost4200");
-            // app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMvc();
         }
     }

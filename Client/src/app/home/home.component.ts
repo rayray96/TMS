@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { UserModel, TaskModel } from '../models';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NavBarService } from '../services/nav-bar.service';
 import { MatTableDataSource, MatSortable, MatSort, MatPaginator } from '@angular/material';
+import { TaskService } from '../services';
 
 @Component({
   selector: 'app-home',
@@ -12,12 +13,13 @@ import { MatTableDataSource, MatSortable, MatSort, MatPaginator } from '@angular
   styleUrls: ['./home.component.css']
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['name', 'author', 'priority', 'assignee','progress', 'deadline'];
   userDetails: UserModel;
   dataSource;
 
   constructor(private router: Router,
+    private task: TaskService,
     private service: UserService,
     private spinner: NgxSpinnerService,
     public nav: NavBarService) { }
@@ -31,6 +33,14 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.getAllTasks();
     this.getUserProfile();
+  }
+
+  onSelect(taskModel: TaskModel): void {
+    this.task.currentTask = taskModel;
+  }
+
+  ngOnDestroy(): void {
+    this.task.currentTask = undefined;
   }
 
   getAllTasks() {

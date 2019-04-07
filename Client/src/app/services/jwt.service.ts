@@ -4,7 +4,7 @@ import * as jwt_decode from 'jwt-decode';
 
 @Injectable()
 export class JwtService {
-  readonly BaseURI = 'https://localhost:44360/api';
+  readonly BaseURI = '/api';
 
   constructor(private http: HttpClient) { }
 

@@ -3,7 +3,7 @@
     <h1 class="display-4 text-center">Wellcome Home!</h1>
     <hr>
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-9">
 
         <div class="wrapper-about">
           <div class="wrapped-about">
@@ -25,31 +25,35 @@
             <!-- Name Column -->
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+              <td mat-cell *matCellDef="let element" data-toggle="modal" data-target="#task" (click)="onSelect(element)"> {{element.name}}
+              </td>
             </ng-container>
 
             <!-- Author Column -->
             <ng-container matColumnDef="author">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Author </th>
-              <td mat-cell *matCellDef="let element"> {{element.author}} </td>
+              <td mat-cell *matCellDef="let element" data-toggle="modal" data-target="#task" (click)="onSelect(element)"> {{element.author}}
+              </td>
             </ng-container>
 
             <!-- Priority Column -->
             <ng-container matColumnDef="priority">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Priority </th>
-              <td mat-cell *matCellDef="let element"> {{element.priority}} </td>
+              <td mat-cell *matCellDef="let element" data-toggle="modal" data-target="#task" (click)="onSelect(element)">
+                {{element.priority}} </td>
             </ng-container>
 
             <!-- Assignee Column -->
             <ng-container matColumnDef="assignee">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Assignee </th>
-              <td mat-cell *matCellDef="let element"> {{element.assignee}} </td>
+              <td mat-cell *matCellDef="let element" data-toggle="modal" data-target="#task" (click)="onSelect(element)">
+                {{element.assignee}} </td>
             </ng-container>
 
             <!-- Progress Column -->
             <ng-container matColumnDef="progress">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Progress </th>
-              <td mat-cell *matCellDef="let element">
+              <td mat-cell *matCellDef="let element" data-toggle="modal" data-target="#task" (click)="onSelect(element)">
                 <div class="progress" style="width:90%">
                   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="element.progress"
                     aria-valuemin="0" aria-valuemax="100" [style.width]=" element.progress + '%'">
@@ -59,22 +63,65 @@
 
               </td>
             </ng-container>
-
+            
             <!-- Deadline Column -->
             <ng-container matColumnDef="deadline">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Deadline </th>
-              <td mat-cell *matCellDef="let element"> {{element.deadline | date}} </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-
-          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-        </div>
-
+              <td mat-cell *matCellDef="let element" data-toggle="modal" data-target="#task" (click)="onSelect(element)">
+                {{element.deadline | date}} </td>
+              </ng-container>
+              
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </div>
+          <div id="task" class="modal fade" role="dialog" *ngIf="task.currentTask">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="question-position">Task Info</h5>
+                  <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                  </button>
+                </div>
+                <mat-list>
+                  <mat-list-item><strong>Name and description: <br></strong> {{task.currentTask.name}}
+                  </mat-list-item>
+                  <mat-list-item>
+                    <p>{{task.currentTask.description}}</p>
+                  </mat-list-item>
+                  <mat-divider></mat-divider>
+                  <mat-list-item><strong>Author : <br></strong> {{task.currentTask.author}}</mat-list-item>
+                  <mat-divider></mat-divider>
+                  <mat-list-item><strong>Assignee : <br></strong> {{task.currentTask.assignee}}</mat-list-item>
+                  <mat-divider></mat-divider>
+                  <mat-list-item><strong>Priority : <br></strong> {{task.currentTask.priority}}</mat-list-item>
+                  <mat-divider></mat-divider>
+                  <mat-list-item><strong>Status : <br></strong> {{task.currentTask.status}}</mat-list-item>
+                  <mat-divider></mat-divider>
+                  <mat-list-item><strong>Progress : <br></strong> {{task.currentTask.progress}} %</mat-list-item>
+                  <mat-divider></mat-divider>
+                  <div *ngIf="task.currentTask.startDate">
+                    <mat-list-item><strong>Start Date : <br></strong> {{task.currentTask.startDate | date}}
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                  </div>
+                  <div *ngIf="task.currentTask.finishDate">
+                    <mat-list-item><strong>Finish Date : <br></strong> {{task.currentTask.finishDate | date}}
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                  </div>
+                  <mat-list-item><strong>Deadline : <br></strong> {{task.currentTask.deadline | date}}
+                  </mat-list-item>
+                </mat-list>
+              </div>
+            </div>
+          </div>
+          
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <!-- User Profile -->
         <mat-card class="card m-5" style="width:18rem" *ngIf="userDetails">
           <mat-card-header>

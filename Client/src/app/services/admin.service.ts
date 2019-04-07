@@ -8,7 +8,7 @@ import { RoleModel } from '../models/role-model';
   providedIn: 'root'
 })
 export class AdminService {
-  readonly BaseURI = 'https://localhost:44360/api/admin';
+  readonly BaseURI = '/api/admin';
   currentUser: UserModel;
 
   constructor(private http: HttpClient) { }

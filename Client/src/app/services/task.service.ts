@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class TaskService {
-  readonly BaseURI = 'https://localhost:44360/api/task';
+  readonly BaseURI = '/api/task';
   currentTask: TaskModel;
   needCheck = false;
 

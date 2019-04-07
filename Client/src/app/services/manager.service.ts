@@ -8,7 +8,7 @@ import { TeamModel } from '../models/team-model';
   providedIn: 'root'
 })
 export class ManagerService {
-  readonly BaseURI = 'https://localhost:44360/api/team';
+  readonly BaseURI = '/api/team';
   currentPerson: PersonModel;
   needCheck = false;
 

@@ -10,7 +10,6 @@ namespace DAL.Interfaces
     public interface IUserRepository: IDisposable
     {
         Task<ApplicationUser> FindByEmailAsync(string email);
-        Task<ApplicationUser> FindByLoginAsync(string userName, string password);
         Task<ApplicationUser> FindByIdAsync(string userId);
         Task<ApplicationUser> FindByNameAsync(string userName);
 

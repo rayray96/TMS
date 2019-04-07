@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using DAL.Interfaces;
-using DAL.Entities;
-using System.Security.Claims;
-using System.Collections.Generic;
+﻿using DAL.Interfaces;
 using DAL.Identity;
+using DAL.Entities;
+using Microsoft.AspNetCore.Identity;
+using System;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace DAL.Repositories
 {
@@ -36,11 +35,6 @@ namespace DAL.Repositories
         public async Task<bool> CheckPasswordAsync(ApplicationUser user, string password)
         {
             return await ApplicationUserManager.CheckPasswordAsync(user, password);
-        }
-
-        public async Task<ApplicationUser> FindByLoginAsync(string userName, string password)
-        {
-            return await ApplicationUserManager.FindByLoginAsync(userName, password); // Remake!!!
         }
 
         public async Task<ApplicationUser> FindByIdAsync(string userId)

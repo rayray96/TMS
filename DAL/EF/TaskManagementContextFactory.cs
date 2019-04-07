@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore.Design;
 using System.IO;
 // This class for testing system only!
-// TODO: Don't forget to delete before publishing!
 namespace DAL.EF
 {
     public class TaskManagementContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>

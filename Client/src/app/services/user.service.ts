@@ -6,7 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UserService {
-  readonly BaseURI = 'https://localhost:44360/api';
+  readonly BaseURI = '/api';
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
