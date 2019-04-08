@@ -59,7 +59,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
           else if (error.error.userName)
             this.toastr.warning(error.error.roleName);
           else
-            this.toastr.warning('Cannot create a team');
+            this.toastr.warning('Cannot change a role');
         }
       );
   }

@@ -15,9 +15,15 @@ namespace BLL.Interfaces
         /// Create new user.
         /// </summary>
         /// <param name="userDTO">Model of the current user</param>
-        /// <returns>Information about result of creating</returns>
+        /// <returns>Information about result of creating of the new user</returns>
         Task<IdentityOperation> CreateUserAsync(UserDTO userDTO);
 
+        /// <summary>
+        /// Update user role.
+        /// </summary>
+        /// <param name="userId">Id of the current user</param>
+        /// <param name="roleName">New role for the current user</param>
+        /// <returns>Information about result of updating a role for the current user</returns>
         Task<IdentityOperation> UpdateUserRoleAsync(string userId, string roleName);
 
         Task<IEnumerable<UserDTO>> GetAllWorkersAsync();

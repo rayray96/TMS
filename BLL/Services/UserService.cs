@@ -104,6 +104,7 @@ namespace BLL.Services
                 await Database.Users.RemoveFromRoleAsync(user, "Worker");
                 // Changing role for Person.
                 person.Role = roleName;
+
                 Database.People.Update(person.Id, person);
             }
             else if ((roleName == "Worker") && (userRole == "Manager"))
@@ -122,6 +123,9 @@ namespace BLL.Services
             else if ((roleName == "Admin") || (userRole == "Admin"))
             {
                 return new IdentityOperation(false, "Only the one administrator have to be in database", "userRole");
+            }
+            else if (roleName == userRole)
+            {
             }
             else
             {

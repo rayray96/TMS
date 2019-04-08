@@ -1,18 +1,16 @@
-﻿using System;
+﻿using Bootstrap;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Bootstrap;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
-using Newtonsoft.Json.Serialization;
-using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Text;
 using WebApi.Configurations;
 
 namespace WebApi
@@ -31,8 +29,6 @@ namespace WebApi
         {
             // Using extension method from Bootstrap project.
             services.RegisterApplicationServices("DefaultConnection");
-            // Is that really need???
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             // Adding and configuring JwtBearer Authentication.
             services.AddAuthentication(options =>
             {
@@ -92,12 +88,6 @@ namespace WebApi
                 config.Filters.Add(new AuthorizeFilter(policy));
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            //.AddJsonOptions(options =>
-            //{
-            //    var resolver = options.SerializerSettings.ContractResolver;
-            //    if (resolver != null)
-            //        (resolver as DefaultContractResolver).NamingStrategy = null;
-            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
