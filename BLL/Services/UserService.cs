@@ -136,10 +136,10 @@ namespace BLL.Services
             return new IdentityOperation(true, "Role has been changed", "");
         }
 
-        public async Task<IEnumerable<UserDTO>> GetAllWorkersAsync()
+        public async Task<IEnumerable<UserDTO>> GetUsersInRoleAsync(string roleName)
         {
-            var users = await Database.Users.GetUsersInRoleAsync("Worker");
-            var persons = Database.People.Find(p => p.Role == "Worker");
+            var users = await Database.Users.GetUsersInRoleAsync(roleName);
+            var persons = Database.People.Find(p => p.Role == roleName);
             var userDTOs = mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<UserDTO>>(users);
 
             foreach (var person in persons)
@@ -149,8 +149,8 @@ namespace BLL.Services
                     if (userDTO.Id == person.UserId)
                     {
                         if (person.TeamId != null)
-                            userDTO.TeamName = Database.Teams.GetById(person.TeamId.Value).TeamName;
-                        userDTO.Role = "Worker";
+                            userDTO.TeamName = (await Database.Teams.GetByIdAsync(person.TeamId.Value)).TeamName;
+                        userDTO.Role = roleName;
                     }
                 }
             }
@@ -158,46 +158,14 @@ namespace BLL.Services
             return userDTOs;
         }
 
-        public async Task<IEnumerable<UserDTO>> GetAllManagersAsync()
-        {
-            var users = await Database.Users.GetUsersInRoleAsync("Manager");
-            var persons = Database.People.Find(p => p.Role == "Manager");
-            var userDTOs = mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<UserDTO>>(users);
-
-            foreach (var person in persons)
-            {
-                foreach (var userDTO in userDTOs)
-                {
-                    if (userDTO.Id == person.UserId)
-                    {
-                        if (person.TeamId != null)
-                            userDTO.TeamName = Database.Teams.GetById(person.TeamId.Value).TeamName;
-                        userDTO.Role = "Manager";
-                    }
-                }
-            }
-
-            return userDTOs;
-        }
-
-        public async Task<UserDTO> GetUserAsync(string userName)
+        public async Task<UserDTO> GetUserByNameAsync(string userName)
         {
             var user = await Database.Users.FindByNameAsync(userName);
 
             if (user == null)
                 throw new UserNotFoundException("User with this username has not found");
 
-            var role = (await Database.Users.GetRolesAsync(user)).FirstOrDefault();
-            var userDTO = mapper.Map<ApplicationUser, UserDTO>(user);
-            userDTO.Role = role;
-
-            var person = await Database.People.GetSingleAsync(p => p.UserId == user.Id);
-
-            if (person != null)
-                if (person.TeamId != null)
-                    userDTO.TeamName = Database.Teams.GetById(person.TeamId.Value).TeamName;
-
-            return userDTO;
+            return await GetUser(user);
         }
 
         public async Task<UserDTO> GetUserByIdAsync(string userId)
@@ -206,6 +174,12 @@ namespace BLL.Services
 
             if (user == null)
                 throw new UserNotFoundException("User with this id has not found");
+
+            return await GetUser(user);
+        }
+
+        private async Task<UserDTO> GetUser(ApplicationUser user)
+        {
             var role = (await Database.Users.GetRolesAsync(user)).FirstOrDefault();
             var userDTO = mapper.Map<ApplicationUser, UserDTO>(user);
             userDTO.Role = role;
@@ -214,10 +188,11 @@ namespace BLL.Services
 
             if (person != null)
                 if (person.TeamId != null)
-                    userDTO.TeamName = Database.Teams.GetById(person.TeamId.Value).TeamName;
+                    userDTO.TeamName = (await Database.Teams.GetByIdAsync(person.TeamId.Value)).TeamName;
 
             return userDTO;
         }
+
 
         public void Dispose()
         {

@@ -68,7 +68,7 @@ namespace WebApi.Controllers
 
             var token = tokenService.GenerateToken(identity.Claims, 120);
             var refreshToken = await tokenService.GenerateRefreshTokenAsync(login.UserName);
-            var user = await userService.GetUserAsync(login.UserName);
+            var user = await userService.GetUserByNameAsync(login.UserName);
 
             var response = new
             {

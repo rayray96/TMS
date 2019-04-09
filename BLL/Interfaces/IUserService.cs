@@ -26,12 +26,25 @@ namespace BLL.Interfaces
         /// <returns>Information about result of updating a role for the current user</returns>
         Task<IdentityOperation> UpdateUserRoleAsync(string userId, string roleName);
 
-        Task<IEnumerable<UserDTO>> GetAllWorkersAsync();
+        /// <summary>
+        /// Get all users by the current role.
+        /// </summary>
+        /// <param name="roleName">Role name of the current user</param>
+        /// <returns>All users in the current role</returns>
+        Task<IEnumerable<UserDTO>> GetUsersInRoleAsync(string roleName);
 
-        Task<IEnumerable<UserDTO>> GetAllManagersAsync();
+        /// <summary>
+        /// Get user by the current name.
+        /// </summary>
+        /// <param name="userName">User name of the current user</param>
+        /// <returns>User by the user name</returns>
+        Task<UserDTO> GetUserByNameAsync(string userName);
 
-        Task<UserDTO> GetUserAsync(string userName);
-
+        /// <summary>
+        /// Get user by the current id.
+        /// </summary>
+        /// <param name="userId">Id of the current user</param>
+        /// <returns>User by the user id</returns>
         Task<UserDTO> GetUserByIdAsync(string userId);
     }
 }

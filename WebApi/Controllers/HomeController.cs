@@ -30,7 +30,7 @@ namespace WebApi.Controllers
         public async Task<ActionResult> GetUserProfile()
         {
             string userName = User.FindFirstValue(ClaimsIdentity.DefaultNameClaimType);
-            var user = await userService.GetUserAsync(userName);
+            var user = await userService.GetUserByNameAsync(userName);
 
             var model = mapper.Map<UserDTO, UserViewModel>(user);
 

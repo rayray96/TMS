@@ -32,8 +32,8 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var managers = await userService.GetAllManagersAsync();
-            var workers = await userService.GetAllWorkersAsync();
+            var managers = await userService.GetUsersInRoleAsync("Manager");
+            var workers = await userService.GetUsersInRoleAsync("Worker");
 
             var users = new List<UserDTO>();
             users.AddRange(managers);
