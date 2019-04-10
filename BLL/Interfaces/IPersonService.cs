@@ -1,6 +1,6 @@
-﻿using System;
+﻿using BLL.DTO;
+using BLL.Exceptions;
 using System.Collections.Generic;
-using BLL.DTO;
 
 namespace BLL.Interfaces
 {
@@ -13,7 +13,7 @@ namespace BLL.Interfaces
         /// Delete person from team.
         /// </summary>
         /// <param name="id">Id of person which need to delete from team</param>
-        /// ///<exception cref="ArgumentException">If person wasn't found</exception>
+        /// ///<exception cref="PersonNotFoundException">This person has not found</exception>
         void DeletePersonFromTeam(int id);
 
         /// <summary>
@@ -21,7 +21,8 @@ namespace BLL.Interfaces
         /// </summary>
         /// <param name="persons">Array of Id of persons which needed to add to team of manager</param>
         /// <param name="managerId">Id of manager who want to add members to his team</param>
-        /// ///<exception cref="ArgumentException">If manager wasn't found or members wasn't found</exception>
+        /// ///<exception cref="PersonNotFoundException">No persons to adding or not all members was founded</exception>
+        /// ///<exception cref="ManagerNotFoundException">This manager is unknown</exception>
         void AddPersonsToTeam(int[] persons, string managerId);
 
         /// <summary>

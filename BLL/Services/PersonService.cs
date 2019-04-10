@@ -57,9 +57,6 @@ namespace BLL.Services
             if ((persons == null) || (persons.Length == 0))
                 throw new PersonNotFoundException("No persons to adding");
 
-            if (string.IsNullOrWhiteSpace(managerId))
-                throw new ManagerNotFoundException("This manager is unknown");
-
             Person manager = db.People.Find(m => (m.UserId == managerId)).SingleOrDefault();
 
             if (manager == null)
@@ -103,14 +100,11 @@ namespace BLL.Services
             return people;
         }
 
-        public IEnumerable<PersonDTO> GetPeopleInTeam(Person manager)
+        private IEnumerable<PersonDTO> GetPeopleInTeam(Person manager)
         {
             IEnumerable<PersonDTO> people = new List<PersonDTO>();
             if (manager == null)
                 throw new ManagerNotFoundException("This manager is unknown");
-
-            if (manager.Team == null)
-                return people;
 
             people = mapper.Map<IEnumerable<Person>, IEnumerable<PersonDTO>>(db.People.Find(p => ((p.Team != null) && (p.Team.Id == manager.Team.Id))));
 
@@ -135,17 +129,17 @@ namespace BLL.Services
             return mapper.Map<Person, PersonDTO>(person);
         }
 
-        public IEnumerable<PersonDTO> GetAssignees(string Id)
+        public IEnumerable<PersonDTO> GetAssignees(int managerId)
         {
-            var person = db.People.Find(p => p.UserId == Id).SingleOrDefault();
+            var person = db.People.Find(p => p.Id == managerId).SingleOrDefault();
             var people = GetPeopleInTeam(person);
 
             return people;
         }
 
-        public IEnumerable<PersonDTO> GetAssignees(int Id)
+        public IEnumerable<PersonDTO> GetAssignees(string managerId)
         {
-            var person = db.People.Find(p => p.Id == Id).SingleOrDefault();
+            var person = db.People.Find(p => p.UserId == managerId).SingleOrDefault();
             var people = GetPeopleInTeam(person);
 
             return people;

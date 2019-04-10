@@ -16,6 +16,7 @@ namespace BLL.Tests.ServicesTests
     [TestClass]
     public class TaskServiceTests
     {
+
         #region DeleteTask
 
         [TestMethod]
@@ -460,5 +461,6 @@ namespace BLL.Tests.ServicesTests
         }
 
         #endregion
+
     }
 }

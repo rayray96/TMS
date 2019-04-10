@@ -344,7 +344,7 @@ namespace BLL.Tests.ServicesTests
             IIdentityUnitOfWork uow = mock.Object;
             UserService service = new UserService(uow);
 
-            var expected = new IdentityOperation(true, "Role has been changed", "");
+            var expected = new IdentityOperation(true, "This role is a current role", "");
 
             mock.Setup(x => x.Users.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
             mock.Setup(x => x.Users.GetRolesAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(roles);

@@ -15,6 +15,7 @@ namespace BLL.Tests.ServicesTests
     [TestClass]
     public class TeamServiceTests
     {
+
         #region GetAllTeams
 
         [TestMethod]
@@ -176,5 +177,6 @@ namespace BLL.Tests.ServicesTests
         }
 
         #endregion
+
     }
 }
