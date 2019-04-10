@@ -59,11 +59,6 @@ namespace DAL.Repositories
             return await Set.Where(whereCondition).ToListAsync();
         }
 
-        public IQueryable<T> GetQueryable()
-        {
-            return Set.AsQueryable();
-        }
-
         public void Create(T item)
         {
             Set.Add(item);

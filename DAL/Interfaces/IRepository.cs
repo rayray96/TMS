@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -16,7 +15,6 @@ namespace DAL.Interfaces
         T GetSingle(Expression<Func<T, bool>> whereCondition);
 
         IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
-        IQueryable<T> GetQueryable();
         IEnumerable<T> GetAll();
 
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> whereCondition);

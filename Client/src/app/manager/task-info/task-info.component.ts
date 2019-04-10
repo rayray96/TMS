@@ -90,7 +90,7 @@ export class TaskInfoComponent implements OnInit, OnDestroy {
         this.task.needCheck = true;
         this.task.currentTask.status = status;
         this.spinner.hide();
-        this.toastr.success("Status has finished!");
+        this.toastr.success("Task has finished!");
       },
       error => {
         console.log(error);
@@ -108,7 +108,7 @@ export class TaskInfoComponent implements OnInit, OnDestroy {
         this.task.needCheck = true;
         this.task.currentTask.status = status;
         this.spinner.hide();
-        this.toastr.warning("Status has canceled!");
+        this.toastr.warning("Task has canceled!");
       },
       error => {
         console.log(error);
@@ -126,7 +126,7 @@ export class TaskInfoComponent implements OnInit, OnDestroy {
         this.task.needCheck = true;
         this.task.currentTask.status = status;
         this.spinner.hide();
-        this.toastr.success("Status has resumed!");
+        this.toastr.success("Task has resumed!");
       },
       error => {
         console.log(error);
