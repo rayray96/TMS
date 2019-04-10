@@ -66,7 +66,7 @@ namespace BLL.Services
 
             if (taskForEdit != null)
             {
-                var newTask = EditTask(task, authorName, assigneeId, priority);
+                TaskInfo newTask = EditTask(task, authorName, assigneeId, priority);
 
                 newTask.Id = taskForEdit.Id;
                 newTask.Progress = taskForEdit.Progress;
@@ -79,14 +79,15 @@ namespace BLL.Services
 
                 emailService.Send(EmailSender, EmailRecipient, EmailService.SUBJECT_NEW_TASK, EmailBody);
             }
+            else
+                throw new TaskNotFoundException("Current task has not found");
         }
 
         public void UpdateStatus(int taskId, string statusName, int changerId)
         {
-            if (string.IsNullOrWhiteSpace(statusName))
-                throw new StatusNotFoundException("Name of status is null or empty");
-
             Status status = db.Statuses.Find(s => (s.Name == statusName)).SingleOrDefault();
+            if (status == null)
+                throw new StatusNotFoundException("Status with this name has not found");
 
             TaskInfo task = db.Tasks.GetById(taskId);
             if (task == null)
@@ -109,6 +110,7 @@ namespace BLL.Services
                 }
                 else if ((taskStatus.Name == "Canceled") && (statusName == "Not Started"))
                 {
+                    return;
                 }
                 else
                     throw new StatuskAccessException("This is status cannot belong to Author");
@@ -125,8 +127,6 @@ namespace BLL.Services
                         }
                     case "In Progress":
                         {
-                            if (task.StartDate == null)
-                                task.StartDate = DateTime.Now;
                             task.Progress = 20;
                             break;
                         }
@@ -148,14 +148,20 @@ namespace BLL.Services
                     default:
                         throw new StatuskAccessException("This status cannot belongs to Author");
                 }
+                if (statusName != "Not started")
+                    if (task.StartDate == null)
+                        task.StartDate = DateTime.Now;
+
             }
             else
                 throw new StatuskAccessException("Current person cannot change a status");
-            task.Status = status ?? throw new StatusNotFoundException("Status with this name was not found");
+
+            task.Status = status;
 
             db.Tasks.Update(task.Id, task);
             db.Save();
 
+            // If assignee executed task manager should take email.
             if (status.Name == "Executed")
             {
                 Person manager = db.People.GetById(task.AuthorId);
@@ -186,7 +192,7 @@ namespace BLL.Services
 
         public IEnumerable<TaskDTO> GetTasksOfAuthor(string managerId)
         {
-            var manager = db.People.Find(p => (p.UserId == managerId) && (p.Role == "Manager")).SingleOrDefault();
+            var manager = db.People.Find(p => (p.UserId == managerId) && (p.Role == "Manager")).FirstOrDefault();
             if (manager == null)
                 throw new ManagerNotFoundException("Manager is not found");
 
@@ -290,7 +296,7 @@ namespace BLL.Services
                 FinishDate = null,
                 Deadline = task.Deadline,
             };
-
+            // For sending email to assignee when task created or updated.
             EmailBody = string.Format(EmailService.BODY_NEW_TASK,
                                assigneeDTO.FName + " " + assigneeDTO.LName, task.Name, authorDTO.FName + " " + authorDTO.LName);
             EmailSender = authorDTO.Email;

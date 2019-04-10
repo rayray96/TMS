@@ -32,12 +32,9 @@ namespace BLL.Services
             return mapper.Map<IEnumerable<Team>, IEnumerable<TeamDTO>>(result);
         }
 
-        public string GetTeamNameById(int? id)
+        public string GetTeamNameById(int id)
         {
-            Team team = null;
-
-            if (id != null)
-                team = db.Teams.GetById(id.Value);
+            var team = db.Teams.GetById(id);
 
             if (team == null)
                 throw new TeamNotFoundException("Team with current id does not exist");
@@ -45,17 +42,17 @@ namespace BLL.Services
             return team.TeamName;
         }
 
-        public void ChangeTeamName(int? Id, string newName)
+        public void ChangeTeamName(int id, string newName)
         {
-            var team = db.Teams.GetById(Id.Value);
+            var team = db.Teams.GetById(id);
 
             if (team == null)
-                throw new TeamNotFoundException("Invalid Team for changes");
+                throw new TeamNotFoundException("Invalid Team Id for changes");
 
             if (team.TeamName != newName)
             {
                 team.TeamName = newName;
-                db.Teams.Update(Id.Value, team);
+                db.Teams.Update(id, team);
                 db.Save();
             }
         }

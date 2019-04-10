@@ -15,13 +15,13 @@ namespace BLL.Interfaces
         IEnumerable<StatusDTO> GetAllStatuses();
 
         /// <summary>
-        /// Get all active statuses.
+        /// Get all statuses for assignee.
         /// </summary>
         /// <returns>Enumeration of statuses</returns>
         IEnumerable<StatusDTO> GetStatusesForAssignee();
 
         /// <summary>
-        /// Get all not active statuses.
+        /// Get all statuses for author.
         /// </summary>
         /// <returns>Enumeration of statuses</returns>
         IEnumerable<StatusDTO> GetStatusesForAuthor();

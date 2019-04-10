@@ -80,7 +80,7 @@ namespace DAL.UnitOfWork
 
         private bool disposed = false;
 
-        public virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (!this.disposed)
             {
@@ -96,6 +96,11 @@ namespace DAL.UnitOfWork
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        ~IdentityUnitOfWork()
+        {
+            Dispose(false);
         }
     }
 }

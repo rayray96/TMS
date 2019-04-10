@@ -126,6 +126,7 @@ namespace BLL.Services
             }
             else if (roleName == userRole)
             {
+                return new IdentityOperation(true, "This role is a current role", "");
             }
             else
             {

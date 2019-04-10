@@ -34,8 +34,13 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            PersonDTO person = personService.GetPerson(id);
-            string teamName = teamService.GetTeamNameById(person.TeamId);
+            var person = personService.GetPerson(id);
+            if(person.TeamId==null)
+            {
+                ModelState.AddModelError("", "Current person does not have a team");
+                BadRequest(ModelState);
+            }
+            string teamName = teamService.GetTeamNameById(person.TeamId.Value);
 
             var teamOfCurrentManager = mapper.Map<IEnumerable<PersonDTO>, IEnumerable<PersonViewModel>>(personService.GetTeam(id));
 
@@ -97,7 +102,12 @@ namespace WebApi.Controllers
             }
 
             var author = personService.GetPerson(Id);
-            teamService.ChangeTeamName(author.TeamId, model.TeamName);
+            if (author.TeamId == null)
+            {
+                ModelState.AddModelError("", "Current author does not have a team");
+                BadRequest(ModelState);
+            }
+            teamService.ChangeTeamName(author.TeamId.Value, model.TeamName);
 
             return Ok(new { message = "The team name has been successfully changed" });
         }
