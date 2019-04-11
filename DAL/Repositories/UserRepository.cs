@@ -1,10 +1,9 @@
-﻿using DAL.Interfaces;
+﻿using DAL.Entities;
 using DAL.Identity;
-using DAL.Entities;
+using DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
@@ -70,31 +69,6 @@ namespace DAL.Repositories
         public async Task<IdentityResult> RemoveFromRoleAsync(ApplicationUser user, string role)
         {
             return await ApplicationUserManager.RemoveFromRoleAsync(user, role);
-        }
-
-        private bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    ApplicationUserManager.Dispose();
-                }
-                this.disposed = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~UserRepository()
-        {
-            Dispose(false);
         }
     }
 }

@@ -110,7 +110,6 @@ namespace BLL.Services
                 }
                 else if ((taskStatus.Name == "Canceled") && (statusName == "Not Started"))
                 {
-                    return;
                 }
                 else
                     throw new StatuskAccessException("This is status cannot belong to Author");

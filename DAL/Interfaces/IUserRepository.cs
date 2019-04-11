@@ -1,13 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using DAL.Entities;
 using Microsoft.AspNetCore.Identity;
-using DAL.Entities;
-using System.Security.Claims;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
-    public interface IUserRepository: IDisposable
+    public interface IUserRepository
     {
         Task<ApplicationUser> FindByEmailAsync(string email);
         Task<ApplicationUser> FindByIdAsync(string userId);

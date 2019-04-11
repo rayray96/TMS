@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public abstract class Repository<T> : IRepository<T>, IDisposable where T : class
+    public abstract class Repository<T> : IRepository<T> where T : class
     {
         protected DbSet<T> Set => Context.Set<T>();
         protected ApplicationDbContext Context { get; }
@@ -78,31 +78,6 @@ namespace DAL.Repositories
 
             if (item != null)
                 Set.Remove(item);
-        }
-
-        private bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    Context.Dispose();
-                }
-                this.disposed = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~Repository()
-        {
-            Dispose(false);
         }
     }
 }
