@@ -29,11 +29,6 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetMyTeam(string id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var person = personService.GetPerson(id);
             if(person.TeamId==null)
             {
@@ -56,11 +51,6 @@ namespace WebApi.Controllers
         [HttpGet("possibleMembers")]
         public IActionResult GetPossibleMembers()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var persons = mapper.Map<IEnumerable<PersonDTO>, IEnumerable<PersonViewModel>>(personService.GetPeopleWithoutTeam());
 
             return Ok(persons);
@@ -69,11 +59,6 @@ namespace WebApi.Controllers
         [HttpPost("{id}")]
         public IActionResult CreateTeam(string id, [FromBody]TeamNameViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var author = personService.GetPerson(id);
             teamService.CreateTeam(author, model.TeamName);
 
@@ -83,11 +68,6 @@ namespace WebApi.Controllers
         [HttpPost("addMembers/{Id}")]
         public IActionResult AddMembersToTeam(string Id, [FromBody]AddMembersViewModel members)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             personService.AddPersonsToTeam(members.Members, Id);
 
             return Ok(new { message = "Members have added to your team" });
@@ -96,11 +76,6 @@ namespace WebApi.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateTeamName(string Id, [FromBody]TeamNameViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var author = personService.GetPerson(Id);
             if (author.TeamId == null)
             {
@@ -115,11 +90,6 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteFromTeam(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             personService.DeletePersonFromTeam(id);
 
             return Ok(new { message = "Member has deleted from your team" });

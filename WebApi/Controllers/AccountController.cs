@@ -25,40 +25,29 @@ namespace WebApi.Controllers
         [HttpPost("sign-up")]
         public async Task<ActionResult> SignUpAsync([FromBody]RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            var user = new UserDTO
             {
-                var user = new UserDTO
-                {
-                    Email = model.Email,
-                    UserName = model.UserName,
-                    Password = model.Password,
-                    FName = model.FName,
-                    LName = model.LName
-                };
-                var result = await userService.CreateUserAsync(user);
-                if (result.Succeeded)
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return BadRequest(result);
-                }
+                Email = model.Email,
+                UserName = model.UserName,
+                Password = model.Password,
+                FName = model.FName,
+                LName = model.LName
+            };
+            var result = await userService.CreateUserAsync(user);
+            if (result.Succeeded)
+            {
+                return Ok(result);
             }
             else
             {
-                return BadRequest(ModelState);
+                return BadRequest(result);
             }
+
         }
         // POST api/account/sign-in
         [HttpPost("sign-in")]
         public async Task<ActionResult> SignInAsync([FromBody]LoginViewModel login)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var identity = await tokenService.GetClaimsIdentityAsync(login.UserName, login.Password);
             if (identity == null)
             {
@@ -84,11 +73,6 @@ namespace WebApi.Controllers
         [HttpPost("{refreshToken}/refresh")]
         public async Task<ActionResult> GetRefreshTokenAsync([FromRoute]string refreshToken)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var _refreshToken = tokenService.GetRefreshToken(refreshToken);
             if (_refreshToken == null)
                 return BadRequest();

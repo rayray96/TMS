@@ -86,6 +86,7 @@ namespace WebApi
                                  .RequireAuthenticatedUser()
                                  .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
+                config.Filters.Add(typeof(ModelStateValidationActionFilterAttribute));
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

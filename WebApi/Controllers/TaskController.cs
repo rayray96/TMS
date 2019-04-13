@@ -32,11 +32,6 @@ namespace WebApi.Controllers
         [HttpGet("statuses")]
         public IActionResult GetStatuses()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             IEnumerable<StatusViewModel> statuses;
             if (User.IsInRole("Worker"))
             {
@@ -54,11 +49,6 @@ namespace WebApi.Controllers
         [HttpGet("workerTasks/{id}")]
         public IActionResult GetTasksOfAssignee(string id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             PersonDTO worker = personService.GetPerson(id);
 
             var myTasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(taskService.GetTasksOfAssignee(id));
@@ -75,11 +65,6 @@ namespace WebApi.Controllers
         [HttpGet("managerTasks/{id}")]
         public IActionResult GetTasksOfAuthor(string id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             PersonDTO manager = personService.GetPerson(id);
 
             var myTasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(taskService.GetTasksOfAuthor(id));
@@ -96,11 +81,6 @@ namespace WebApi.Controllers
         [HttpPost]
         public IActionResult CreateTask([FromBody]EditTaskViewModel newTask)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             string author = HttpContext.User.Identity.Name;
 
             taskService.CreateTask(mapper.Map<EditTaskViewModel, EditTaskDTO>(newTask), author, newTask.AssigneeId, newTask.Priority);
@@ -112,11 +92,6 @@ namespace WebApi.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateTask(int id, [FromBody]EditTaskViewModel taskUpdate)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             string author = HttpContext.User.Identity.Name;
 
             var task = mapper.Map<EditTaskViewModel, EditTaskDTO>(taskUpdate);
@@ -130,11 +105,6 @@ namespace WebApi.Controllers
         [HttpPut("{id}/status")]
         public IActionResult UpdateStatus(string id, [FromBody]EditStatusViewModel status)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             PersonDTO person = personService.GetPerson(id);
 
             if (status != null)
@@ -149,11 +119,6 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteTask(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             string author = HttpContext.User.Identity.Name;
 
             taskService.DeleteTask(id, author);

@@ -40,11 +40,6 @@ namespace WebApi.Controllers
         [HttpGet("tasks")]
         public ActionResult GetAllTasks()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var myTasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(taskService.GetAllTasks());
 
             return Ok(myTasks);

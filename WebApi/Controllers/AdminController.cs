@@ -27,11 +27,6 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult> GetAllUsers()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var managers = await userService.GetUsersInRoleAsync("Manager");
             var workers = await userService.GetUsersInRoleAsync("Worker");
 
@@ -47,11 +42,6 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetUser(string id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var user = await userService.GetUserByIdAsync(id);
             if (user != null)
             {
@@ -67,11 +57,6 @@ namespace WebApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateRole(string Id, [FromBody]RoleChangeViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             if (Id == null || model.Role == null)
             {
                 ModelState.AddModelError("", "Invalid userId or roleName");
