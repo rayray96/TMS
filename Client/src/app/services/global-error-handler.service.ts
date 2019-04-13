@@ -1,11 +1,11 @@
-import { Injectable, ErrorHandler, Injector } from '@angular/core';
+import { Injectable, ErrorHandler, Injector, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
 
-  constructor(private injector: Injector) { }
+  constructor(private ngZone: NgZone, private injector: Injector) { }
 
   handleError(error: any) {
     const router = this.injector.get(Router);
@@ -20,22 +20,22 @@ export class GlobalErrorHandler implements ErrorHandler {
     }
     switch (error.status) {
       case (400): {
-        router.navigate(['error400']);
+        this.ngZone.run(() => router.navigate(['error400'])).then();
         break;
       }
       case (404): {
-        router.navigate(['error404']);
+        this.ngZone.run(() => router.navigate(['error404'])).then();
         break;
       }
       case (500): {
-        router.navigate(['error500']);
+        this.ngZone.run(() => router.navigate(['error500'])).then();
         break;
       }
       case (401):{
         break;
       }
       default: {
-        router.navigate(['error']);
+        this.ngZone.run(() => router.navigate(['error'])).then();
         break;
       }
     }

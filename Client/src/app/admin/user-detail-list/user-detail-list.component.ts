@@ -3,6 +3,7 @@ import { MatTableDataSource, MatSort, MatPaginator, MatSortable } from '@angular
 import { AdminService } from 'src/app/services';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserModel } from 'src/app/models';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-user-detail-list',
@@ -32,8 +33,8 @@ export class UserDetailListComponent implements OnInit {
         this.spinner.hide();
       },
       err => {
-        console.log(err);
         this.spinner.hide();
+        throw (err);
       },
     );
   }

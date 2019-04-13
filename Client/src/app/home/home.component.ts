@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       },
       err => {
         this.spinner.hide();
-        console.log(err);
+        throw (err);
       }
     );
   }
@@ -71,8 +71,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.spinner.hide();
       },
       err => {
-        console.log(err);
         this.spinner.hide();
+        throw (err);
       },
     );
   }

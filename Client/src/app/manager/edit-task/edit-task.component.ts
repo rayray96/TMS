@@ -51,6 +51,7 @@ export class EditTaskComponent {
       },
       err => {
         this.spinner.hide();
+        throw (err);
       }
     );
   }

@@ -33,7 +33,7 @@ export class TeamMemberInfoComponent implements OnInit, OnDestroy {
       },
       (err: any) => {
         this.spinner.hide();
-        this.toastr.success(err.error);
+        this.toastr.warning(err.error);
       }
     );
   }

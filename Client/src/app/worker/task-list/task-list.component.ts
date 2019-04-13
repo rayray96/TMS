@@ -59,7 +59,7 @@ export class TaskListComponent implements OnInit, DoCheck {
       },
       err => {
         this.spinner.hide();
-        console.log(err);
+        throw (err);
       }
     );
 

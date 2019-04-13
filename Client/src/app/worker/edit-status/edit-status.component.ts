@@ -46,6 +46,7 @@ export class EditStatusComponent implements OnInit {
       },
       err => {
         this.spinner.hide();
+        throw (err);
       }
     );
   }
