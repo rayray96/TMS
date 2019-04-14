@@ -60,7 +60,10 @@ export class TeamMembersListComponent implements OnInit, DoCheck {
       err => {
         this.spinner.hide();
         console.log(err);
-        this.toastr.error(err.error);
+        if (err.error.errors)
+          this.toastr.error(err.error.errors.TeamName);
+        else
+          this.toastr.error(err.error.error);
       }
     );
   }
@@ -151,7 +154,9 @@ export class TeamMembersListComponent implements OnInit, DoCheck {
       },
       err => {
         this.spinner.hide();
-        throw (err);
+        console.log(err);
+        if (!err.error.team)
+          throw (err);
       }
     );
   }

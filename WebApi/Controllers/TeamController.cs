@@ -30,10 +30,10 @@ namespace WebApi.Controllers
         public IActionResult GetMyTeam(string id)
         {
             var person = personService.GetPerson(id);
-            if(person.TeamId==null)
+            if (person.TeamId == null)
             {
-                ModelState.AddModelError("", "Current person does not have a team");
-                BadRequest(ModelState);
+                ModelState.AddModelError("team", "Current person does not have a team");
+                return BadRequest(ModelState);
             }
             string teamName = teamService.GetTeamNameById(person.TeamId.Value);
 
@@ -79,8 +79,8 @@ namespace WebApi.Controllers
             var author = personService.GetPerson(Id);
             if (author.TeamId == null)
             {
-                ModelState.AddModelError("", "Current author does not have a team");
-                BadRequest(ModelState);
+                ModelState.AddModelError("team", "Current author does not have a team");
+                return BadRequest(ModelState);
             }
             teamService.ChangeTeamName(author.TeamId.Value, model.TeamName);
 
