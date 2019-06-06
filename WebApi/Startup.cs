@@ -94,6 +94,7 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             // In ASP.NET Core 2.2, we released a new Server which runs inside IIS for Windows scenarios.
             // When sending the XMLHttpRequest, there is a preflight OPTIONS request which returns a status code of 204.
             // This was incorrectly handled by the IIS server, returning an invalid response to the client.
@@ -122,7 +123,6 @@ namespace WebApi
             app.UseAuthentication();
 
             app.UseCors("AllowLocalHost4200");
-            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMvc();
         }
     }

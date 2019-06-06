@@ -1,9 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using BLL.DTO;
+﻿using BLL.DTO;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using System;
+using System.Threading.Tasks;
 using WebApi.AccountModels;
 
 namespace WebApi.Controllers
@@ -15,16 +16,19 @@ namespace WebApi.Controllers
     {
         private readonly IUserService userService;
         private readonly ITokenService tokenService;
+        private readonly ILogger logger;
 
-        public AccountController(IUserService userService, ITokenService tokenService)
+        public AccountController(IUserService userService, ITokenService tokenService, ILogger logger)
         {
             this.userService = userService;
             this.tokenService = tokenService;
+            this.logger = logger;
         }
         // POST api/account/sign-up
         [HttpPost("sign-up")]
         public async Task<ActionResult> SignUpAsync([FromBody]RegisterViewModel model)
         {
+            logger.Information("Method SignUpAsync has started");
             var user = new UserDTO
             {
                 Email = model.Email,
@@ -36,13 +40,14 @@ namespace WebApi.Controllers
             var result = await userService.CreateUserAsync(user);
             if (result.Succeeded)
             {
+                logger.Information("Method SignUpAsync has finished");
                 return Ok(result);
             }
             else
             {
+                logger.Information("Method SignUpAsync has finished");
                 return BadRequest(result);
             }
-
         }
         // POST api/account/sign-in
         [HttpPost("sign-in")]
