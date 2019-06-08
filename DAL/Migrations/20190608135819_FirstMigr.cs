@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DAL.Migrations
 {
-    public partial class Initial : Migration
+    public partial class FirstMigr : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,7 +40,9 @@ namespace DAL.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    FName = table.Column<string>(maxLength: 50, nullable: false),
+                    LName = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -193,13 +195,37 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<string>(nullable: false),
+                    Token = table.Column<string>(nullable: false),
+                    Issue = table.Column<DateTime>(nullable: false),
+                    Expires = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "People",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
+                    FName = table.Column<string>(maxLength: 50, nullable: false),
+                    LName = table.Column<string>(maxLength: 50, nullable: false),
+                    UserName = table.Column<string>(maxLength: 50, nullable: false),
                     Role = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: true),
                     TeamId = table.Column<int>(nullable: true)
@@ -272,9 +298,9 @@ namespace DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "b5579f0d-8cbb-40b5-b00a-bdf4c08e880d", "32333c9a-ef96-4bc5-957b-fb352f04f1d9", "Admin", "ADMIN" },
-                    { "b589b466-d1de-4210-90bf-2c884a365200", "f8553781-72ef-414c-8f92-20ade22a9024", "Manager", "MANAGER" },
-                    { "3a44e138-0561-4273-8fea-f129ec62610c", "e11d7984-0d13-487f-938d-5804cbf5a252", "Worker", "WORKER" }
+                    { "94bb9aee-3969-454b-9884-01c1b46b9d0b", "bc5f6a8e-555d-4a6b-9173-3aec9ab8a838", "Admin", "ADMIN" },
+                    { "322d5444-6f48-40c2-be20-60d501f731d1", "22f5a374-82be-46c7-990b-2edc0ec96f4a", "Manager", "MANAGER" },
+                    { "bb35a808-50e7-4e73-ae20-924fca724c67", "3e2a2c8a-a830-472f-aaef-e25e60f812c5", "Worker", "WORKER" }
                 });
 
             migrationBuilder.InsertData(
@@ -351,6 +377,11 @@ namespace DAL.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_UserId",
+                table: "RefreshTokens",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TaskInfos_AssigneeId",
                 table: "TaskInfos",
                 column: "AssigneeId");
@@ -387,6 +418,9 @@ namespace DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "RefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "TaskInfos");

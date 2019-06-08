@@ -3,6 +3,7 @@ using BLL.DTO;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System.Collections.Generic;
 using System.Linq;
 using WebApi.Configurations;
@@ -33,6 +34,7 @@ namespace WebApi.Controllers
             if (person.TeamId == null)
             {
                 ModelState.AddModelError("team", "Current person does not have a team");
+                Log.Warning($"User with UserId: {id} does not have a team");
                 return BadRequest(ModelState);
             }
             string teamName = teamService.GetTeamNameById(person.TeamId.Value);
@@ -45,6 +47,7 @@ namespace WebApi.Controllers
                 Team = teamOfCurrentManager.ToList()
             };
 
+            Log.Information($"Team with Id: {person.TeamId.Value} was been found for the user with UserId: {id}");
             return Ok(teamModel);
         }
         // GET api/team/possibleMembers
@@ -62,6 +65,7 @@ namespace WebApi.Controllers
             var author = personService.GetPerson(id);
             teamService.CreateTeam(author, model.TeamName);
 
+            Log.Information($"Team was been created for the user with the UserId: {id}");
             return Ok(new { message = "The team has created!" });
         }
         // POST api/team/addMembers/{id}
@@ -70,6 +74,7 @@ namespace WebApi.Controllers
         {
             personService.AddPersonsToTeam(members.Members, Id);
 
+            Log.Information($"Members were been added to the team of the user with UserId: {Id}");
             return Ok(new { message = "Members have added to your team" });
         }
         // PUT api/team/{id}
@@ -80,10 +85,12 @@ namespace WebApi.Controllers
             if (author.TeamId == null)
             {
                 ModelState.AddModelError("team", "Current author does not have a team");
+                Log.Warning($"Author with UserId: {Id} does not have a team");
                 return BadRequest(ModelState);
             }
             teamService.ChangeTeamName(author.TeamId.Value, model.TeamName);
 
+            Log.Information($"Team name was been changed by the user with UserId: {Id}");
             return Ok(new { message = "The team name has been successfully changed" });
         }
         // DELETE api/team/{id}
@@ -92,6 +99,7 @@ namespace WebApi.Controllers
         {
             personService.DeletePersonFromTeam(id);
 
+            Log.Information($"Team member with PersonId: {id} was been deleted from the team");
             return Ok(new { message = "Member has deleted from your team" });
         }
     }

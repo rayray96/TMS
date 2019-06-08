@@ -15,7 +15,7 @@ namespace DAL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -281,22 +281,22 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2de5e722-43ac-4c5c-9c6b-8f13bd26ada7",
-                            ConcurrencyStamp = "b4090688-e453-401b-9d62-97b611c238ce",
+                            Id = "94bb9aee-3969-454b-9884-01c1b46b9d0b",
+                            ConcurrencyStamp = "bc5f6a8e-555d-4a6b-9173-3aec9ab8a838",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8e295fc9-6f4e-4a74-a0fb-c5345bf82494",
-                            ConcurrencyStamp = "4280c9cb-f9c8-4f9e-889d-7cf6a71450a7",
+                            Id = "322d5444-6f48-40c2-be20-60d501f731d1",
+                            ConcurrencyStamp = "22f5a374-82be-46c7-990b-2edc0ec96f4a",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "52ad0df6-58b5-4c58-bdfd-4fbc28e25c0a",
-                            ConcurrencyStamp = "5ade07fd-42db-4e8c-a9cb-10b1e30660e2",
+                            Id = "bb35a808-50e7-4e73-ae20-924fca724c67",
+                            ConcurrencyStamp = "3e2a2c8a-a830-472f-aaef-e25e60f812c5",
                             Name = "Worker",
                             NormalizedName = "WORKER"
                         });

@@ -16,19 +16,16 @@ namespace WebApi.Controllers
     {
         private readonly IUserService userService;
         private readonly ITokenService tokenService;
-        private readonly ILogger logger;
 
-        public AccountController(IUserService userService, ITokenService tokenService, ILogger logger)
+        public AccountController(IUserService userService, ITokenService tokenService)
         {
             this.userService = userService;
             this.tokenService = tokenService;
-            this.logger = logger;
         }
         // POST api/account/sign-up
         [HttpPost("sign-up")]
         public async Task<ActionResult> SignUpAsync([FromBody]RegisterViewModel model)
         {
-            logger.Information("Method SignUpAsync has started");
             var user = new UserDTO
             {
                 Email = model.Email,
@@ -40,12 +37,12 @@ namespace WebApi.Controllers
             var result = await userService.CreateUserAsync(user);
             if (result.Succeeded)
             {
-                logger.Information("Method SignUpAsync has finished");
+                Log.Information("Sign up was been succeeded");
                 return Ok(result);
             }
             else
             {
-                logger.Information("Method SignUpAsync has finished");
+                Log.Error("Sign up was been failed");
                 return BadRequest(result);
             }
         }
@@ -57,6 +54,7 @@ namespace WebApi.Controllers
             if (identity == null)
             {
                 ModelState.AddModelError("login", "Invalid username or password");
+                Log.Error("Claims-based identity is null");
                 return BadRequest(ModelState);
             }
 
@@ -69,9 +67,10 @@ namespace WebApi.Controllers
                 AccessToken = token,
                 RefreshToken = refreshToken.Token,
                 UserId = user.Id,
-                Role = user.Role
+                user.Role
             };
 
+            Log.Information($"User with UserId: {user.Id} and Role: {user.Role} has signed in");
             return Ok(response);
         }
         // POST api/account/{refreshToken}/refresh
@@ -89,6 +88,7 @@ namespace WebApi.Controllers
             if (identity == null)
             {
                 ModelState.AddModelError("userId", "Invalid userId");
+                Log.Error("Claims-based identity is null");
                 return BadRequest(ModelState);
             }
 
@@ -100,10 +100,11 @@ namespace WebApi.Controllers
             {
                 AccessToken = token,
                 RefreshToken = _refreshToken.Token,
-                UserId = _refreshToken.UserId,
-                Role = user.Role
+                _refreshToken.UserId,
+                user.Role
             };
 
+            Log.Information($"User with UserId: {user.Id} and Role: {user.Role} has got access and refresh tokens");
             return Ok(response);
         }
     }

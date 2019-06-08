@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190308143415_v2")]
-    partial class v2
+    [Migration("20190608135819_FirstMigr")]
+    partial class FirstMigr
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -35,6 +35,14 @@ namespace DAL.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("LName")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -80,7 +88,13 @@ namespace DAL.Migrations
 
                     b.Property<string>("Email");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("FName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("LName")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("Role")
                         .IsRequired();
@@ -89,6 +103,10 @@ namespace DAL.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired();
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -265,22 +283,22 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "25d6cdfc-83b2-40d9-b172-21993759ab61",
-                            ConcurrencyStamp = "812a6f03-76c4-45ad-a54a-472c1e5539ac",
+                            Id = "94bb9aee-3969-454b-9884-01c1b46b9d0b",
+                            ConcurrencyStamp = "bc5f6a8e-555d-4a6b-9173-3aec9ab8a838",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "440d099e-a6ee-46e6-96d2-3c6f6fe05c6c",
-                            ConcurrencyStamp = "db69877d-0632-41a1-a55f-caf85ce78107",
+                            Id = "322d5444-6f48-40c2-be20-60d501f731d1",
+                            ConcurrencyStamp = "22f5a374-82be-46c7-990b-2edc0ec96f4a",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "84d28b86-2e45-4b9e-b6ee-6f3be5c97c19",
-                            ConcurrencyStamp = "f6833ac1-e1c5-4e67-b9ba-dd9c526533ce",
+                            Id = "bb35a808-50e7-4e73-ae20-924fca724c67",
+                            ConcurrencyStamp = "3e2a2c8a-a830-472f-aaef-e25e60f812c5",
                             Name = "Worker",
                             NormalizedName = "WORKER"
                         });
@@ -372,6 +390,29 @@ namespace DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Expires");
+
+                    b.Property<DateTime>("Issue");
+
+                    b.Property<string>("Token")
+                        .IsRequired();
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("DAL.Entities.Person", b =>
                 {
                     b.HasOne("DAL.Entities.Team", "Team")
@@ -447,6 +488,14 @@ namespace DAL.Migrations
                 {
                     b.HasOne("DAL.Entities.ApplicationUser")
                         .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RefreshToken", b =>
+                {
+                    b.HasOne("DAL.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

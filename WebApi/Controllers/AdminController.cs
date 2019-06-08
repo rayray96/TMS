@@ -3,6 +3,7 @@ using BLL.DTO;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApi.AccountModels;
@@ -18,7 +19,7 @@ namespace WebApi.Controllers
         private readonly IUserService userService;
         private readonly IMapper mapper;
 
-        public AdminController(IUserService userService)
+        public AdminController(IUserService userServicer)
         {
             this.userService = userService;
             mapper = MapperConfig.GetMapperResult();
@@ -45,11 +46,13 @@ namespace WebApi.Controllers
             var user = await userService.GetUserByIdAsync(id);
             if (user != null)
             {
+                Log.Information($"User with UserId: {id} was been found");
                 return Ok(user);
             }
             else
             {
                 ModelState.AddModelError("id", "User has not found");
+                Log.Warning($"User with UserId: {id} was not found");
                 return BadRequest(ModelState);
             }
         }
@@ -59,17 +62,20 @@ namespace WebApi.Controllers
         {
             if (Id == null || model.Role == null)
             {
-                ModelState.AddModelError("", "Invalid userId or roleName");
+                ModelState.AddModelError("", "UserId or roleName is null");
+                Log.Warning("UserId or roleName is null");
                 return BadRequest(ModelState);
             }
             var result = await userService.UpdateUserRoleAsync(Id, model.Role);
             if (result.Succeeded)
             {
+                Log.Information($"Role for UserId: {Id} was been changed onto {model.Role}");
                 return Ok();
             }
             else
             {
                 ModelState.AddModelError(result.Property, result.Message);
+                Log.Error("Updating a role was been failed");
                 return BadRequest(ModelState);
             }
         }

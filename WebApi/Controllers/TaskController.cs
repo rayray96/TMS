@@ -4,6 +4,7 @@ using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System.Collections.Generic;
 using WebApi.Configurations;
 using WebApi.Models;
@@ -54,7 +55,8 @@ namespace WebApi.Controllers
             var myTasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(taskService.GetTasksOfAssignee(id));
             if (myTasks == null)
             {
-                ModelState.AddModelError("", "Cannot find the tasks of current worker!");
+                ModelState.AddModelError("", "Cannot find the tasks of the current worker!");
+                Log.Warning($"Cannot find the tasks of the current worker with UserId: {id}");
                 return BadRequest(ModelState);
             }
 
@@ -70,7 +72,8 @@ namespace WebApi.Controllers
             var myTasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(taskService.GetTasksOfAuthor(id));
             if (myTasks == null)
             {
-                ModelState.AddModelError("", "Cannot find the tasks of current manager!");
+                ModelState.AddModelError("", "Cannot find the tasks of the current manager!");
+                Log.Warning($"Cannot find the tasks of the current manager with UserId: {id}");
                 return BadRequest(ModelState);
             }
 
@@ -85,6 +88,7 @@ namespace WebApi.Controllers
 
             taskService.CreateTask(mapper.Map<EditTaskViewModel, EditTaskDTO>(newTask), author, newTask.AssigneeId, newTask.Priority);
 
+            Log.Information($"Task was been created by the manager with UserName: {author}");
             return Ok(new { message = "Task has created!" });
         }
         // PUT api/task/{id}
@@ -93,11 +97,11 @@ namespace WebApi.Controllers
         public IActionResult UpdateTask(int id, [FromBody]EditTaskViewModel taskUpdate)
         {
             string author = HttpContext.User.Identity.Name;
-
             var task = mapper.Map<EditTaskViewModel, EditTaskDTO>(taskUpdate);
 
             taskService.UpdateTask(task, id, author, taskUpdate.AssigneeId, taskUpdate.Priority);
 
+            Log.Information($"Task with Id: {id} was been updated by the manager with UserName: {author}");
             return Ok(new { message = "Task has changed" });
         }
         // PUT api/task/{id}/status
@@ -110,6 +114,7 @@ namespace WebApi.Controllers
             if (status != null)
             {
                 taskService.UpdateStatus(status.TaskId, status.Status, person.Id);
+                Log.Information($"Status was been updated by the user with UserId: {id}");
             }
 
             return Ok();
@@ -123,6 +128,7 @@ namespace WebApi.Controllers
 
             taskService.DeleteTask(id, author);
 
+            Log.Information($"Task with Id: {id} was been deleted by the manager with UserId: {author}");
             return Ok(new { message = "Task has deleted" });
         }
     }
