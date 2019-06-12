@@ -3,8 +3,8 @@ using BLL.Configurations;
 using BLL.DTO;
 using BLL.Exceptions;
 using BLL.Interfaces;
-using DAL.Interfaces;
 using DAL.Entities;
+using DAL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +36,7 @@ namespace BLL.Services
             Person person = db.People.GetById(id);
 
             if (person == null)
-                throw new PersonNotFoundException("This person has not found");
+                throw new PersonNotFoundException($"This person \"{id}\" has not found");
 
             person.TeamId = null;
 
@@ -60,7 +60,7 @@ namespace BLL.Services
             Person manager = db.People.Find(m => (m.UserId == managerId)).SingleOrDefault();
 
             if (manager == null)
-                throw new ManagerNotFoundException("This manager is unknown");
+                throw new ManagerNotFoundException($"This manager \"{managerId}\" is unknown");
 
             IEnumerable<Person> newTeamMembers = db.People.Find(p => persons.Contains(p.Id));
 
@@ -104,7 +104,7 @@ namespace BLL.Services
         {
             IEnumerable<PersonDTO> people = new List<PersonDTO>();
             if (manager == null)
-                throw new ManagerNotFoundException("This manager is unknown");
+                throw new ManagerNotFoundException("The argument manager is null");
 
             people = mapper.Map<IEnumerable<Person>, IEnumerable<PersonDTO>>(db.People.Find(p => ((p.Team != null) && (p.Team.Id == manager.Team.Id))));
 

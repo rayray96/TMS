@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using BLL.DTO;
 using BLL.Configurations;
+using BLL.DTO;
 using BLL.Interfaces;
-using DAL.Interfaces;
 using DAL.Entities;
+using DAL.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 

@@ -81,7 +81,7 @@ namespace BLL.Services
             }
             else
             {
-                return new IdentityOperation(false, "User with this email is already exist", "Email");
+                return new IdentityOperation(false, $"User with this email \"{userDTO.Email}\" is already exist", "Email");
             }
         }
 
@@ -89,7 +89,7 @@ namespace BLL.Services
         {
             var user = await Database.Users.FindByIdAsync(userId);
             if (user == null)
-                return new IdentityOperation(false, "User with this Id is not found", "userId");
+                return new IdentityOperation(false, $"User with this Id \"{userId}\" is not found", "userId");
 
             var userRole = (await Database.Users.GetRolesAsync(user)).FirstOrDefault();
 
@@ -112,7 +112,7 @@ namespace BLL.Services
                 var person = await Database.People.GetSingleAsync(p => p.UserId == user.Id);
 
                 if (person.TeamId != null)
-                    return new IdentityOperation(false, "Cannot change role, this manager has got a team", "userRole");
+                    return new IdentityOperation(false, $"Cannot change role, this manager {userId} has got a team", "userRole");
                 // Changing role for User.
                 await Database.Users.AddToRoleAsync(user, "Worker");
                 await Database.Users.RemoveFromRoleAsync(user, "Manager");
@@ -126,15 +126,15 @@ namespace BLL.Services
             }
             else if (roleName == userRole)
             {
-                return new IdentityOperation(true, "This role is a current role", "");
+                return new IdentityOperation(true, $"This role \"{roleName}\" is a current role", "");
             }
             else
             {
-                return new IdentityOperation(false, "Current role cannot find in database", "roleName");
+                return new IdentityOperation(false, $"Current role \"{roleName}\" cannot find in database", "roleName");
             }
 
             await Database.SaveAsync();
-            return new IdentityOperation(true, "Role has been changed", "");
+            return new IdentityOperation(true, $"Role \"{userRole}\" has been changed onto \"{roleName}\"", "");
         }
 
         public async Task<IEnumerable<UserDTO>> GetUsersInRoleAsync(string roleName)
@@ -164,7 +164,7 @@ namespace BLL.Services
             var user = await Database.Users.FindByNameAsync(userName);
 
             if (user == null)
-                throw new UserNotFoundException("User with this username has not found");
+                throw new UserNotFoundException($"User with this username \"{userName}\" has not found");
 
             return await GetUser(user);
         }
@@ -174,7 +174,7 @@ namespace BLL.Services
             var user = await Database.Users.FindByIdAsync(userId);
 
             if (user == null)
-                throw new UserNotFoundException("User with this id has not found");
+                throw new UserNotFoundException($"User with this id \"{userId}\" has not found");
 
             return await GetUser(user);
         }

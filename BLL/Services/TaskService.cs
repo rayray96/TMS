@@ -3,8 +3,8 @@ using BLL.Configurations;
 using BLL.DTO;
 using BLL.Exceptions;
 using BLL.Interfaces;
-using DAL.Interfaces;
 using DAL.Entities;
+using DAL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +35,7 @@ namespace BLL.Services
             TaskDTO task = mapper.Map<TaskInfo, TaskDTO>(db.Tasks.GetById(taskId));
 
             if (task == null)
-                throw new TaskNotFoundException("Task with this id not found");
+                throw new TaskNotFoundException($"Task with this id \"{taskId}\" not found");
 
             PersonDTO managerDTO = mapper.Map<Person, PersonDTO>(db.People.Find(m => m.UserName == currentUserName).SingleOrDefault());
 
@@ -46,7 +46,7 @@ namespace BLL.Services
             }
             else
             {
-                throw new TaskAccessException("Access error. You cannot delete this task");
+                throw new TaskAccessException($"Access error. You cannot delete this task \"{taskId}\"");
             }
         }
 
@@ -80,18 +80,18 @@ namespace BLL.Services
                 emailService.Send(EmailSender, EmailRecipient, EmailService.SUBJECT_NEW_TASK, EmailBody);
             }
             else
-                throw new TaskNotFoundException("Current task has not found");
+                throw new TaskNotFoundException($"Current task \"{id}\"has not found");
         }
 
         public void UpdateStatus(int taskId, string statusName, int changerId)
         {
             Status status = db.Statuses.Find(s => (s.Name == statusName)).SingleOrDefault();
             if (status == null)
-                throw new StatusNotFoundException("Status with this name has not found");
+                throw new StatusNotFoundException($"Status with this name \"{statusName}\" has not found");
 
             TaskInfo task = db.Tasks.GetById(taskId);
             if (task == null)
-                throw new TaskNotFoundException("Task wasn't found");
+                throw new TaskNotFoundException($"Task \"{taskId}\" wasn't found");
 
             Status taskStatus = db.Statuses.GetById(task.StatusId);
 
@@ -112,7 +112,7 @@ namespace BLL.Services
                 {
                 }
                 else
-                    throw new StatuskAccessException("This is status cannot belong to Author");
+                    throw new StatuskAccessException($"This status cannot \"{statusName}\" belongs to Author \"{changerId}\"");
             }
             else if ((task.AssigneeId == changerId) && (taskStatus.Name != "Canceled"))
             {
@@ -145,7 +145,7 @@ namespace BLL.Services
                             break;
                         }
                     default:
-                        throw new StatuskAccessException("This status cannot belongs to Author");
+                        throw new StatuskAccessException($"This status cannot \"{statusName}\" belongs to Author \"{changerId}\"");
                 }
                 if (statusName != "Not started")
                     if (task.StartDate == null)
@@ -153,7 +153,7 @@ namespace BLL.Services
 
             }
             else
-                throw new StatuskAccessException("Current person cannot change a status");
+                throw new StatuskAccessException($"Current person \"{changerId}\" cannot change a status onto \"{statusName}\"");
 
             task.Status = status;
 
@@ -193,7 +193,7 @@ namespace BLL.Services
         {
             var manager = db.People.Find(p => (p.UserId == managerId) && (p.Role == "Manager")).FirstOrDefault();
             if (manager == null)
-                throw new ManagerNotFoundException("Manager is not found");
+                throw new ManagerNotFoundException($"Manager \"{managerId}\" is not found");
 
             var condition = db.Tasks.Find(t => t.AuthorId == manager.Id);
             var tasks = GetTasksWithCondition(condition);
@@ -205,7 +205,7 @@ namespace BLL.Services
         {
             var worker = db.People.Find(p => (p.UserId == workerId) && (p.Role == "Worker")).SingleOrDefault();
             if (worker == null)
-                throw new WorkerNotFoundException("Worker is not found");
+                throw new WorkerNotFoundException($"Worker \"{workerId}\" is not found");
 
             var condition = db.Tasks.Find(t => t.AssigneeId == worker.Id);
             var tasks = GetTasksWithCondition(condition);
@@ -264,19 +264,19 @@ namespace BLL.Services
         private TaskInfo EditTask(EditTaskDTO task, string authorName, int assigneeId, string priority)
         {
             if (task.Deadline < DateTime.Now)
-                throw new DateIsWrongException("Deadline date cannot be less than current date");
+                throw new DateIsWrongException($"Deadline date \"{task.Deadline}\" cannot be less than current date \"{DateTime.Now}\"");
 
             PersonDTO authorDTO = mapper.Map<Person, PersonDTO>(db.People.Find(p => p.UserName == authorName).SingleOrDefault());
             if (authorDTO == null)
-                throw new PersonNotFoundException("Author has not found");
+                throw new PersonNotFoundException($"Author \"{authorName}\" has not found");
 
             PersonDTO assigneeDTO = mapper.Map<Person, PersonDTO>(db.People.Find(p => p.Id == assigneeId).SingleOrDefault());
             if (assigneeDTO == null)
-                throw new PersonNotFoundException("Assignee has not found");
+                throw new PersonNotFoundException($"Assignee \"{assigneeId}\" has not found");
 
             PriorityDTO priorityDTO = mapper.Map<Priority, PriorityDTO>(db.Priorities.Find(p => p.Name == priority).SingleOrDefault());
             if (priorityDTO == null)
-                throw new PriorityNotFoundException("Priority has not known");
+                throw new PriorityNotFoundException($"Priority \"{priority}\" has not known");
 
             StatusDTO status = mapper.Map<Status, StatusDTO>(db.Statuses.Find(s => (s.Name == "Not Started")).SingleOrDefault());
             if (status == null)

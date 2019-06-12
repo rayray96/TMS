@@ -45,6 +45,8 @@ namespace BLL.Services
                     {
                         var claims = new List<Claim>
                         {
+                            new Claim("UserId", user.Id),
+                            new Claim("TransactionId", Guid.NewGuid().ToString()),
                             new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
                             new Claim(ClaimsIdentity.DefaultRoleClaimType, role.FirstOrDefault())
                         };
@@ -54,17 +56,17 @@ namespace BLL.Services
                     }
                     else
                     {
-                        throw new RoleException("This user does not have a role");
+                        throw new RoleException($"This user \"{user.Id}\" does not have a role");
                     }
                 }
                 else
                 {
-                    throw new InvalidPasswordException("This password is not valid");
+                    throw new InvalidPasswordException($"This password \"{password}\" is not valid");
                 }
             }
             else
             {
-                throw new UserNotFoundException("This user does not exist");
+                throw new UserNotFoundException($"This user \"{userName}\" does not exist");
             }
 
             return claimsIdentity;
@@ -84,8 +86,10 @@ namespace BLL.Services
                 {
                     var claims = new List<Claim>
                     {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, role.FirstOrDefault())
+                        new Claim("UserId", user.Id),
+                        new Claim("TransactionId", Guid.NewGuid().ToString()),
+                        new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
+                        new Claim(ClaimsIdentity.DefaultRoleClaimType, role.FirstOrDefault())
                     };
 
                     claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
@@ -93,12 +97,12 @@ namespace BLL.Services
                 }
                 else
                 {
-                    throw new RoleException("This user does not have a role");
+                    throw new RoleException($"This user \"{userId}\" does not have a role");
                 }
             }
             else
             {
-                throw new UserNotFoundException("This user does not exist");
+                throw new UserNotFoundException($"This user \"{userId}\" does not exist");
             }
 
             return claimsIdentity;
@@ -131,7 +135,7 @@ namespace BLL.Services
             }
             else
             {
-                throw new UserNotFoundException("User with this username is not exist");
+                throw new UserNotFoundException($"User with this username \"{userName}\" is not exist");
             }
         }
 
@@ -144,7 +148,7 @@ namespace BLL.Services
             }
             else
             {
-                throw new RefreshTokenNotFoundException("Refresh token has not found");
+                throw new RefreshTokenNotFoundException($"Refresh token \"{refreshToken}\" has not found");
             }
         }
 
@@ -179,7 +183,7 @@ namespace BLL.Services
             }
             else
             {
-                throw new RefreshTokenNotFoundException("Refresh token has not found");
+                throw new RefreshTokenNotFoundException($"Refresh token \"{refreshToken}\" has not found");
             }
         }
 

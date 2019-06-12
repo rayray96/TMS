@@ -37,7 +37,7 @@ namespace BLL.Services
             var team = db.Teams.GetById(id);
 
             if (team == null)
-                throw new TeamNotFoundException("Team with current id does not exist");
+                throw new TeamNotFoundException($"Team with current id \"{id}\" does not exist");
 
             return team.TeamName;
         }
@@ -47,7 +47,7 @@ namespace BLL.Services
             var team = db.Teams.GetById(id);
 
             if (team == null)
-                throw new TeamNotFoundException("Invalid Team Id for changes");
+                throw new TeamNotFoundException($"Invalid Team Id \"{id}\" for changes");
 
             if (team.TeamName != newName)
             {
@@ -60,16 +60,16 @@ namespace BLL.Services
         public void CreateTeam(PersonDTO manager, string teamName)
         {
             if (manager.TeamId != null)
-                throw new TeamExistsException("This manager has got a team");
+                throw new TeamExistsException($"This manager {manager.Id} has got a team");
 
             var team = new Team { TeamName = teamName };
             IEnumerable<Team> checkTeamExists = db.Teams.Find(t => (t.TeamName == teamName));
 
             if (checkTeamExists.Count() != 0)
-                throw new TeamExistsException("This team already exists");
+                throw new TeamExistsException($"This team \"{teamName}\" already exists");
 
             if (manager.Role != "Manager")
-                throw new ManagerNotFoundException("This user is not a manager");
+                throw new ManagerNotFoundException($"This user {manager.Id} is not a manager");
 
             db.Teams.Create(team);
             manager.TeamId = team.Id;

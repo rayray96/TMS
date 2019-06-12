@@ -19,7 +19,7 @@ namespace WebApi.Controllers
         private readonly IUserService userService;
         private readonly IMapper mapper;
 
-        public AdminController(IUserService userServicer)
+        public AdminController(IUserService userService)
         {
             this.userService = userService;
             mapper = MapperConfig.GetMapperResult();

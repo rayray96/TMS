@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using Serilog.Core;
 using System;
 using System.Text;
 using WebApi.Configurations;
@@ -28,11 +29,8 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //// Adding Serilog dependency.
-            //services.AddLogging((builder) =>
-            //{
-            //    builder.AddSerilog(dispose: true);
-            //});
+            WebApi.Configurations.StaticHttpContextExtensions.AddHttpContextAccessor(services);
+            services.AddScoped<ILogEventEnricher, WebApi.Configurations.TransactionIdEnricher>();
             // Using extension method from Bootstrap project.
             services.RegisterApplicationServices("DefaultConnection");
             // Adding and configuring JwtBearer Authentication.
@@ -115,6 +113,7 @@ namespace WebApi
 
             if (env.IsDevelopment())
             {
+                Log.Information("In Development environment");
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -128,6 +127,7 @@ namespace WebApi
 
             app.UseAuthentication();
 
+            app.UseStaticHttpContext();
             app.UseCors("AllowLocalHost4200");
             app.UseMvc();
         }

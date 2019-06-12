@@ -16,7 +16,7 @@ namespace WebApi.Configurations
             this.next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(Microsoft.AspNetCore.Http.HttpContext context)
         {
             try
             {
@@ -28,7 +28,7 @@ namespace WebApi.Configurations
             }
         }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private static Task HandleExceptionAsync(Microsoft.AspNetCore.Http.HttpContext context, Exception exception)
         {
             // Status 500 if unexpected exception.
             var code = HttpStatusCode.InternalServerError;
