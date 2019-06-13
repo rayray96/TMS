@@ -121,6 +121,7 @@ namespace WebApi
                 app.UseHsts();
             }
 
+            ConfigureLogger(app, env);
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -130,6 +131,15 @@ namespace WebApi
             app.UseStaticHttpContext();
             app.UseCors("AllowLocalHost4200");
             app.UseMvc();
+        }
+
+        private void ConfigureLogger(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(Configuration)
+                .Enrich.With(new TransactionIdEnricher())
+                .CreateLogger();
+            Log.Information($"Application startup with environment {(string.IsNullOrEmpty(env.EnvironmentName) ? "Production" : env.EnvironmentName)}");
         }
     }
 }

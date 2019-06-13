@@ -17,14 +17,14 @@ namespace WebApi.Configurations
 
             var userId = logEvent.Properties.ContainsKey("UserId") 
                 ? logEvent.Properties["UserId"].ToString() 
-                : context?.User.Claims?.First(c => c.Type == "UserId")?.Value;
+                : context?.User.Claims?.FirstOrDefault(c => c.Type == "UserId")?.Value;
 
             var userIdProperty = new LogEventProperty("UserId", new ScalarValue(userId));
             logEvent.AddPropertyIfAbsent(userIdProperty);
 
             var transactionId = logEvent.Properties.ContainsKey("TransactionId") 
                 ? logEvent.Properties["TransactionId"].ToString() 
-                : context?.User.Claims?.First(c => c.Type == "TransactionId")?.Value;
+                : context?.TraceIdentifier;
 
             var transactionIdProperty = new LogEventProperty("TransactionId", new ScalarValue(transactionId));
             logEvent.AddPropertyIfAbsent(transactionIdProperty);

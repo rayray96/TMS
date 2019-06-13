@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Serilog;
 using System;
 using System.IO;
-using WebApi.Configurations;
 
 namespace WebApi
 {
@@ -12,24 +11,15 @@ namespace WebApi
     {
         public static void Main(string[] args)
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true)
-                .AddJsonFile("appsettings.Development.json", true)
-                .Build();
-
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(config)
-                .Enrich.With(new TransactionIdEnricher())
-                .CreateLogger();
-
             try
             {
                 CreateWebHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 Log.Fatal(ex, "Host terminated unexpectedly");
+                throw;
             }
             finally
             {
@@ -39,7 +29,23 @@ namespace WebApi
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(AddConfiguration)
                 .UseSerilog()
                 .UseStartup<Startup>();
+
+        private static void AddConfiguration(WebHostBuilderContext ctx, IConfigurationBuilder builder)
+        {
+            try
+            {
+                builder
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", true)
+                    .AddJsonFile($"appsettings.{ctx.HostingEnvironment.EnvironmentName}.json", true);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
     }
 }
