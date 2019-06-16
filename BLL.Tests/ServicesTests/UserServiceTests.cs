@@ -99,7 +99,7 @@ namespace BLL.Tests.ServicesTests
                 LName = "Collins",
                 Password = "qwerty123",
                 Role = "Worker",
-                UserName = "J."
+                UserName = "Josh"
             };
 
             Mock<IIdentityUnitOfWork> mock = new Mock<IIdentityUnitOfWork>();
@@ -107,7 +107,7 @@ namespace BLL.Tests.ServicesTests
             UserService service = new UserService(uow);
 
             IList<ApplicationUser> applicationUsers = new List<ApplicationUser>(1);
-            var expected = new IdentityOperation(false, "User with this email is already exist", "Email");
+            var expected = new IdentityOperation(false, "", "");
 
             mock.Setup(x => x.Users.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
 
@@ -115,8 +115,6 @@ namespace BLL.Tests.ServicesTests
             var actual = await service.CreateUserAsync(user);
 
 
-            Assert.AreSame(expected.Message, actual.Message);
-            Assert.AreSame(expected.Property, actual.Property);
             Assert.AreEqual(expected.Succeeded, actual.Succeeded);
         }
 
@@ -166,7 +164,7 @@ namespace BLL.Tests.ServicesTests
             IIdentityUnitOfWork uow = mock.Object;
             UserService service = new UserService(uow);
 
-            var expected = new IdentityOperation(false, "User with this Id is not found", "userId");
+            var expected = new IdentityOperation(false, "", "");
 
             mock.Setup(x => x.Users.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((ApplicationUser)null);
 
@@ -174,8 +172,6 @@ namespace BLL.Tests.ServicesTests
             var actual = await service.UpdateUserRoleAsync(userId, rolename);
 
 
-            Assert.AreSame(expected.Message, actual.Message);
-            Assert.AreSame(expected.Property, actual.Property);
             Assert.AreEqual(expected.Succeeded, actual.Succeeded);
         }
 
@@ -216,7 +212,7 @@ namespace BLL.Tests.ServicesTests
             IIdentityUnitOfWork uow = mock.Object;
             UserService service = new UserService(uow);
 
-            var expected = new IdentityOperation(true, "Role has been changed", "");
+            var expected = new IdentityOperation(true, "", "");
 
             mock.Setup(x => x.Users.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
             mock.Setup(x => x.Users.GetRolesAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(roles);
@@ -226,8 +222,6 @@ namespace BLL.Tests.ServicesTests
             var actual = await service.UpdateUserRoleAsync(userId, rolename);
 
 
-            Assert.AreSame(expected.Message, actual.Message);
-            Assert.AreSame(expected.Property, actual.Property);
             Assert.AreEqual(expected.Succeeded, actual.Succeeded);
         }
 
@@ -242,7 +236,7 @@ namespace BLL.Tests.ServicesTests
             IIdentityUnitOfWork uow = mock.Object;
             UserService service = new UserService(uow);
 
-            var expected = new IdentityOperation(true, "Role has been changed", "");
+            var expected = new IdentityOperation(true, "", "");
 
             mock.Setup(x => x.Users.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
             mock.Setup(x => x.Users.GetRolesAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(roles);
@@ -252,8 +246,6 @@ namespace BLL.Tests.ServicesTests
             var actual = await service.UpdateUserRoleAsync(userId, rolename);
 
 
-            Assert.AreSame(expected.Message, actual.Message);
-            Assert.AreSame(expected.Property, actual.Property);
             Assert.AreEqual(expected.Succeeded, actual.Succeeded);
         }
 
@@ -268,7 +260,7 @@ namespace BLL.Tests.ServicesTests
             IIdentityUnitOfWork uow = mock.Object;
             UserService service = new UserService(uow);
 
-            var expected = new IdentityOperation(false, "Cannot change role, this manager has got a team", "userRole");
+            var expected = new IdentityOperation(false, "", "");
 
             mock.Setup(x => x.Users.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
             mock.Setup(x => x.Users.GetRolesAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(roles);
@@ -278,8 +270,6 @@ namespace BLL.Tests.ServicesTests
             var actual = await service.UpdateUserRoleAsync(userId, rolename);
 
 
-            Assert.AreSame(expected.Message, actual.Message);
-            Assert.AreSame(expected.Property, actual.Property);
             Assert.AreEqual(expected.Succeeded, actual.Succeeded);
         }
 
@@ -344,7 +334,7 @@ namespace BLL.Tests.ServicesTests
             IIdentityUnitOfWork uow = mock.Object;
             UserService service = new UserService(uow);
 
-            var expected = new IdentityOperation(true, "This role is a current role", "");
+            var expected = new IdentityOperation(true, "", "");
 
             mock.Setup(x => x.Users.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
             mock.Setup(x => x.Users.GetRolesAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(roles);
@@ -353,8 +343,6 @@ namespace BLL.Tests.ServicesTests
             var actual = await service.UpdateUserRoleAsync(userId, rolename);
 
 
-            Assert.AreSame(expected.Message, actual.Message);
-            Assert.AreSame(expected.Property, actual.Property);
             Assert.AreEqual(expected.Succeeded, actual.Succeeded);
         }
 
@@ -369,7 +357,7 @@ namespace BLL.Tests.ServicesTests
             IIdentityUnitOfWork uow = mock.Object;
             UserService service = new UserService(uow);
 
-            var expected = new IdentityOperation(false, "Current role cannot find in database", "roleName");
+            var expected = new IdentityOperation(false, "", "");
 
             mock.Setup(x => x.Users.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
             mock.Setup(x => x.Users.GetRolesAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(roles);
@@ -378,8 +366,6 @@ namespace BLL.Tests.ServicesTests
             var actual = await service.UpdateUserRoleAsync(userId, rolename);
 
 
-            Assert.AreSame(expected.Message, actual.Message);
-            Assert.AreSame(expected.Property, actual.Property);
             Assert.AreEqual(expected.Succeeded, actual.Succeeded);
         }
 

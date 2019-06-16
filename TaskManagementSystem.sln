@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.136
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{F810E1F1-C534-4ABC-95A5-C0FCB81004B3}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{B172A594-D4F0-4A4C-AF28-B8B27F28BD31}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL.Tests", "BLL.Tests\BLL.Tests.csproj", "{016CF5E9-6038-4053-B601-8D2FA97F790A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi.IntegrationTests", "IntegrationTests\WebApi.IntegrationTests.csproj", "{F74A54E5-A34C-41F3-BC34-344E8CF88BDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{016CF5E9-6038-4053-B601-8D2FA97F790A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{016CF5E9-6038-4053-B601-8D2FA97F790A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{016CF5E9-6038-4053-B601-8D2FA97F790A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F74A54E5-A34C-41F3-BC34-344E8CF88BDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F74A54E5-A34C-41F3-BC34-344E8CF88BDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F74A54E5-A34C-41F3-BC34-344E8CF88BDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F74A54E5-A34C-41F3-BC34-344E8CF88BDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

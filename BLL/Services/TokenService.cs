@@ -41,7 +41,7 @@ namespace BLL.Services
                 if (checkPassword)
                 {
                     var role = await Database.Users.GetRolesAsync(user);
-                    if (role != null)
+                    if (role.Count != 0)
                     {
                         var claims = new List<Claim>
                         {

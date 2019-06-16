@@ -9,7 +9,6 @@ using WebApi.AccountModels;
 
 namespace WebApi.Controllers
 {
-    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -22,7 +21,9 @@ namespace WebApi.Controllers
             this.userService = userService;
             this.tokenService = tokenService;
         }
+
         // POST api/account/sign-up
+        [AllowAnonymous]
         [HttpPost("sign-up")]
         public async Task<ActionResult> SignUpAsync([FromBody]RegisterViewModel model)
         {
@@ -46,7 +47,9 @@ namespace WebApi.Controllers
                 return BadRequest(result);
             }
         }
+
         // POST api/account/sign-in
+        [AllowAnonymous]
         [HttpPost("sign-in")]
         public async Task<ActionResult> SignInAsync([FromBody]LoginViewModel login)
         {
@@ -73,6 +76,7 @@ namespace WebApi.Controllers
             Log.Information($"User with UserId: {user.Id} and Role: {user.Role} has signed in");
             return Ok(response);
         }
+
         // POST api/account/{refreshToken}/refresh
         [HttpPost("{refreshToken}/refresh")]
         public async Task<ActionResult> GetRefreshTokenAsync([FromRoute]string refreshToken)

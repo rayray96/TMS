@@ -57,7 +57,7 @@ namespace BLL.Tests.ServicesTests
 
             mock.Setup(x => x.Users.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
             mock.Setup(x => x.Users.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(true);
-            mock.Setup(x => x.Users.GetRolesAsync(It.IsAny<ApplicationUser>())).ReturnsAsync((IList<string>)null);
+            mock.Setup(x => x.Users.GetRolesAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(new List<string>());
 
 
             await service.GetClaimsIdentityAsync(It.IsAny<string>(), It.IsAny<string>());

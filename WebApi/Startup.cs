@@ -19,12 +19,14 @@ namespace WebApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
+            HostingEnvironment = hostingEnvironment;
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment HostingEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -32,7 +34,7 @@ namespace WebApi
             WebApi.Configurations.StaticHttpContextExtensions.AddHttpContextAccessor(services);
             services.AddScoped<ILogEventEnricher, WebApi.Configurations.TransactionIdEnricher>();
             // Using extension method from Bootstrap project.
-            services.RegisterApplicationServices("DefaultConnection");
+            services.RegisterApplicationServices("DefaultConnection", HostingEnvironment);
             // Adding and configuring JwtBearer Authentication.
             services.AddAuthentication(options =>
             {
@@ -111,7 +113,7 @@ namespace WebApi
                 }
             });
 
-            if (env.IsDevelopment())
+            if (!env.IsProduction())
             {
                 Log.Information("In Development environment");
                 app.UseDeveloperExceptionPage();
