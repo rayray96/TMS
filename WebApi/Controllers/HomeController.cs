@@ -26,6 +26,7 @@ namespace WebApi.Controllers
             this.taskService = taskService;
             mapper = MapperConfig.GetMapperResult();
         }
+
         // GET api/home/userProfile
         [HttpGet("userProfile")]
         public async Task<ActionResult> GetUserProfile()
@@ -38,13 +39,14 @@ namespace WebApi.Controllers
             Log.Information($"User profile for UserId: {user.Id} was been found");
             return Ok(model);
         }
+
         // GET api/home/tasks
         [HttpGet("tasks")]
         public ActionResult GetAllTasks()
         {
-            var myTasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(taskService.GetAllTasks());
+            var tasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(taskService.GetAllTasks());
 
-            return Ok(myTasks);
+            return Ok(tasks);
         }
     }
 }

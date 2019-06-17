@@ -39,7 +39,7 @@ namespace BLL.Services
 
         IConfigurationRoot configuration = new ConfigurationBuilder()
                    .SetBasePath(Directory.GetCurrentDirectory())
-                   .AddJsonFile("appsettings.json")
+                   .AddJsonFile("appsettings.json", true)
                    .Build();
 
         public void Send(string from, string to, string subject, string body)

@@ -2,8 +2,6 @@
 using DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 
@@ -15,6 +13,7 @@ namespace Bootstrap
         {
             CreateUsers(context);
             CreateRefreshTokens(context);
+            CreateTasks(context);
 
             context.SaveChanges();
         }
@@ -60,11 +59,12 @@ namespace Bootstrap
                     NormalizedUserName = "MURDER",
                     SecurityStamp = Guid.NewGuid().ToString()
                 }};
+
                 context.Users.AddRange(users);
 
                 foreach (var user in users)
                     user.PasswordHash = hasher.HashPassword(user, "qwerty123!");
-                
+
                 store.AddToRoleAsync(users[0], "ADMIN");
                 store.AddToRoleAsync(users[1], "MANAGER");
                 store.AddToRoleAsync(users[2], "WORKER");
@@ -81,6 +81,57 @@ namespace Bootstrap
                     Token = "1a2b3c4d5e",
                     Expires = DateTime.Now.AddDays(1),
                 });
+        }
+
+        private static void CreateTasks(ApplicationDbContext context)
+        {
+            if (!context.TaskInfos.Any())
+            {
+                TaskInfo[] tasks =
+                {
+                    new TaskInfo
+                    {
+                        Id = 1,
+                        AssigneeId = 3,
+                        AuthorId = 2,
+                        Deadline = DateTime.Now.AddDays(8),
+                        StartDate = DateTime.Now.AddDays(1),
+                        Description = "Bla bla bla... DAL",
+                        Name = "Develope DAL",
+                        StatusId = 1,
+                        PriorityId = 1,
+                        Progress = 0
+                    },
+                    new TaskInfo
+                    {
+                        Id = 2,
+                        AssigneeId = 3,
+                        AuthorId = 2,
+                        Deadline = DateTime.Now.AddDays(7),
+                        StartDate = DateTime.Now.AddDays(1),
+                        Description = "Bla bla bla... BLL",
+                        Name = "Develope BLL",
+                        StatusId = 2,
+                        PriorityId = 2,
+                        Progress = 20
+                    },
+                    new TaskInfo
+                    {
+                        Id = 3,
+                        AssigneeId = 3,
+                        AuthorId = 2,
+                        Deadline = DateTime.Now.AddDays(10),
+                        StartDate = DateTime.Now.AddDays(1),
+                        Description = "Bla bla bla... UI",
+                        Name = "Develope UI",
+                        StatusId = 5,
+                        PriorityId = 3,
+                        Progress = 80
+                    },
+                };
+
+                context.TaskInfos.AddRange(tasks);
+            }
         }
     }
 }
