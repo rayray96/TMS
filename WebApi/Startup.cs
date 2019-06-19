@@ -14,6 +14,7 @@ using Serilog.Core;
 using System;
 using System.Text;
 using WebApi.Configurations;
+using WebApi.Filters;
 
 namespace WebApi
 {

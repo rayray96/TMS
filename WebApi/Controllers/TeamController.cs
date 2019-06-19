@@ -7,6 +7,7 @@ using Serilog;
 using System.Collections.Generic;
 using System.Linq;
 using WebApi.Configurations;
+using WebApi.Filters;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -26,7 +27,9 @@ namespace WebApi.Controllers
             this.personService = personService;
             mapper = MapperConfig.GetMapperResult();
         }
+
         // GET api/team/{id}
+        [UserValidationActionFilter]
         [HttpGet("{id}")]
         public IActionResult GetMyTeam(string id)
         {
@@ -50,6 +53,7 @@ namespace WebApi.Controllers
             Log.Information($"Team with Id: {person.TeamId.Value} was been found for the user with UserId: {id}");
             return Ok(teamModel);
         }
+
         // GET api/team/possibleMembers
         [HttpGet("possibleMembers")]
         public IActionResult GetPossibleMembers()
@@ -58,7 +62,9 @@ namespace WebApi.Controllers
 
             return Ok(persons);
         }
+
         // POST api/team/{id}
+        [UserValidationActionFilter]
         [HttpPost("{id}")]
         public IActionResult CreateTeam(string id, [FromBody]TeamNameViewModel model)
         {
@@ -68,7 +74,9 @@ namespace WebApi.Controllers
             Log.Information($"Team was been created for the user with the UserId: {id}");
             return Ok(new { message = "The team has created!" });
         }
+
         // POST api/team/addMembers/{id}
+        [UserValidationActionFilter]
         [HttpPost("addMembers/{Id}")]
         public IActionResult AddMembersToTeam(string Id, [FromBody]AddMembersViewModel members)
         {
@@ -77,7 +85,9 @@ namespace WebApi.Controllers
             Log.Information($"Members were been added to the team of the user with UserId: {Id}");
             return Ok(new { message = "Members have added to your team" });
         }
+
         // PUT api/team/{id}
+        [UserValidationActionFilter]
         [HttpPut("{id}")]
         public IActionResult UpdateTeamName(string Id, [FromBody]TeamNameViewModel model)
         {
@@ -93,6 +103,7 @@ namespace WebApi.Controllers
             Log.Information($"Team name was been changed by the user with UserId: {Id}");
             return Ok(new { message = "The team name has been successfully changed" });
         }
+
         // DELETE api/team/{id}
         [HttpDelete("{id}")]
         public IActionResult DeleteFromTeam(int id)

@@ -66,10 +66,9 @@ namespace WebApi.IntegrationTests.IntegrationTests
         public async Task Post_GetRefreshTokenAsync_DoesReturnOk_GivenRefreshToken()
         {
             // Arrange
+            client.UseToken("Nightmare", "Admin", "1a");
             var refreshToken = "1a2b3c4d5e";
             var request = $"/api/account/{refreshToken}/refresh";
-            var jwt = TestJwtBearerToken.UseToken("Nightmare", "qwerty123!");
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + jwt);
 
             // Act
             var response = await client.PostAsync(request, ContentHelper.GetStringContent(refreshToken));

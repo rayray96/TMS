@@ -2,12 +2,18 @@
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
-using System.IO;
 
 namespace BLL.Services
 {
     public class EmailService : IEmailService
     {
+        private readonly IConfiguration configuration;
+
+        public EmailService(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
         public const string SUBJECT_NEW_TEAM_MEMBER = "A new team member!";
         public const string SUBJECT_NEW_TASK = "You have a new task!";
         public const string SUBJECT_EXECUTED_TASK = "Your team member has finished task!";
@@ -36,11 +42,6 @@ namespace BLL.Services
             "<br />" +
             "<p>Have a nice day,<br />" +
             "Task Management System</p>";
-
-        IConfigurationRoot configuration = new ConfigurationBuilder()
-                   .SetBasePath(Directory.GetCurrentDirectory())
-                   .AddJsonFile("appsettings.json", true)
-                   .Build();
 
         public void Send(string from, string to, string subject, string body)
         {

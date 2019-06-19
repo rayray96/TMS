@@ -34,7 +34,7 @@ namespace BLL.Services
 
         public IEnumerable<StatusDTO> GetStatusesForAuthor()
         {
-            return GetAllStatuses().Where(s => s.Name == "Canceled" && s.Name == "Completed" && s.Name == "Not started");
+            return GetAllStatuses().Where(s => s.Name == "Canceled" || s.Name == "Completed" || s.Name == "Not Started");
         }
     }
 }

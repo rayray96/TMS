@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Collections.Generic;
 using WebApi.Configurations;
+using WebApi.Filters;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -28,6 +29,7 @@ namespace WebApi.Controllers
 
             mapper = MapperConfig.GetMapperResult();
         }
+
         // GET api/task/statuses
         [Authorize(Roles = "Worker, Manager")]
         [HttpGet("statuses")]
@@ -45,13 +47,13 @@ namespace WebApi.Controllers
 
             return Ok(statuses);
         }
+
         // GET api/task/workerTasks/{id}
         [Authorize(Roles = "Worker")]
+        [UserValidationActionFilter]
         [HttpGet("workerTasks/{id}")]
         public IActionResult GetTasksOfAssignee(string id)
         {
-            PersonDTO worker = personService.GetPerson(id);
-
             var myTasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(taskService.GetTasksOfAssignee(id));
             if (myTasks == null)
             {
@@ -62,13 +64,14 @@ namespace WebApi.Controllers
 
             return Ok(myTasks);
         }
-        // GET api/task/managerrTasks/{id}
+
+       
+        // GET api/task/managerTasks/{id}
         [Authorize(Roles = "Manager")]
+        [UserValidationActionFilter]
         [HttpGet("managerTasks/{id}")]
         public IActionResult GetTasksOfAuthor(string id)
         {
-            PersonDTO manager = personService.GetPerson(id);
-
             var myTasks = mapper.Map<IEnumerable<TaskDTO>, IEnumerable<TaskViewModel>>(taskService.GetTasksOfAuthor(id));
             if (myTasks == null)
             {
@@ -79,6 +82,7 @@ namespace WebApi.Controllers
 
             return Ok(myTasks);
         }
+      
         // POST api/task
         [Authorize(Roles = "Manager")]
         [HttpPost]
@@ -91,6 +95,7 @@ namespace WebApi.Controllers
             Log.Information($"Task was been created by the manager with UserName: {author}");
             return Ok(new { message = "Task has created!" });
         }
+
         // PUT api/task/{id}
         [Authorize(Roles = "Manager")]
         [HttpPut("{id}")]
@@ -104,8 +109,11 @@ namespace WebApi.Controllers
             Log.Information($"Task with Id: {id} was been updated by the manager with UserName: {author}");
             return Ok(new { message = "Task has changed" });
         }
+
+    
         // PUT api/task/{id}/status
         [Authorize(Roles = "Worker, Manager")]
+        [UserValidationActionFilter]
         [HttpPut("{id}/status")]
         public IActionResult UpdateStatus(string id, [FromBody]EditStatusViewModel status)
         {
@@ -119,6 +127,7 @@ namespace WebApi.Controllers
 
             return Ok();
         }
+
         // DELETE api/task/{id}
         [Authorize(Roles = "Manager")]
         [HttpDelete("{id}")]

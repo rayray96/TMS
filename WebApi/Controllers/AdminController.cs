@@ -24,6 +24,7 @@ namespace WebApi.Controllers
             this.userService = userService;
             mapper = MapperConfig.GetMapperResult();
         }
+
         // GET api/admin
         [HttpGet]
         public async Task<ActionResult> GetAllUsers()
@@ -39,6 +40,7 @@ namespace WebApi.Controllers
 
             return Ok(model);
         }
+
         // GET api/admin/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult> GetUser(string id)
@@ -56,6 +58,7 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
         }
+
         // PUT api/admin/{id}
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateRole(string Id, [FromBody]RoleChangeViewModel model)

@@ -46,7 +46,6 @@ namespace BLL.Services
                         var claims = new List<Claim>
                         {
                             new Claim("UserId", user.Id),
-                            new Claim("TransactionId", Guid.NewGuid().ToString()),
                             new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
                             new Claim(ClaimsIdentity.DefaultRoleClaimType, role.FirstOrDefault())
                         };
@@ -87,7 +86,6 @@ namespace BLL.Services
                     var claims = new List<Claim>
                     {
                         new Claim("UserId", user.Id),
-                        new Claim("TransactionId", Guid.NewGuid().ToString()),
                         new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
                         new Claim(ClaimsIdentity.DefaultRoleClaimType, role.FirstOrDefault())
                     };

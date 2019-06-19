@@ -21,7 +21,7 @@ namespace Bootstrap
         public static void RegisterApplicationServices(this IServiceCollection services, string nameConnection, IHostingEnvironment HostingEnvironment)
         {
             // Creating connection with our database.
-            if (HostingEnvironment.IsDevelopment() || HostingEnvironment.EnvironmentName == "Testing")
+            if (/*HostingEnvironment.IsDevelopment() || */HostingEnvironment.EnvironmentName == "Testing")
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
                 {
@@ -38,7 +38,7 @@ namespace Bootstrap
             {
                 IConfigurationRoot configuration = new ConfigurationBuilder()
                        .SetBasePath(Directory.GetCurrentDirectory())
-                       .AddJsonFile($"appsettings.{HostingEnvironment.EnvironmentName}.json", true)
+                       .AddJsonFile($"appsettings.json")
                        .Build();
 
                 services.AddDbContext<ApplicationDbContext>(options =>

@@ -2,17 +2,28 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
+using System.Net.Http.Headers;
 
 namespace WebApi.IntegrationTests.Configurations
 {
     internal static class TestJwtBearerToken
     {
-        public static string UseToken(string userName, string role)
+        private const string scheme = "Bearer";
+
+        public static void UseToken(this HttpClient httpClient, string userName, string role, string id)
+        {
+            var jwt = CreateToken(userName, role, id);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(scheme, jwt);
+        }
+
+        private static string CreateToken(string userName, string role, string id)
         {
             var claims = new List<Claim>
             {
+                new Claim("UserId", id),
                 new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, role)
             };

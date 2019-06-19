@@ -18,14 +18,13 @@ namespace WebApi.IntegrationTests.IntegrationTests
         public HomeApiIntegrationTests(TestFixture<Startup> fixture)
         {
             client = fixture.Client;
+            client.UseToken("Nightmare", "Admin", "1a");
         }
 
         [Fact]
         public async Task Get_GetUserProfile_DoesReturnOk_GivenInformationFromContext()
         {
             // Arrange
-            var jwt = TestJwtBearerToken.UseToken("Nightmare", "qwerty123!");
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + jwt);
             var url = "/api/home/userProfile";
             var expected = new UserViewModel
             {
@@ -58,8 +57,6 @@ namespace WebApi.IntegrationTests.IntegrationTests
         public async Task Get_AllTasks_DoesReturnOk_GivenInformationFromContext()
         {
             // Arrange
-            var jwt = TestJwtBearerToken.UseToken("Nightmare", "qwerty123!");
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + jwt);
             var url = "/api/home/tasks";
 
             // Act

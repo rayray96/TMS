@@ -22,7 +22,7 @@ namespace DAL.Configurations
                 .HasData(
                 new Status[]
                 {
-                    new Status{ Id=1, Name="Not started" },
+                    new Status{ Id=1, Name="Not Started" },
                     new Status{ Id=2, Name="In Progress"},
                     new Status{ Id=3, Name="Test"},
                     new Status{ Id=4, Name="Almost Ready"},
