@@ -5,13 +5,15 @@ import { FormsModule } from '@angular/forms';
 import { AdminHomeComponent, ManageUsersComponent, RoleComponent, UserDetailComponent, UserDetailListComponent } from './index';
 import { AppMaterialModule } from '../app-material/app-material.module';
 import { AdminRoutingModule } from './admin-routing.module';
+import { CommonComponentsModule } from 'src/app/common/common-components.module';
 
 @NgModule({
     imports: [
         CommonModule,
         AppMaterialModule,
         FormsModule,
-        AdminRoutingModule
+        AdminRoutingModule,
+        CommonComponentsModule
     ],
     declarations: [
         AdminHomeComponent,

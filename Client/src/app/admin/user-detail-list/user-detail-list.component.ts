@@ -4,6 +4,7 @@ import { AdminService } from 'src/app/services';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserModel } from 'src/app/models';
 import { throwError } from 'rxjs';
+import { Roles } from 'src/app/common';
 
 @Component({
   selector: 'app-user-detail-list',
@@ -12,14 +13,16 @@ import { throwError } from 'rxjs';
 })
 export class UserDetailListComponent implements OnInit {
   displayedColumns: string[] = ['fName', 'lName', 'role', 'team'];
+  roles = Roles;
   dataSource;
+  currentSelection = 'All';
 
   constructor(private admin: AdminService, private spinner: NgxSpinnerService) { }
 
-  @ViewChild(MatSort)
+  @ViewChild(MatSort, { static: true })
   sort: MatSort;
 
-  @ViewChild(MatPaginator)
+  @ViewChild(MatPaginator, { static: true })
   paginator: MatPaginator;
 
   ngOnInit() {
@@ -38,7 +41,7 @@ export class UserDetailListComponent implements OnInit {
       },
     );
   }
-
+  // Unusing anymore.
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }

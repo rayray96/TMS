@@ -1,0 +1,21 @@
+<!-- <div ngbDropdown class="d-inline-block" style="width:100%">
+  <button class="btn btn-lg btn-info" style="width:100%" id="company"
+    ngbDropdownToggle>{{currentSelection}}</button>
+  <div class="cp" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+    <div class="cp-dropdown">
+      <h6 class="cp-dropdown__label" (click)="$event.stopPropagation()">Select Existing:</h6>
+      <div class="cp-dropdown__select">
+        <h3 class="cp-dropdown__select-option" *ngFor="let option of options" (click)="setCurrentSelection(option)">
+          {{option}}</h3>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div ngbDropdown class="d-inline-block">
+  <button class="btn btn-outline-success" id="sortMenu" ngbDropdownToggle>
+    {{currentSelection}}</button>
+  <div class="dropdown-menu" aria-labelledby="sortMenu" ngbDropdownMenu>
+    <button class="dropdown-item" *ngFor="let option of options" (click)="setCurrentSelection(option)">{{option}}
+    </button>
+  </div>
+</div>

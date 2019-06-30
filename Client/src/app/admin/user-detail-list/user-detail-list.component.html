@@ -12,12 +12,13 @@
 </div>
 <hr>
 
-<mat-form-field>
-  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-</mat-form-field>
+<div>
+  <app-search [(searchModel)]="searchModel"></app-search>
+</div>
 
 <div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource | search: searchModel: ['fName', 'lName', 'role', 'teamName']
+  | filter: currentSelection: 'role' " matSort class="mat-elevation-z8">
 
     <!-- First Name Column -->
     <ng-container matColumnDef="fName">
@@ -33,9 +34,12 @@
 
     <!-- Role Column -->
     <ng-container matColumnDef="role">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> <span> Role <br> </span>
+        <app-dropdownlist [options]="roles | enumToArray" [(currentSelection)]="currentSelection"></app-dropdownlist>
+      </th>
       <td mat-cell *matCellDef="let element" (click)="onSelect(element)"> {{element.role}} </td>
     </ng-container>
+
 
     <!-- Team Column -->
     <ng-container matColumnDef="team">

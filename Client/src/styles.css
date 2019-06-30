@@ -2,7 +2,7 @@
 @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
 
 body{
-    background-color: #04c582;
+    background-color:#28a745 !important;
 }
 
 input.form-control,input.form-control:focus{
@@ -166,4 +166,12 @@ table tr:hover{
     padding: 0px;
     -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
     box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+  }
+
+  .wrapper-search-filter {
+    display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      height: 15em;
   }

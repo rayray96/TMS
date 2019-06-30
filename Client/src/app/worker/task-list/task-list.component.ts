@@ -22,10 +22,10 @@ export class TaskListComponent implements OnInit, DoCheck {
     this.workerId = this.jwt.getId();
   }
 
-  @ViewChild(MatSort)
+  @ViewChild(MatSort, {static: true})
   sort: MatSort;
 
-  @ViewChild(MatPaginator)
+  @ViewChild(MatPaginator, {static: true})
   paginator: MatPaginator;
 
   ngOnInit() {

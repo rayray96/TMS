@@ -1,0 +1,8 @@
+<mat-form-field floatLabel=never>
+  <input 
+  matInput class="searching-item" 
+  type="text" 
+  placeholder="Search" 
+  [ngModel]="searchModel"
+  (ngModelChange)="updateSearchModel($event)">
+</mat-form-field>

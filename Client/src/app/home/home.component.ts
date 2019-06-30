@@ -24,10 +24,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     private spinner: NgxSpinnerService,
     public nav: NavBarService) { }
 
-  @ViewChild(MatSort)
+  @ViewChild(MatSort, {static: true})
   sort: MatSort;
 
-  @ViewChild(MatPaginator)
+  @ViewChild(MatPaginator, {static: true})
   paginator: MatPaginator;
 
   ngOnInit() {

@@ -1,3 +1,4 @@
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -9,6 +10,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { AppMaterialModule } from './app-material/app-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AdminModule } from './admin/admin.module';
+import { CommonComponentsModule } from './common/common-components.module';
 import { AdminRoutingModule } from './admin/admin-routing.module';
 import { ComponentsModule } from './components/components.module';
 import { ComponentsRoutingModule } from './components/components-routing.module';
@@ -32,11 +34,12 @@ import { WorkerRoutingModule } from './worker/worker-routing.module';
     RegistrationComponent,
     LoginComponent,
     HomeComponent,
-    NavBarComponent,
+    NavBarComponent
   ],
   imports: [
     AdminModule,
     AdminRoutingModule,
+    CommonComponentsModule,
     ManagerModule,
     ManagerRoutingModule,
     WorkerModule,
@@ -53,6 +56,7 @@ import { WorkerRoutingModule } from './worker/worker-routing.module';
     ToastrModule.forRoot({
       progressBar: true
     }),
+    NgbModule,
     // Routing module should always be in the end of imports!
     AppRoutingModule
   ],

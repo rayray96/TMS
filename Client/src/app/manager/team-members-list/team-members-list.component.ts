@@ -26,10 +26,10 @@ export class TeamMembersListComponent implements OnInit, DoCheck {
     this.managerId = this.jwt.getId();
   }
 
-  @ViewChild(MatSort)
+  @ViewChild(MatSort, {static: true})
   sort: MatSort;
 
-  @ViewChild(MatPaginator)
+  @ViewChild(MatPaginator, {static: true})
   paginator: MatPaginator;
 
   ngOnInit() {
