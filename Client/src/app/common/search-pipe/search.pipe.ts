@@ -1,4 +1,4 @@
-import { Injectable, Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'search'
@@ -7,13 +7,13 @@ import { Injectable, Pipe, PipeTransform } from '@angular/core';
 export class SearchPipe implements PipeTransform {
 
   transform(value: any, filterText: string, args: any[]): any {
-    if (!value) return null;
-    if (!filterText) return value;
+    if (!value || !args) return null;
+    if (!filterText || filterText === "All") return value;
 
     const data = value.filteredData === undefined ? value : value.filteredData;
     filterText = filterText.toLowerCase();
 
-    return data.filter(item => 
-      args.some(element => JSON.stringify(item[element]).toLowerCase().includes(filterText)));
+    return data.filter(item =>
+      args.some(element => String(item[element]).toLowerCase().includes(filterText)));
   }
 }

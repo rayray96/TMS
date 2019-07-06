@@ -3,7 +3,7 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from '../app-material/app-material.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {
   DropdownlistComponent,
@@ -12,9 +12,9 @@ import {
   SortComponent,
   SearchPipe,
   EnumToArrayPipe,
-  SearchComponent
+  SearchComponent,
+  MultipleSelectComponent,
 } from './index';
-import { FilterPipe } from './filter/filter.pipe';
 
 @NgModule({
   declarations: [
@@ -26,13 +26,14 @@ import { FilterPipe } from './filter/filter.pipe';
     SearchComponent,
     SearchComponent,
     EnumToArrayPipe,
-    FilterPipe,
+    MultipleSelectComponent,
   ],
   imports: [
     CommonModule,
     AppMaterialModule,
     FormsModule,
-    NgbModule
+    NgbModule,
+    ReactiveFormsModule
   ],
   exports: [
     DropdownlistComponent,
@@ -42,7 +43,7 @@ import { FilterPipe } from './filter/filter.pipe';
     SearchComponent,
     SearchPipe,
     EnumToArrayPipe,
-    FilterPipe
+    MultipleSelectComponent
   ]
 })
 export class CommonComponentsModule { }

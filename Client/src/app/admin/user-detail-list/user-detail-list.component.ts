@@ -16,6 +16,39 @@ export class UserDetailListComponent implements OnInit {
   roles = Roles;
   dataSource;
   currentSelection = 'All';
+  
+  columns: string[] = ['First Name', 'Last Name', 'Role', 'Team'];
+  currentSelections;
+
+  getCurrentSelections() {
+    if (this.currentSelections !== null && this.currentSelections !== undefined) {
+      var newSelections: string[];
+      this.currentSelections.forEach(element => {
+        switch (element) {
+          case this.columns[0]: {
+            newSelections.push(this.displayedColumns[0]);
+            break;
+          }
+          case this.columns[1]: {
+            newSelections.push(this.displayedColumns[1]);
+            break;
+          }
+          case this.columns[2]: {
+            newSelections.push(this.displayedColumns[2]);
+            break;
+          }
+          case this.columns[3]: {
+            newSelections.push(this.displayedColumns[3]);
+            break;
+          }
+          default: {
+            break;
+          }
+        }
+      });
+      return newSelections.values;
+    }
+  }
 
   constructor(private admin: AdminService, private spinner: NgxSpinnerService) { }
 

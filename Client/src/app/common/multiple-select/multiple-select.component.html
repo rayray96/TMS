@@ -1,0 +1,11 @@
+<mat-form-field>
+    <mat-select [placeholder]="placeholder" [formControl]="items" multiple>
+        <mat-select-trigger>
+            {{items.value ? items.value[0] : ''}}
+            <span *ngIf="items.value?.length > 1" class="example-additional-selection">
+                (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+            </span>
+        </mat-select-trigger>
+        <mat-option *ngFor="let option of options" [value]="option">{{option}}</mat-option>
+    </mat-select>
+</mat-form-field>

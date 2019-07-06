@@ -10,7 +10,7 @@ import {
 @Component({
   selector: 'app-dropdownlist',
   templateUrl: './dropdownlist.component.html',
-  styleUrls: ['./dropdownlist.component.scss']
+  styleUrls: ['./dropdownlist.component.css']
 })
 export class DropdownlistComponent implements OnInit {
 

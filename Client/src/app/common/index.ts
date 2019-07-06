@@ -6,4 +6,4 @@ export * from './search/search.component';
 export * from './search-pipe/search.pipe';
 export * from './models/roles.enum';
 export * from './enum-to-array/enum-to-array.pipe';
-export * from './filter/filter.pipe';
+export * from './multiple-select/multiple-select.component'
