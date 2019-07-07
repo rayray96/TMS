@@ -16,37 +16,62 @@
   <app-search [(searchModel)]="searchModel"></app-search>
 </div>
 
+<div class="wrapper-about">
+  <div class="wrapped-about">
+    <div class="container">
+      <div class="row">
+        <div class="about-template">
+          <label class='elem-space' for="columnsKeys"> Sort by column <br> </label>
+          <app-dropdownlist class='elem-space' [options]="columns | enumToArray: false"
+            [(currentSelection)]="currentSortValue"></app-dropdownlist>
+
+          <label class='elem-space' for="sortTypeValues"> Sort by sort type <br> </label>
+          <app-dropdownlist class='elem-space' [options]="sortings | enumToArray: false"
+            [(currentSelection)]="currentSortValueBy">
+          </app-dropdownlist>
+
+          <button mat-raised-button color="primary" type="button" class="btn btn-space btn btn-info" data-toggle="modal"
+            (click)="sortValues(currentSortValue, currentSortValueBy)">
+            Sort </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+
 <!-- <div> 
     <app-multiple-select [options]="displayedColumns" [(currentSelections)]="currentSelections"></app-multiple-select>
 </div> -->
 
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource | search: searchModel: ['fName', 'lName', 'role', 'team']
-  | search: currentSelection: ['role'] " matSort class="mat-elevation-z8">
+  | search: currentSelection: ['role'] | orderBy: currentSortKey : currentSortKeyBy" class="mat-elevation-z8">
 
     <!-- First Name Column -->
     <ng-container matColumnDef="fName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
+      <th mat-header-cell *matHeaderCellDef> First Name </th>
       <td mat-cell *matCellDef="let element" (click)="onSelect(element)"> {{element.fName}} </td>
     </ng-container>
 
     <!-- Last Name Column -->
     <ng-container matColumnDef="lName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
+      <th mat-header-cell *matHeaderCellDef> Last Name </th>
       <td mat-cell *matCellDef="let element" (click)="onSelect(element)"> {{element.lName}} </td>
     </ng-container>
 
     <!-- Role Column -->
     <ng-container matColumnDef="role">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> <span> Role <br> </span>
-        <app-dropdownlist [options]="roles | enumToArray" [(currentSelection)]="currentSelection"></app-dropdownlist>
+      <th mat-header-cell *matHeaderCellDef> <span> Role <br> </span>
+        <app-dropdownlist [options]="roles | enumToArray: true" [(currentSelection)]="currentSelection">
+        </app-dropdownlist>
       </th>
       <td mat-cell *matCellDef="let element" (click)="onSelect(element)"> {{element.role}} </td>
     </ng-container>
 
     <!-- Team Column -->
     <ng-container matColumnDef="team">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Team </th>
+      <th mat-header-cell *matHeaderCellDef> Team </th>
       <td mat-cell *matCellDef="let element" (click)="onSelect(element)"> {{element.teamName}} </td>
     </ng-container>
 

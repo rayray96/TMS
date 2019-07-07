@@ -10,3 +10,16 @@ table {
   th.mat-sort-header-sorted {
     color: black;
   }
+
+  .dropdowns{
+    text-align: center;
+    left: 50%;
+  }
+
+  .elem-space {
+    margin-right: 5px;
+}
+
+.option-position{
+  text-align: center;
+}

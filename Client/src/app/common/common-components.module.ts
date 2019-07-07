@@ -14,6 +14,7 @@ import {
   EnumToArrayPipe,
   SearchComponent,
   MultipleSelectComponent,
+  OrderByPipe
 } from './index';
 
 @NgModule({
@@ -27,6 +28,7 @@ import {
     SearchComponent,
     EnumToArrayPipe,
     MultipleSelectComponent,
+    OrderByPipe
   ],
   imports: [
     CommonModule,
@@ -43,7 +45,8 @@ import {
     SearchComponent,
     SearchPipe,
     EnumToArrayPipe,
-    MultipleSelectComponent
+    MultipleSelectComponent,
+    OrderByPipe
   ]
 })
 export class CommonComponentsModule { }
