@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Configurations;
+using BLL.Configurations.FactoryMethod;
 using BLL.DTO;
 using BLL.Exceptions;
 using BLL.Interfaces;
@@ -25,7 +26,11 @@ namespace BLL.Services
         {
             db = uow;
             this.emailService = emailService;
-            mapper = MapperConfig.GetMapperResult();
+
+            // Using Factory Method.
+            MapperCreator creator = new CommonCreator();
+            IWrappedMapper wrappedMapper = creator.FactoryMethod();
+            mapper = wrappedMapper.CreateMapping();
         }
 
         #region Main CRUD-operations for Tasks.

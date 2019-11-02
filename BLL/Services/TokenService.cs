@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Configurations;
+using BLL.Configurations.FactoryMethod;
 using BLL.Interfaces;
 using BLL.Exceptions;
 using DAL.Entities;
@@ -26,7 +27,11 @@ namespace BLL.Services
         {
             Database = unitOfWork;
             Configuration = configuration;
-            mapper = MapperConfig.GetMapperResult();
+
+            // Using Factory Method.
+            MapperCreator creator = new IdentityCreator();
+            IWrappedMapper wrappedMapper = creator.FactoryMethod();
+            mapper = wrappedMapper.CreateMapping();
         }
 
         public async Task<ClaimsIdentity> GetClaimsIdentityAsync(string userName, string password)

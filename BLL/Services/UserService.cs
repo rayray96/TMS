@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BLL.DTO;
 using BLL.Configurations;
+using BLL.Configurations.FactoryMethod;
 using BLL.Infrastructure;
 using BLL.Interfaces;
 using BLL.Exceptions;
@@ -25,7 +26,11 @@ namespace BLL.Services
         public UserService(IIdentityUnitOfWork unitOfWork)
         {
             Database = unitOfWork;
-            mapper = MapperConfig.GetIdentityMapperResult();
+
+            // Using Factory Method.
+            MapperCreator creator = new IdentityCreator();
+            IWrappedMapper wrappedMapper = creator.FactoryMethod();
+            mapper = wrappedMapper.CreateMapping();
         }
 
         public async Task<IdentityOperation> CreateUserAsync(UserDTO userDTO)

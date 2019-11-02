@@ -2,12 +2,11 @@
 using BLL.DTO;
 using DAL.Entities;
 
-namespace BLL.Configurations
+namespace BLL.Configurations.FactoryMethod
 {
-    // Was replaced on Factory Method.
-    public static class MapperConfig
+    public class CommonMapper : IWrappedMapper
     {
-        public static IMapper GetMapperResult()
+        public IMapper CreateMapping()
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -24,22 +23,6 @@ namespace BLL.Configurations
                 cfg.CreateMap<PriorityDTO, Priority>();
                 cfg.CreateMap<TeamDTO, Team>();
                 cfg.CreateMap<TaskDTO, TaskInfo>();
-            });
-
-            return config.CreateMapper();
-        }
-
-        public static IMapper GetIdentityMapperResult()
-        {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Person, PersonDTO>();
-                cfg.CreateMap<ApplicationUser, UserDTO>();
-                cfg.CreateMap<RefreshToken, RefreshTokenDTO>();
-
-                cfg.CreateMap<PersonDTO, Person>();
-                cfg.CreateMap<UserDTO, ApplicationUser>();
-                cfg.CreateMap<RefreshTokenDTO, RefreshToken>();
             });
 
             return config.CreateMapper();
